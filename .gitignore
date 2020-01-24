@@ -58,3 +58,8 @@ gf2d
 *.log
 
 makefile.dep
+/Project1/.vs/2D Project/v16
+/Project1/Debug/2D Project.tlog
+/Project1/x64/Debug/2D Project.tlog
+/Project1/Project1.vcxproj.filters
+/Project1/Project1.vcxproj.user
