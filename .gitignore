@@ -63,3 +63,6 @@ makefile.dep
 /Project1/x64/Debug/2D Project.tlog
 /Project1/Project1.vcxproj.filters
 /Project1/Project1.vcxproj.user
+/Project1/Release/2D Project.tlog
+/2D Project.ipdb
+/2D Project.iobj
