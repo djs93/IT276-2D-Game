@@ -22,6 +22,15 @@
     <Filter Include="Source Files\simple_logger">
       <UniqueIdentifier>{5c265aea-9d0f-4415-9529-fe08fbb07a40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gfc">
+      <UniqueIdentifier>{a5cd73b4-971b-4f60-b389-74f56df4d858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\simple_json">
+      <UniqueIdentifier>{bbda44e9-fb42-47d7-8aee-ed3eb7c04d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\simple_logger">
+      <UniqueIdentifier>{f51c2c00-33fc-4d0c-8943-448a974fac31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\game.c">
@@ -84,6 +93,12 @@
     <ClCompile Include="..\gfc\simple_logger\src\simple_logger.c">
       <Filter>Source Files\simple_logger</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Geometry2D.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_entity.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\gf2d_draw.h">
@@ -95,58 +110,70 @@
     <ClInclude Include="..\include\gf2d_sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\gfc\include\gfc_audio.h">
+    <ClInclude Include="..\include\gf2d_entity.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfc\include\gfc_audio.h">
+      <Filter>Header Files\gfc</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\include\gfc_callbacks.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gfc</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\include\gfc_color.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gfc</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\include\gfc_input.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gfc</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\include\gfc_list.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gfc</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\include\gfc_matrix.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gfc</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\include\gfc_text.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gfc</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\include\gfc_types.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gfc</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\include\gfc_vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gfc\simple_logger\include\simple_logger.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gfc</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\simple_json\include\simple_json.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\simple_json</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\simple_json\include\simple_json_array.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\simple_json</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\simple_json\include\simple_json_error.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\simple_json</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\simple_json\include\simple_json_list.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\simple_json</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\simple_json\include\simple_json_object.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\simple_json</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\simple_json\include\simple_json_parse.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\simple_json</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\simple_json\include\simple_json_string.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\simple_json</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\simple_json\include\simple_json_value.h">
+      <Filter>Header Files\simple_json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gfc\simple_logger\include\simple_logger.h">
+      <Filter>Header Files\simple_logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Geometry2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\local.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

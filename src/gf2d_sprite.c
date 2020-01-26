@@ -181,7 +181,6 @@ Sprite *gf2d_sprite_load_all(
     else sprite->frame_w = frameWidth;
     sprite->frames_per_line = framesPerLine;
     gfc_line_cpy(sprite->filepath,filename);
-
     SDL_FreeSurface(surface);
     return sprite;
 }
