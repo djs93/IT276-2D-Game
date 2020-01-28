@@ -2,6 +2,8 @@
 #include "gfc_matrix.h"
 #include <math.h>
 #include "local.h"
+#define FLT_EPSILON 1.192092896e-07F 
+#define DEG2RAD 0.01745329251994329576923690768489f
 
 #define CMP(x,y) (fabsf((x)-(y))) <= FLT_EPSILON * fmaxf(1.0f, fmaxf(fabsf(x),fabsf(y))) //CMP macro for comparing floats
 

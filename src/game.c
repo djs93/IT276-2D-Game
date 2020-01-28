@@ -2,6 +2,9 @@
 #include "gf2d_graphics.h"
 #include "gf2d_sprite.h"
 #include "simple_logger.h"
+#include "local.h"
+
+Entity* entity_list;
 
 int main(int argc, char * argv[])
 {

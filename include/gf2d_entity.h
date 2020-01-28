@@ -35,7 +35,7 @@ typedef struct Entity_S
 	int frame;
 	Vector3D origin;
 	Vector3D old_origin;
-	Entity* groundentity;
+	struct Entity_S* groundentity;
 	int linkcount;
 	int groundentity_linkcount;
 

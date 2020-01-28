@@ -105,13 +105,13 @@ EntityManager get_entity_manager() {
 }
 
 /*
-Entity* modeled_entity_animated(char* modelName, char* entityName, int startFrame, int numFrames)
+Entity* modeled_entity_animated(char* modelName, char* entityName, int frame_w, int numFrames)
 {
 	Entity* ent = gf2d_entity_new();
 	if (!ent) {
 		return NULL;
 	}
-	Model* model = gf2d_model_load_animated(modelName, startFrame, numFrames);
+	Model* model = gf2d_model_load_animated(modelName, frame_w, numFrames);
 	if (!model) {
 		slog("Could not load animated model %s", modelName);
 		return NULL;
@@ -195,16 +195,18 @@ Entity* load_entity_json(char * entityType)
 	SJson* animatedObj = sj_object_get_value(file, "animated");
 	char* animatedChar = sj_get_string_value(animatedObj);
 	if (strcmp(animatedChar, "true")==0) {
-		SJson* startFrameObj = sj_object_get_value(file, "startFrame");
-		int startFrame;
-		sj_get_integer_value(startFrameObj, &startFrame);
-		SJson* endFrameObj = sj_object_get_value(file, "endFrame");
-		int endFrame;
-		sj_get_integer_value(endFrameObj, &endFrame);
-		result = modeled_entity_animated(modelFileChar, NULL, startFrame, endFrame);
+		SJson* frame_wObj = sj_object_get_value(file, "frame_w");
+		int frame_w;
+		sj_get_integer_value(frame_wObj, &frame_w);
+		SJson* frame_hObj = sj_object_get_value(file, "frame_h");
+		int frame_h;
+		sj_get_integer_value(frame_hObj, &frame_h);
+		//result = modeled_entity_animated(modelFileChar, NULL, frame_w, frame_h);
+		result = NULL;
 	}
 	else {
-		result = modeled_entity(modelFileChar, NULL);
+		//result = modeled_entity(modelFileChar, NULL);
+		result = NULL;
 	}
 	if (!result) {
 		slog("could not load %s from json!", modelFileChar);
@@ -330,24 +332,29 @@ void save_entity_layout_json(Entity* entity)
 
 	if (entity->sprite) {
 		SJson* animated = NULL;
-		SJson* startFrame = NULL;
-		SJson* endFrame = NULL;
-		if (entity->sprite->frameCount > 1) {
+		SJson* frame_w = NULL;
+		SJson* frame_h = NULL;
+		SJson* frames_per_line = NULL;
+		if (entity->sprite->frame_count > 1) {
 			animated = sj_new_bool(1);
-			startFrame = sj_new_int(entity->model->startFrame);
-			endFrame = sj_new_int(entity->model->endFrame);
+			frame_w = sj_new_int(entity->sprite->frame_w);
+			frame_h = sj_new_int(entity->sprite->frame_h);
+			frames_per_line = sj_new_int(entity->sprite->frames_per_line);
 		}
 		else {
 			animated = sj_new_bool(0);
 		}
 		sj_object_insert(file, "animated", animated);
-		if (startFrame) {
-			sj_object_insert(file, "startFrame", startFrame);
+		if (frame_w) {
+			sj_object_insert(file, "frame_w", frame_w);
 		}
-		if (endFrame) {
-			sj_object_insert(file, "endFrame", endFrame);
+		if (frame_h) {
+			sj_object_insert(file, "frame_h", frame_h);
 		}
-		SJson* modelName = sj_new_str(entity->model->filename);
+		if (frames_per_line) {
+			sj_object_insert(file, "frames_per_line", frames_per_line);
+		}
+		SJson* modelName = sj_new_str(entity->sprite->filepath);
 		sj_object_insert(file, "modelFile", modelName);
 	}
 
@@ -402,8 +409,10 @@ void save_entity_layout_json(Entity* entity)
 	SJson* healthMax = sj_new_float(entity->healthmax);
 	sj_object_insert(file, "healthmax", healthMax);
 
+	/*
 	SJson* movetype = sj_new_int(entity->movetype);
 	sj_object_insert(file, "movetype", movetype);
+	*/
 
 	SJson* nextthink = sj_new_float(entity->nextthink);
 	sj_object_insert(file, "nextthink", nextthink);
@@ -440,21 +449,20 @@ void save_entity_layout_json(Entity* entity)
 	*/
 
 	SJson* AABBSize = sj_array_new();
-	sj_array_append(AABBSize, sj_new_float(entity->boundingBox.size.x));
-	sj_array_append(AABBSize, sj_new_float(entity->boundingBox.size.y));
-	sj_array_append(AABBSize, sj_new_float(entity->boundingBox.size.z));
+	sj_array_append(AABBSize, sj_new_float(entity->boundingBox.halfExtents.x));
+	sj_array_append(AABBSize, sj_new_float(entity->boundingBox.halfExtents.y));
 	sj_object_insert(file, "AABBSize", AABBSize);
-
+	
+	/*
 	SJson* AABBAdjustments = sj_array_new();
 	sj_array_append(AABBAdjustments, sj_new_float(entity->model->boudningAdjustment.x));
 	sj_array_append(AABBAdjustments, sj_new_float(entity->model->boudningAdjustment.y));
-	sj_array_append(AABBAdjustments, sj_new_float(entity->model->boudningAdjustment.z));
 	sj_object_insert(file, "AABBAdjustments", AABBAdjustments);
+	*/
 
 	SJson* maxspeed = sj_array_new();
 	sj_array_append(maxspeed, sj_new_float(entity->maxspeed.x));
 	sj_array_append(maxspeed, sj_new_float(entity->maxspeed.y));
-	sj_array_append(maxspeed, sj_new_float(entity->maxspeed.z));
 	sj_object_insert(file, "maxspeed", maxspeed);
 
 	SJson* specFloat1 = sj_new_float(entity->specFloat1);
@@ -475,7 +483,6 @@ SJson* save_entity_content_editor_json(Entity* entity) {
 	sj_object_insert(entJson, "type", sj_string_to_value(sj_string_new_text(entity->type)));
 	sj_array_append(positionArray, sj_new_float(entity->position.x));
 	sj_array_append(positionArray, sj_new_float(entity->position.y));
-	sj_array_append(positionArray, sj_new_float(entity->position.z));
 	sj_object_insert(entJson, "position", positionArray);
 
 	return entJson;
@@ -501,8 +508,8 @@ void save_all_content_editor() {
 Entity* gf2d_nonanimated_entity_copy(Entity* entity)
 {
 	Entity* res = gf2d_entity_new();
-	res->model = gf2d_model_load(entity->model->filename);
-	res->model->texture = entity->model->texture;
+	//res->model = gf2d_model_load(entity->model->filename);
+	//res->model->texture = entity->model->texture;
 	res->type = entity->type;
 	if (strcmp(res->type, "player") == 0) {
 		res->name = "player";
@@ -510,9 +517,9 @@ Entity* gf2d_nonanimated_entity_copy(Entity* entity)
 	else {
 		res->name = "copied entity";
 	}
-	Matrix4 modelMat;
-	gfc_matrix_identity(modelMat);
-	gfc_matrix_copy(res->modelMat, modelMat);
+	//Matrix4 modelMat;
+	//gfc_matrix_identity(modelMat);
+	//gfc_matrix_copy(res->modelMat, modelMat);
 	return res;
 }
 
