@@ -66,11 +66,7 @@ void gf2d_entity_free(Entity *self)
 
 void gf2d_entity_free_all()
 {
-	int i;
-	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
-	{
-		memset(&entity_list[i], 0, sizeof(Entity));
-	}
+	memset(entity_list, 0, sizeof(Entity) * gf2d_entity_manager.entity_max);
 }
 
 Entity* find_entity(char* name) {
