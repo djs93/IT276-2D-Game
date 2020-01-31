@@ -291,7 +291,7 @@ Entity* load_entity_json(char * entityType)
 		result->healthmax = test->healthmax;
 	}
 	else if (strcmp(entityType, "pacer")==0) {
-		Vector3D temp = vector3d(0, -10, 0);
+		Vector2D temp = vector2d(0, -10);
 		result->data2 = &temp;
 		result->acceleration = temp;
 	}
@@ -546,8 +546,8 @@ float getLowestPoint() {
 		Entity* ent = &entity_list[i];
 		if (!ent->_inuse)continue;
 		if (!(strcmp(ent->type, "ground") == 0 || strcmp(ent->type, "platform") == 0))continue;
-		if (ent->position.z < result) {
-			result = ent->position.z;
+		if (ent->position.y < result) {
+			result = ent->position.y;
 		}
 	}
 	return result;

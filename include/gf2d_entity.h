@@ -18,11 +18,14 @@ typedef struct Entity_S
 	char* type;			/**Type of the entitiy*/
 	int           _inuse;         /**<flag to keep track if this isntance is in use and should not be reassigned*/
 	Sprite* sprite;          /**<the 3d model for this entity*/
-	Vector3D         position;       /**<DO NOT DIRECTLY MODIFY - position of the entity in 3d space*/
-	Vector3D         velocity;       /**<velocity of the entity in 3d space*/
-	Vector3D         acceleration;   /**<acceleration of the entity in 3d space*/
-	Vector3D         rotation;       /**<yaw, pitch, and roll of the entity*/
-	Vector3D         scale;          /**<*please default to 1,1,1*/
+	Vector2D         position;       /**<DO NOT DIRECTLY MODIFY - position of the entity in 3d space*/
+	Vector2D         velocity;       /**<velocity of the entity in 3d space*/
+	Vector2D         acceleration;   /**<acceleration of the entity in 3d space*/
+	Vector3D         rotation;       /**<x and y of center of rotation, then degrees of rotation*/
+	Vector2D         scale;          /**<*please default to 1,1*/
+	Vector2D         scaleCenter;          /**<*please default to 0,0*/
+	Vector2D         flip;          /**<*1,0 flips on x-axis,  0,1 on the y*/
+	Vector4D		colorShift;		/**Color shift*/
 	EntityState     state;          /**<current state of the entity*/
 	void (*prethink)(struct Entity_S* self);   /**<function called before entity think*/
 	void (*think)(struct Entity_S* self);   /**<function called on entity think*/
@@ -43,7 +46,7 @@ typedef struct Entity_S
 	int svflags;
 
 	OrientedRectangle boundingBox;
-	Vector3D maxspeed;
+	Vector2D maxspeed;
 
 	float specFloat1;		/**<used for jumpheight in player*/
 	void* data;                     /**<additional entity specific data*/
@@ -58,7 +61,7 @@ typedef struct
 	Uint32	num_ents;
 }EntityManager;
 
-static EntityManager gf2d_entity_manager = { 0, 100 };
+static EntityManager gf2d_entity_manager = { 0, 300 };
 /**
  * @brief initializes the entity subsystem
  * @param entity_max maximum number of simultaneous entities you wish to support
