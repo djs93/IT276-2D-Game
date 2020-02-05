@@ -12,6 +12,9 @@ typedef enum
 	ES_Dead = 2
 }EntityState;
 
+/**
+* @brief The basic entity. Stores its sprite, position, visual components, as well as thinking and other state functions 
+*/
 typedef struct Entity_S
 {
 	char* name;			/**<name of the entity*/
@@ -54,6 +57,9 @@ typedef struct Entity_S
 
 }Entity;
 
+/**
+* @brief Manages all entities, stores them in a list that can be accessed later
+*/
 typedef struct
 {
 	Entity* entity_list;
@@ -79,6 +85,10 @@ Entity* gf2d_entity_new();
  * @param self the entity to free
  */
 void    gf2d_entity_free(Entity* self);
+
+/**
+* @brief free all entities
+*/
 void gf2d_entity_free_all();
 
 /**
@@ -87,23 +97,58 @@ void gf2d_entity_free_all();
 * @return the index of the entity in the entity list
 */
 Entity* find_entity(char* name);
+
+/**
+* @brief get the last entity in the entity list
+* @return the last entity in the entity list
+*/
 Entity* get_last_entity();
 
+/**
+* @brief rotate an entity around an axis
+* @param entity the entity to rotate
+* @param radians the amount of radians to rotate
+* @param axis the axis to rotate around
+*/
 void rotate_entity(Entity* entity, float radians, Vector3D axis);
 
-Entity* modeled_entity_animated(char* modelName, char* entityName, int startFrame, int numFrames);
-Entity* modeled_entity(char* modelName, char* entityName);
+
+//Entity* modeled_entity_animated(char* modelName, char* entityName, int startFrame, int numFrames);
+//Entity* modeled_entity(char* modelName, char* entityName);
 
 //Vector3D getAngles(Matrix4 mat);
 
+/**
+* @brief load an entity from a json file
+* @param entityType the type of entity you wish to load. Loads from <entityType>.json
+* @return an Entity pointer to the new entity
+*/
 Entity* load_entity_json(char* entityType);
 
+/**
+* @brief a helper function to save an entity's basic layout to a json file for further manual tweaking. Saves type, sprite (animation data), health, what fram it's on, flags, and bounding box size
+* @param entity the entity you wish to save
+*/
 void save_entity_layout_json(Entity* entity);
 
+//Probably gonna remove this one
 Entity* gf2d_nonanimated_entity_copy(Entity* entity);
 
+/**
+* @brief saves all needed content from editor to level file (save.json) to load later
+*/
 void save_all_content_editor();
 
+/**
+* @brief get the amount of a certain type of entity in the world
+* @param type the type of entity to count
+* @return the count of entities of that type
+*/
 int get_type_count(char* type);
+
+/**
+* @brief get the lowest point in the world from ground types
+* @return the lowest y position of the world
+*/
 float getLowestPoint();
 #endif
