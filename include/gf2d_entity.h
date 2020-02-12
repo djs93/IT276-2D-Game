@@ -26,11 +26,14 @@ typedef struct Entity_S
 	EntityType* type;			/**Type of the entitiy*/
 	int           _inuse;         /**<flag to keep track if this isntance is in use and should not be reassigned*/
 	Sprite* sprite;          /**<the 3d model for this entity*/
-	Vector3D         position;       /**<DO NOT DIRECTLY MODIFY - position of the entity in 3d space*/
-	Vector3D         velocity;       /**<velocity of the entity in 3d space*/
-	Vector3D         acceleration;   /**<acceleration of the entity in 3d space*/
-	Vector3D         rotation;       /**<yaw, pitch, and roll of the entity*/
-	Vector3D         scale;          /**<defaults to 1,1,1*/
+	Vector2D         position;       /**<DO NOT DIRECTLY MODIFY - position of the entity in 3d space*/
+	Vector2D         velocity;       /**<velocity of the entity in 3d space*/
+	Vector2D         acceleration;   /**<acceleration of the entity in 3d space*/
+	Vector3D         rotation;       /**<x and y of center of rotation, then degrees of rotation*/
+	Vector2D         scale;          /**<*please default to 1,1*/
+	Vector2D         scaleCenter;          /**<*please default to 0,0*/
+	Vector2D         flip;          /**<*1,0 flips on x-axis,  0,1 on the y*/
+	Vector4D		colorShift;		/**Color shift*/
 	EntityState     state;          /**<current state of the entity*/
 	void (*prethink)(struct Entity_S* self);   /**<function called before entity think*/
 	void (*think)(struct Entity_S* self);   /**<function called on entity think*/
@@ -48,6 +51,9 @@ typedef struct Entity_S
 
 }Entity;
 
+/**
+* @brief Manages all entities, stores them in a list that can be accessed later
+*/
 typedef struct
 {
 	Entity* entity_list;
@@ -55,7 +61,7 @@ typedef struct
 	Uint32	num_ents;
 }EntityManager;
 
-static EntityManager gf2d_entity_manager = { 0, 100 };
+static EntityManager gf2d_entity_manager = { 0, 300 };
 /**
  * @brief initializes the entity subsystem
  * @param entity_max maximum number of simultaneous entities you wish to support
@@ -72,8 +78,11 @@ Entity* gf2d_entity_new();
  * @brief free an active entity
  * @param self the entity to free
  */
-void gf2d_entity_free(Entity* self);
+void    gf2d_entity_free(Entity* self);
 
+/**
+* @brief free all entities
+*/
 void gf2d_entity_free_all();
 
 /**
@@ -82,29 +91,58 @@ void gf2d_entity_free_all();
 * @return the index of the entity in the entity list
 */
 Entity* find_entity(char* name);
+
+/**
+* @brief get the last entity in the entity list
+* @return the last entity in the entity list
+*/
 Entity* get_last_entity();
 
 /**
- * @brief rotate an entity around an axis in radians
- * @param entity the entity to rotate
- * @param radians the amount to rotate the entity
- * @param axis the axis to rotate the entity around
- */
+* @brief rotate an entity around an axis
+* @param entity the entity to rotate
+* @param radians the amount of radians to rotate
+* @param axis the axis to rotate around
+*/
 void rotate_entity(Entity* entity, float radians, Vector3D axis);
 
-Entity* modeled_entity_animated(char* modelName, char* entityName, int startFrame, int numFrames);
-Entity* modeled_entity(char* modelName, char* entityName);
+
+//Entity* modeled_entity_animated(char* modelName, char* entityName, int startFrame, int numFrames);
+//Entity* modeled_entity(char* modelName, char* entityName);
 
 //Vector3D getAngles(Matrix4 mat);
 
+/**
+* @brief load an entity from a json file
+* @param entityType the type of entity you wish to load. Loads from <entityType>.json
+* @return an Entity pointer to the new entity
+*/
 Entity* load_entity_json(char* entityType);
 
+/**
+* @brief a helper function to save an entity's basic layout to a json file for further manual tweaking. Saves type, sprite (animation data), health, what fram it's on, flags, and bounding box size
+* @param entity the entity you wish to save
+*/
 void save_entity_layout_json(Entity* entity);
 
+//Probably gonna remove this one
 Entity* gf2d_nonanimated_entity_copy(Entity* entity);
 
+/**
+* @brief saves all needed content from editor to level file (save.json) to load later
+*/
 void save_all_content_editor();
 
+/**
+* @brief get the amount of a certain type of entity in the world
+* @param type the type of entity to count
+* @return the count of entities of that type
+*/
 int get_type_count(char* type);
+
+/**
+* @brief get the lowest point in the world from ground types
+* @return the lowest y position of the world
+*/
 float getLowestPoint();
 #endif

@@ -66,11 +66,7 @@ void gf2d_entity_free(Entity *self)
 
 void gf2d_entity_free_all()
 {
-	int i;
-	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
-	{
-		memset(&entity_list[i], 0, sizeof(Entity));
-	}
+	memset(entity_list, 0, sizeof(Entity) * gf2d_entity_manager.entity_max);
 }
 
 Entity* find_entity(char* name) {
@@ -532,8 +528,8 @@ float getLowestPoint() {
 		Entity* ent = &entity_list[i];
 		if (!ent->_inuse)continue;
 		if (!(strcmp(ent->type, "ground") == 0 || strcmp(ent->type, "platform") == 0))continue;
-		if (ent->position.z < result) {
-			result = ent->position.z;
+		if (ent->position.y < result) {
+			result = ent->position.y;
 		}
 	}
 	return result;
