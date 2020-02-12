@@ -66,3 +66,12 @@ makefile.dep
 /Project1/Release/2D Project.tlog
 /2D Project.ipdb
 /2D Project.iobj
+/.idea
+/cmake-build-debug
+/CMakeFiles
+/CMakeCache.txt
+/CMakeLists.txt
+/sdl2-config.cmake
+/Makefile
+/IT276_2D_Game.cbp
+/cmake_install.cmake

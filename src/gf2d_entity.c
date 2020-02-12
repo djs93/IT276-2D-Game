@@ -233,10 +233,10 @@ Entity* load_entity_json(char * entityType)
 	else result->movetype = MOVETYPE_NONE;
 	*/
 
-	float* nextthink = malloc(sizeof(float));
-	sj_get_float_value(sj_object_get_value(file, "nextthink"), nextthink);
-	if (nextthink)result->nextthink = *nextthink;
-	else result->nextthink = 0.0f;
+	float* nextThink = malloc(sizeof(float));
+	sj_get_float_value(sj_object_get_value(file, "nextThink"), nextThink);
+	if (nextThink)result->nextThink = *nextThink;
+	else result->nextThink = 0.0f;
 
 	int* frame = malloc(sizeof(int));
 	sj_get_integer_value(sj_object_get_value(file, "frame"), frame);
@@ -282,24 +282,10 @@ Entity* load_entity_json(char * entityType)
 	if (specfloat)result->specFloat1 = *specfloat;
 	else result->specFloat1 = 0.0f;
 
-	Entity* test = find_entity("player");
-	if (strcmp(entityType, "player")==0&&test) {
-		result->data = test->data;
-		result->data2 = test->data2;
-		result->specFloat1 = test->specFloat1;
-		result->health = test->health;
-		result->healthmax = test->healthmax;
-	}
-	else if (strcmp(entityType, "pacer")==0) {
-		Vector3D temp = vector3d(0, -10, 0);
-		result->data2 = &temp;
-		result->acceleration = temp;
-	}
-
 	free(health);
 	free(maxHealth);
 	//free(moveType);
-	free(nextthink);
+	free(nextThink);
 	free(frame);
 	free(flags);
 	free(svflags);
@@ -414,8 +400,8 @@ void save_entity_layout_json(Entity* entity)
 	sj_object_insert(file, "movetype", movetype);
 	*/
 
-	SJson* nextthink = sj_new_float(entity->nextthink);
-	sj_object_insert(file, "nextthink", nextthink);
+	SJson* nextThink = sj_new_float(entity->nextThink);
+	sj_object_insert(file, "nextThink", nextThink);
 
 	SJson* frame = sj_new_int(entity->frame);
 	sj_object_insert(file, "frame", frame);

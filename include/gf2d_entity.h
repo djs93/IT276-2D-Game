@@ -9,45 +9,42 @@ typedef enum
 {
 	ES_Idle = 0,
 	ES_Dying = 1,
-	ES_Dead = 2
+	ES_Dead = 2,
+	ES_Firing = 3
 }EntityState;
+
+typedef enum
+{
+	Type_Decor = 0,
+	Type_Tower = 1,
+	Type_Enemy = 2
+}EntityType;
 
 typedef struct Entity_S
 {
 	char* name;			/**<name of the entity*/
-	char* type;			/**Type of the entitiy*/
+	EntityType* type;			/**Type of the entitiy*/
 	int           _inuse;         /**<flag to keep track if this isntance is in use and should not be reassigned*/
 	Sprite* sprite;          /**<the 3d model for this entity*/
 	Vector3D         position;       /**<DO NOT DIRECTLY MODIFY - position of the entity in 3d space*/
 	Vector3D         velocity;       /**<velocity of the entity in 3d space*/
 	Vector3D         acceleration;   /**<acceleration of the entity in 3d space*/
 	Vector3D         rotation;       /**<yaw, pitch, and roll of the entity*/
-	Vector3D         scale;          /**<*please default to 1,1,1*/
+	Vector3D         scale;          /**<defaults to 1,1,1*/
 	EntityState     state;          /**<current state of the entity*/
 	void (*prethink)(struct Entity_S* self);   /**<function called before entity think*/
 	void (*think)(struct Entity_S* self);   /**<function called on entity think*/
 	void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<function called when an entity touches another*/
 	void (*die)(struct Entity_S* self);   /**<function called when an entity dies*/
-	float           health;
-	float           healthmax;
-//	int movetype;					/**<type of movement*/
-	float nextthink;
-	int frame;
+	float nextThink;				/**<the next time the entity will think (in seconds)*/
+	float maxSpeed;					/**<the max speed of the entity*/
+	int frame;						/**<the frame of animation the entity is on*/
 	Vector3D origin;
 	Vector3D old_origin;
-	struct Entity_S* groundentity;
-	int linkcount;
-	int groundentity_linkcount;
-
 	int flags;
-	int svflags;
-
-	OrientedRectangle boundingBox;
-	Vector3D maxspeed;
-
-	float specFloat1;		/**<used for jumpheight in player*/
+	Circle boundingBox;
+	float fireRate;
 	void* data;                     /**<additional entity specific data*/
-	void* data2;                     /**<additional entity specific data*/
 
 }Entity;
 
@@ -75,7 +72,8 @@ Entity* gf2d_entity_new();
  * @brief free an active entity
  * @param self the entity to free
  */
-void    gf2d_entity_free(Entity* self);
+void gf2d_entity_free(Entity* self);
+
 void gf2d_entity_free_all();
 
 /**
@@ -86,6 +84,12 @@ void gf2d_entity_free_all();
 Entity* find_entity(char* name);
 Entity* get_last_entity();
 
+/**
+ * @brief rotate an entity around an axis in radians
+ * @param entity the entity to rotate
+ * @param radians the amount to rotate the entity
+ * @param axis the axis to rotate the entity around
+ */
 void rotate_entity(Entity* entity, float radians, Vector3D axis);
 
 Entity* modeled_entity_animated(char* modelName, char* entityName, int startFrame, int numFrames);
