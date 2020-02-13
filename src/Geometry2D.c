@@ -2,10 +2,28 @@
 #include "gfc_matrix.h"
 #include <math.h>
 #include "local.h"
+#include "simple_logger.h"
 #define FLT_EPSILON 1.192092896e-07F 
 #define DEG2RAD 0.01745329251994329576923690768489f
 
 #define CMP(x,y) (fabsf((x)-(y))) <= FLT_EPSILON * fmaxf(1.0f, fmaxf(fabsf(x),fabsf(y))) //CMP macro for comparing floats
+void path2dTotal(void* data, void* context);
+
+Path2D path2d(List* lines)
+{
+	Path2D path;
+	path.lines = lines;
+	path.totalLength = 0.f;
+	gfc_list_foreach(path.lines, path2dTotal, &path);
+	return path;
+}
+
+void path2dTotal(void* data, void* context) {
+	Line2D* line= (Line2D*)data;
+	Path2D* path = (Path2D*)context;
+	float len = LengthLine2D(*line);
+	path->totalLength += len;
+}
 
 Point2D point2d(float x, float y) {
 	Point2D vec;

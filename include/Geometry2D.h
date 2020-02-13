@@ -2,6 +2,7 @@
 #define _H_2D_GEOMETRY_
 
 #include "gfc_vector.h"
+#include "gfc_list.h"
 
 typedef Vector2D Point2D;
 
@@ -16,6 +17,17 @@ typedef struct Line2D {
  * @param end the ending position of the line
  */
 Line2D line2d(Point2D start, Point2D end);
+
+typedef struct Path2D_S {
+	List* lines;
+	float totalLength;
+} Path2D;
+
+/**
+* @brief create and return a Path2D
+* @param lines the set of lines making up the path
+*/
+Path2D path2d(List* lines);
 
 /**
  * @brief create and return a Point2D
