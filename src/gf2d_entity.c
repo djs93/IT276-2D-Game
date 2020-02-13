@@ -213,6 +213,7 @@ Entity* load_entity_json(char * entityType)
 
 	float* health = malloc(sizeof(float));
 	
+	/*
 	sj_get_float_value(sj_object_get_value(file, "health"), health);
 	if (health)result->health = *health;
 	else result->health = 1.0f;
@@ -221,6 +222,7 @@ Entity* load_entity_json(char * entityType)
 	sj_get_float_value(sj_object_get_value(file, "healthmax"), maxHealth);
 	if (maxHealth)result->healthmax = *maxHealth;
 	else result->healthmax = 1.0f;
+	*/
 
 	/*
 	int* moveType = malloc(sizeof(int));
@@ -244,6 +246,7 @@ Entity* load_entity_json(char * entityType)
 	if (flags)result->flags = *flags;
 	else result->flags = 0;
 
+	/*
 	int* svflags = malloc(sizeof(int));
 	sj_get_integer_value(sj_object_get_value(file, "svflags"), svflags);
 	if (svflags)result->svflags = *svflags;
@@ -256,6 +259,7 @@ Entity* load_entity_json(char * entityType)
 	sj_get_float_value(sj_array_get_nth(aabbSizeArray, 1), y);
 	result->boundingBox.halfExtents.x = *x;
 	result->boundingBox.halfExtents.y = *y;
+	*/
 
 	/*
 	SJson* aabbOffsetArray = sj_object_get_value(file, "AABBAdjustments");
@@ -267,28 +271,29 @@ Entity* load_entity_json(char * entityType)
 	result->model->boudningAdjustment.z = *z;
 	*/
 
-	SJson* maxSpeedArray = sj_object_get_value(file, "maxspeed");
-	sj_get_float_value(sj_array_get_nth(maxSpeedArray, 0), x);
-	sj_get_float_value(sj_array_get_nth(maxSpeedArray, 1), y);
-	result->maxspeed.x = *x;
-	result->maxspeed.y = *y;
+	SJson* maxSpeed = sj_object_get_value(file, "maxSpeed");
+	float* maxSpeedFloat = malloc(sizeof(float));
+	sj_get_float_value(maxSpeed, maxSpeedFloat);
+	result->maxSpeed = *maxSpeedFloat;
 
+	/*
 	float* specfloat = malloc(sizeof(float));
 	sj_get_float_value(sj_object_get_value(file, "specFloat1"), specfloat);
 	if (specfloat)result->specFloat1 = *specfloat;
 	else result->specFloat1 = 0.0f;
+	*/
 
 	free(health);
-	free(maxHealth);
+	free(maxSpeedFloat);
 	//free(moveType);
 	free(nextThink);
 	free(frame);
 	free(flags);
-	free(svflags);
-	free(x);
-	free(y);
+	//free(svflags);
+	//free(x);
+	//free(y);
 	//free(z);
-	free(specfloat);
+	//free(specfloat);
 
 	return result;
 }
@@ -383,7 +388,7 @@ void save_entity_layout_json(Entity* entity)
 
 	SJson* state = sj_new_int(entity->state);
 	sj_object_insert(file, "state", state);
-	*/
+	
 
 	SJson* health = sj_new_float(entity->health);
 	sj_object_insert(file, "health", health);
@@ -391,7 +396,6 @@ void save_entity_layout_json(Entity* entity)
 	SJson* healthMax = sj_new_float(entity->healthmax);
 	sj_object_insert(file, "healthmax", healthMax);
 
-	/*
 	SJson* movetype = sj_new_int(entity->movetype);
 	sj_object_insert(file, "movetype", movetype);
 	*/
@@ -418,11 +422,10 @@ void save_entity_layout_json(Entity* entity)
 
 	SJson* flags = sj_new_int(entity->flags);
 	sj_object_insert(file, "flags", flags);
-
+	/*
 	SJson* svflags = sj_new_int(entity->svflags);
 	sj_object_insert(file, "svflags", svflags);
 
-	/*
 	SJson* AABBPos = sj_array_new();
 	sj_array_append(AABBPos, sj_new_float(entity->boundingBox.position.x));
 	sj_array_append(AABBPos, sj_new_float(entity->boundingBox.position.y));
@@ -430,10 +433,8 @@ void save_entity_layout_json(Entity* entity)
 	sj_object_insert(file, "AABBPos", AABBPos);
 	*/
 
-	SJson* AABBSize = sj_array_new();
-	sj_array_append(AABBSize, sj_new_float(entity->boundingBox.halfExtents.x));
-	sj_array_append(AABBSize, sj_new_float(entity->boundingBox.halfExtents.y));
-	sj_object_insert(file, "AABBSize", AABBSize);
+	SJson* radius = sj_new_float(entity->boundingBox.radius);
+	sj_object_insert(file, "radius", radius);
 	
 	/*
 	SJson* AABBAdjustments = sj_array_new();
@@ -442,14 +443,12 @@ void save_entity_layout_json(Entity* entity)
 	sj_object_insert(file, "AABBAdjustments", AABBAdjustments);
 	*/
 
-	SJson* maxspeed = sj_array_new();
-	sj_array_append(maxspeed, sj_new_float(entity->maxspeed.x));
-	sj_array_append(maxspeed, sj_new_float(entity->maxspeed.y));
-	sj_object_insert(file, "maxspeed", maxspeed);
-
+	SJson* maxSpeed = sj_new_float(entity->maxSpeed);
+	sj_object_insert(file, "radius", maxSpeed);
+	/*
 	SJson* specFloat1 = sj_new_float(entity->specFloat1);
 	sj_object_insert(file, "specFloat1", specFloat1);
-
+	*/
 	//be sure to get special cases like think functions and additional data per ent-specific load!
 	char* fileName = malloc(strlen("mobs/")+strlen(entity->type)+ strlen(".json") +1);
 	strcpy(fileName, "mobs/");
