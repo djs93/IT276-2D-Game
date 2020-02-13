@@ -58,7 +58,15 @@ int main(int argc, char * argv[])
 	mouseEnt->scale = vector2d(1, 1);
 	mouseEnt->colorShift = vector4d(255, 255, 255, 255);
 
-	
+	List* testLines = gfc_list_new();
+	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
+	Line2D line2 = line2d(point2d(0, 1), point2d(1, 1));
+	testLines = gfc_list_append(testLines, (void*)&line1);
+	testLines = gfc_list_append(testLines, (void*)&line2);
+
+	Path2D testPath = path2d(testLines);
+	slog("%f", testPath.totalLength);
+
     /*main game loop*/
     while(!done)
     {
@@ -83,7 +91,7 @@ int main(int argc, char * argv[])
 		
 
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
-        slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
+        //slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
     slog("---==== END ====---");
     return 0;
