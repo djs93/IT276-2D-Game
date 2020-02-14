@@ -21,6 +21,8 @@ Line2D line2d(Point2D start, Point2D end);
 typedef struct Path2D_S {
 	List* lines;
 	float totalLength;
+	Point2D* start;
+	Point2D* end;
 } Path2D;
 
 /**

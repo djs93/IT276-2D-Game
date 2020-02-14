@@ -15,6 +15,8 @@ Path2D path2d(List* lines)
 	path.lines = lines;
 	path.totalLength = 0.f;
 	gfc_list_foreach(path.lines, path2dTotal, &path);
+	path.start = (Point2D*)gfc_list_get_nth(lines, 0);
+	path.start = (Point2D*)gfc_list_get_nth(lines, lines->count-1);
 	return path;
 }
 
