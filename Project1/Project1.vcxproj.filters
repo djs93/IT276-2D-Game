@@ -99,6 +99,9 @@
     <ClCompile Include="..\src\gf2d_entity.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="level.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\gf2d_draw.h">

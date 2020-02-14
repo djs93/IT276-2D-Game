@@ -176,6 +176,7 @@
     <ClCompile Include="..\src\gf2d_entity.c" />
     <ClCompile Include="..\src\gf2d_graphics.c" />
     <ClCompile Include="..\src\gf2d_sprite.c" />
+    <ClCompile Include="level.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gfc\include\gfc_audio.h" />
