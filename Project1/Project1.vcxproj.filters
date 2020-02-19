@@ -102,6 +102,9 @@
     <ClCompile Include="..\src\level.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\gf2d_actor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\gf2d_draw.h">
@@ -180,6 +183,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\level.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
