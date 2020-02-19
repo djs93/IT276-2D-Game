@@ -99,7 +99,7 @@
     <ClCompile Include="..\src\gf2d_entity.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="level.c">
+    <ClCompile Include="..\src\level.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -179,7 +179,7 @@
     <ClInclude Include="..\include\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="level.h">
+    <ClInclude Include="..\include\level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
