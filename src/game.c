@@ -4,9 +4,12 @@
 #include "simple_logger.h"
 #include "local.h"
 #include "gf2d_entity.h"
+#include "level.h"
 
 Entity* entity_list;
-void draw_normal_entities(int frame);
+void draw_normal_entities();
+void draw_level();
+Vector2D vector2d_zero;
 
 
 int main(int argc, char * argv[])
@@ -23,6 +26,8 @@ int main(int argc, char * argv[])
 
 	Entity* mouseEnt;
 	Entity* backgroundEnt;
+
+    vector2d_zero = vector2d(0, 0);
     
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -42,18 +47,18 @@ int main(int argc, char * argv[])
     /*demo setup*/
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
-
+    gf2d_action_list_init(128);
 	gf2d_entity_manager_init(300);
 
 	backgroundEnt = gf2d_entity_new();
-	backgroundEnt->sprite = sprite;
+    gf2d_actor_load(&backgroundEnt->actor, "actors/mouse.actor");
 	backgroundEnt->position = vector2d(0, 0);
 	backgroundEnt->scale = vector2d(1, 1);
 	backgroundEnt->scale = vector2d(1, 1);
 	backgroundEnt->colorShift = vector4d(255, 255, 255, 255);
 
-	mouseEnt = gf2d_entity_new();
-	mouseEnt->sprite = mouse;
+	mouseEnt = gf2d_entity_new(); 
+    gf2d_actor_load(&backgroundEnt->actor, "actors/mouse.actor");
 	mouseEnt->position = vector2d(0, 0);
 	mouseEnt->scale = vector2d(1, 1);
 	mouseEnt->colorShift = vector4d(255, 255, 255, 255);
@@ -66,6 +71,8 @@ int main(int argc, char * argv[])
 
 	Path2D testPath = path2d(testLines);
 	slog("%f", testPath.totalLength);
+
+    level_load("this string doesn't matter right now");
 
     /*main game loop*/
     while(!done)
@@ -86,7 +93,9 @@ int main(int argc, char * argv[])
             
             //UI elements last
             //gf2d_sprite_draw(mouse, vector2d(mx,my), NULL, NULL, NULL, NULL, &mouseColor, (int)mf);
-		draw_normal_entities((int)mf);
+        draw_level();
+//        gf2d_entity_update_all();
+		draw_normal_entities();
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 		
 
@@ -97,7 +106,7 @@ int main(int argc, char * argv[])
     return 0;
 }
 
-void draw_normal_entities(int frame) {
+void draw_normal_entities() {
 	int i = 0;
 	Entity* ent;
 	while (i < gf2d_entity_manager.entity_max) {
@@ -107,13 +116,17 @@ void draw_normal_entities(int frame) {
 			continue;
 		}
 
-		if (ent->sprite) {
+		if (ent->actor.sprite) {
 			//if (!ent->name || strcmp(ent->name, "axes_attach") != 0) { //These are checks just in case there are specific things we don't want to draw
-			gf2d_sprite_draw(ent->sprite, ent->position, &ent->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)frame % ent->sprite->frame_count);
+			gf2d_sprite_draw(ent->actor.sprite, ent->position, &ent->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);
 			//}
 		}
 
 		i++;
 	}
+}
+
+void draw_level() {
+    gf2d_sprite_draw(get_loaded_level()->background, vector2d_zero, NULL, NULL, NULL, NULL, NULL, 0);
 }
 /*eol@eof*/

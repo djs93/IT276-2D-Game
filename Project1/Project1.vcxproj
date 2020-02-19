@@ -208,6 +208,9 @@
     <ClInclude Include="..\include\level.h" />
     <ClInclude Include="..\include\local.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\actors\mouse.actor" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

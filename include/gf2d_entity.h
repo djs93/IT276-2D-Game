@@ -2,6 +2,7 @@
 #define __GF2D_ENTITY_H__
 
 #include "gf2d_sprite.h"
+#include "gf2d_actor.h"
 //#include "local.h"
 #include "Geometry2D.h"
 
@@ -25,7 +26,7 @@ typedef struct Entity_S
 	char* name;			/**<name of the entity*/
 	EntityType* type;			/**Type of the entitiy*/
 	int           _inuse;         /**<flag to keep track if this isntance is in use and should not be reassigned*/
-	Sprite* sprite;          /**<the 3d model for this entity*/
+	Actor actor;                     /**<animated sprite information*/
 	Vector2D         position;       /**<DO NOT DIRECTLY MODIFY - position of the entity in 3d space*/
 	Vector2D         velocity;       /**<velocity of the entity in 3d space*/
 	Vector2D         acceleration;   /**<acceleration of the entity in 3d space*/
@@ -39,6 +40,7 @@ typedef struct Entity_S
 	void (*think)(struct Entity_S* self);   /**<function called on entity think*/
 	void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<function called when an entity touches another*/
 	void (*die)(struct Entity_S* self);   /**<function called when an entity dies*/
+	void (*update)(struct Entity_S* self);  /**<called after system entity update*/
 	float nextThink;				/**<the next time the entity will think (in seconds)*/
 	float maxSpeed;					/**<the max speed of the entity*/
 	int frame;						/**<the frame of animation the entity is on*/
@@ -47,6 +49,7 @@ typedef struct Entity_S
 	int flags;
 	Circle boundingBox;
 	float fireRate;
+	Bool dead;						/**<when true, the entity system will delete the entity on the next update*/
 	void* data;                     /**<additional entity specific data*/
 
 }Entity;
@@ -145,4 +148,15 @@ int get_type_count(char* type);
 * @return the lowest y position of the world
 */
 float getLowestPoint();
+
+/**
+* @brief update all entities
+*/
+void gf2d_entity_update_all();
+
+/**
+* @brief update an entity
+* @param self the entity to update
+*/
+void gf2d_entity_update(Entity* self);
 #endif

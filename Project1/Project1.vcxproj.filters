@@ -31,6 +31,9 @@
     <Filter Include="Header Files\simple_logger">
       <UniqueIdentifier>{f51c2c00-33fc-4d0c-8943-448a974fac31}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Actors">
+      <UniqueIdentifier>{de6bccbf-833c-4cba-a23c-0b9d371e72d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\game.c">
@@ -188,5 +191,10 @@
     <ClInclude Include="..\include\gf2d_actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\actors\mouse.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -57,7 +57,7 @@ void gf2d_entity_free(Entity *self)
         return;
     }
     self->_inuse = 0;
-	gf2d_sprite_free(self->sprite);
+	gf2d_sprite_free(self->actor.sprite);
     if (self->data != NULL)
     {
         slog("warning: data not freed at entity free!");
@@ -317,16 +317,16 @@ void save_entity_layout_json(Entity* entity)
 	sj_object_insert(file, "_inuse", inuse);
 	*/
 
-	if (entity->sprite) {
+	if (entity->actor.sprite) {
 		SJson* animated = NULL;
 		SJson* frame_w = NULL;
 		SJson* frame_h = NULL;
 		SJson* frames_per_line = NULL;
-		if (entity->sprite->frame_count > 1) {
+		if (entity->actor.sprite->frame_count > 1) {
 			animated = sj_new_bool(1);
-			frame_w = sj_new_int(entity->sprite->frame_w);
-			frame_h = sj_new_int(entity->sprite->frame_h);
-			frames_per_line = sj_new_int(entity->sprite->frames_per_line);
+			frame_w = sj_new_int(entity->actor.sprite->frame_w);
+			frame_h = sj_new_int(entity->actor.sprite->frame_h);
+			frames_per_line = sj_new_int(entity->actor.sprite->frames_per_line);
 		}
 		else {
 			animated = sj_new_bool(0);
@@ -341,7 +341,7 @@ void save_entity_layout_json(Entity* entity)
 		if (frames_per_line) {
 			sj_object_insert(file, "frames_per_line", frames_per_line);
 		}
-		SJson* modelName = sj_new_str(entity->sprite->filepath);
+		SJson* modelName = sj_new_str(entity->actor.sprite->filepath);
 		sj_object_insert(file, "modelFile", modelName);
 	}
 
@@ -532,5 +532,38 @@ float getLowestPoint() {
 		}
 	}
 	return result;
+}
+
+void gf2d_entity_update_all()
+{
+	int i;
+	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
+	{
+		if (gf2d_entity_manager.entity_list[i]._inuse == 0)continue;
+		gf2d_entity_update(&gf2d_entity_manager.entity_list[i]);
+	}
+}
+
+void gf2d_entity_update(Entity* self)
+{
+	if (!self)return;
+	if (!self->_inuse)return;
+
+	if (self->dead != 0)
+	{
+		gf2d_entity_free(self);
+		return;
+	}
+	/*collision handles position and velocity*/
+	vector2d_add(self->velocity, self->velocity, self->acceleration);
+
+	//gf2d_particle_emitter_update(self->pe);
+
+	gf2d_actor_next_frame(&self->actor);
+
+	if (self->update != NULL)
+	{
+		self->update(self);
+	}
 }
 /*eol@eof*/

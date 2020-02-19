@@ -101,7 +101,7 @@ ActionList *gf2d_action_list_get_by_filename(char * filename)
     }
     for (i = 0;i < action_list_manager.maxActionLists;i++)
     {
-        if (gf2d_line_cmp(action_list_manager.actionLists[i].filename,filename)==0)
+        if (gfc_line_cmp(action_list_manager.actionLists[i].filename,filename)==0)
         {
             return &action_list_manager.actionLists[i];
         }
@@ -244,7 +244,7 @@ ActionList *gf2d_action_list_load(
         slog("failed to open action file: %s",filename);
         return NULL;
     }
-    gf2d_line_cpy(actionList->filename,filename);
+    gfc_line_cpy(actionList->filename,filename);
     count = gf2d_action_file_get_count(file);
     if (!count)
     {
@@ -277,7 +277,7 @@ Action *gf2d_action_list_get_action(ActionList *al, char *name)
     }
     for (i = 0; i < al->numActions;i++)
     {
-        if (gf2d_line_cmp(al->actions[i].name,name) == 0)
+        if (gfc_line_cmp(al->actions[i].name,name) == 0)
         {
             return &al->actions[i];
         }
@@ -366,7 +366,7 @@ void gf2d_actor_set_action(Actor *actor,char *action)
 {
     if (!actor)return;
     actor->frame = gf2d_action_set(actor->al,action);
-    gf2d_line_cpy(actor->action,action);
+    gfc_line_cpy(actor->action,action);
 }
 
 void gf2d_actor_next_frame(Actor *actor)

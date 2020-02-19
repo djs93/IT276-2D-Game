@@ -22,7 +22,8 @@ Level* level_new(char* backgroundFile)
 
 Level* level_load(char* levelFile)
 {
-	return NULL;
+	LOADED_LEVEL = level_new("images/backgrounds/bg_flat.png");
+	return LOADED_LEVEL;
 }
 
 void level_save(char* fileName, Level* level) {
