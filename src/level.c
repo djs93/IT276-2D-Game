@@ -36,12 +36,12 @@ void level_save(char* fileName, Level* level) {
 		gfc_list_foreach(level->paths, paths_save, paths);
 	}
 	//add path saving
-	char* fileName = malloc(strlen("levels/") + strlen(fileName) + strlen(".json") + 1);
-	strcpy(fileName, "mobs/");
-	strcat(fileName, fileName);
-	strcat(fileName, ".json");
-	sj_save(file, fileName);
-	free(fileName);
+	char* saveFileName = malloc(strlen("levels/") + strlen(fileName) + strlen(".json") + 1);
+	strcpy(saveFileName, "mobs/");
+	strcat(saveFileName, fileName);
+	strcat(saveFileName, ".json");
+	sj_save(file, saveFileName);
+	free(saveFileName);
 }
 
 void paths_save(void* data, void* context) {
