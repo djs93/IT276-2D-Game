@@ -50,15 +50,17 @@ int main(int argc, char * argv[])
     gf2d_action_list_init(128);
 	gf2d_entity_manager_init(300);
 
+    /*
 	backgroundEnt = gf2d_entity_new();
     gf2d_actor_load(&backgroundEnt->actor, "actors/mouse.actor");
 	backgroundEnt->position = vector2d(0, 0);
 	backgroundEnt->scale = vector2d(1, 1);
 	backgroundEnt->scale = vector2d(1, 1);
 	backgroundEnt->colorShift = vector4d(255, 255, 255, 255);
+    */
 
 	mouseEnt = gf2d_entity_new(); 
-    gf2d_actor_load(&backgroundEnt->actor, "actors/mouse.actor");
+    gf2d_actor_load(&mouseEnt->actor, "actors/mouse.actor");
 	mouseEnt->position = vector2d(0, 0);
 	mouseEnt->scale = vector2d(1, 1);
 	mouseEnt->colorShift = vector4d(255, 255, 255, 255);
@@ -94,7 +96,7 @@ int main(int argc, char * argv[])
             //UI elements last
             //gf2d_sprite_draw(mouse, vector2d(mx,my), NULL, NULL, NULL, NULL, &mouseColor, (int)mf);
         draw_level();
-//        gf2d_entity_update_all();
+        gf2d_entity_update_all();
 		draw_normal_entities();
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 		
