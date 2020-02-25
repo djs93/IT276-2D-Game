@@ -78,6 +78,24 @@ typedef struct OrientedRectangle {
 	float rotation;
 } OrientedRectangle;
 
+typedef enum
+{
+    ST_RECT,
+    ST_CIRCLE,
+    ST_EDGE
+}ShapeTypes;
+
+typedef struct
+{
+    ShapeTypes type;
+    union
+    {
+        Circle c;
+        Rectangle2D r;
+        Line2D e;
+    }s;
+}Shape;
+
 /**
  * @brief create and return an oriented rectangle
  * @param position the position of the center of the rectangle
