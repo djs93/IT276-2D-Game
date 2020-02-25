@@ -536,11 +536,11 @@ float getLowestPoint() {
 
 void gf2d_entity_update_all()
 {
-	int i = 0;
+	int i;
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
 	{
-		if (entity_list[i]._inuse == 0)continue;
-		gf2d_entity_update(&entity_list[i]);
+		if (gf2d_entity_manager.entity_list[i]._inuse == 0)continue;
+		gf2d_entity_update(&gf2d_entity_manager.entity_list[i]);
 	}
 }
 
