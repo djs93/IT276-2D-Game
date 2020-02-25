@@ -1,0 +1,16 @@
+{
+  "background": "images/backgrounds/bg_flat.png",
+  "paths": [
+    [ 1, 2 ],
+    [ 2, 3 ]
+  ],
+  "decorations": [
+    {
+      "sprite": "images/pointer.png",
+      "position": [ 5, 5 ],
+      "radius": 10,
+      "startFrame": 0,
+      "endFrame": 15
+    }
+  ]
+}
