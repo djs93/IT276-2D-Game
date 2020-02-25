@@ -17,6 +17,9 @@ Level* level_new(char* backgroundFile)
 	if (backgroundFile) {
 		level->background = gf2d_sprite_load_image(backgroundFile);
 	}
+	level->paths = gfc_list_new();
+	level->buckets = gfc_list_new();
+	level->optimalBuckets = gfc_list_new();
 	return level;
 }
 

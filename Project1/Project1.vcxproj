@@ -170,6 +170,7 @@
     <ClCompile Include="..\gfc\src\gfc_text.c" />
     <ClCompile Include="..\gfc\src\gfc_types.c" />
     <ClCompile Include="..\gfc\src\gfc_vector.c" />
+    <ClCompile Include="..\src\bucket.c" />
     <ClCompile Include="..\src\game.c" />
     <ClCompile Include="..\src\Geometry2D.c" />
     <ClCompile Include="..\src\gf2d_actor.c" />
@@ -198,6 +199,7 @@
     <ClInclude Include="..\gfc\simple_json\include\simple_json_string.h" />
     <ClInclude Include="..\gfc\simple_json\include\simple_json_value.h" />
     <ClInclude Include="..\gfc\simple_logger\include\simple_logger.h" />
+    <ClInclude Include="..\include\bucket.h" />
     <ClInclude Include="..\include\game.h" />
     <ClInclude Include="..\include\Geometry2D.h" />
     <ClInclude Include="..\include\gf2d_actor.h" />
@@ -210,8 +212,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\actors\mouse.actor" />
+    <None Include="..\levels\template.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties _1_1_4levels_4template_1json__JsonSchema="http://json-schema.org/draft-04/schema" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

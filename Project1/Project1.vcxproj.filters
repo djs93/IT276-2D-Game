@@ -34,6 +34,9 @@
     <Filter Include="Resource Files\Actors">
       <UniqueIdentifier>{de6bccbf-833c-4cba-a23c-0b9d371e72d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Levels">
+      <UniqueIdentifier>{39e8e48e-5c5a-4f76-970f-367e50911647}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\game.c">
@@ -106,6 +109,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\gf2d_actor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\bucket.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -191,10 +197,16 @@
     <ClInclude Include="..\include\gf2d_actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\bucket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\actors\mouse.actor">
       <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\levels\template.json">
+      <Filter>Resource Files\Levels</Filter>
     </None>
   </ItemGroup>
 </Project>
