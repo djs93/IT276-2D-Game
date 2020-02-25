@@ -5,6 +5,7 @@
 #include "local.h"
 #include "gf2d_entity.h"
 #include "level.h"
+#include "bucket.h"
 
 Entity* entity_list;
 void draw_normal_entities();
@@ -49,7 +50,7 @@ int main(int argc, char * argv[])
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     gf2d_action_list_init(128);
 	gf2d_entity_manager_init(300);
-
+    bucket_manager_init(40, 23);
     /*
 	backgroundEnt = gf2d_entity_new();
     gf2d_actor_load(&backgroundEnt->actor, "actors/mouse.actor");
@@ -87,7 +88,7 @@ int main(int argc, char * argv[])
         //if (mf >= 16.0)mf = 0;
 		mouseEnt->position.x = mx;
 		mouseEnt->position.y = my;
-        slog("%f %f", mx, my);
+        slog("%i %i", mx, my);
         gf2d_graphics_clear_screen();// clears drawing buffers
         // all drawing should happen betweem clear_screen and next_frame
             //backgrounds drawn first

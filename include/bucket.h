@@ -5,10 +5,11 @@
 
 typedef struct Bucket_S {
 	Shape shape;
+    List* entities;
 }Bucket;
 
 typedef struct {
-	Bucket* bucket_array;
+	Bucket** bucket_array;
 }BucketManager;
 
 static BucketManager bucket_manager = { 0 };
