@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     gf2d_action_list_init(128);
 	gf2d_entity_manager_init(300);
-    bucket_manager_init(40, 23);
+    bucket_manager_init(65, 65);
     /*
 	backgroundEnt = gf2d_entity_new();
     gf2d_actor_load(&backgroundEnt->actor, "actors/mouse.actor");
@@ -99,6 +99,7 @@ int main(int argc, char * argv[])
         draw_level();
         gf2d_entity_update_all();
 		draw_normal_entities();
+		draw_buckets();
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 		
 
@@ -132,4 +133,6 @@ void draw_normal_entities() {
 void draw_level() {
     gf2d_sprite_draw(get_loaded_level()->background, vector2d_zero, NULL, NULL, NULL, NULL, NULL, 0);
 }
+
+
 /*eol@eof*/

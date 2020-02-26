@@ -10,6 +10,10 @@ typedef struct Bucket_S {
 
 typedef struct {
 	Bucket** bucket_array;
+	int rows;
+	int columns;
+	Uint32 bucket_width;
+	Uint32 bucket_height;
 }BucketManager;
 
 static BucketManager bucket_manager = { 0 };
@@ -19,5 +23,10 @@ static BucketManager bucket_manager = { 0 };
  * @param bucket_height how tall each bucket should be
  */
 void bucket_manager_init(Uint32 bucket_width, Uint32 bucket_height);
+
+/**
+* @brief debug function to draw all bucket rectangles
+*/
+void draw_buckets();
 
 #endif
