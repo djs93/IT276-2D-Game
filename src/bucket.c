@@ -1,6 +1,8 @@
 #include "bucket.h"
 #include "simple_logger.h"
 
+void bucket_check_remove(void* entity, void* entList);
+
 void bucket_manager_init(Uint32 bucket_width, Uint32 bucket_height)
 {
 	int columns, rows, i, r, c;
@@ -42,6 +44,39 @@ void draw_buckets() {
 			rect.x = bucket_manager.bucket_array[r][c].shape.s.r.origin.x;
 			rect.y = bucket_manager.bucket_array[r][c].shape.s.r.origin.y;
 			SDL_RenderDrawRect(gf2d_graphics_get_renderer(), &rect);
+		}
+	}
+}
+
+void bucket_precalc()
+{
+	int r, c, i;
+	Bucket* currBucket;
+	for (r = 0; r < bucket_manager.rows; r++) {
+		for (c = 0; c < bucket_manager.columns; c++) {
+			currBucket = &bucket_manager.bucket_array[r][c];
+			gfc_list_foreach(currBucket->entities, bucket_check_remove, currBucket->entities);
+		}
+	}
+}
+
+void bucket_check_remove(void* entity, void* entList) {
+	Entity* ent = (Entity*)entity;
+	List* entityList = (List*)entList;
+	if (vector2d_equal(vector2d(0, 0), ent->velocity)) {
+		return;
+	}
+	gfc_list_delete_data(entityList, entity);
+}
+
+void bucket_update(Entity* entity) {
+	int r, c, i;
+	Bucket* currBucket;
+	for (r = 0; r < bucket_manager.rows; r++) {
+		for (c = 0; c < bucket_manager.columns; c++) {
+			currBucket = &bucket_manager.bucket_array[r][c];
+			//do collision between rect of bucket and circle of ent
+			//add if colliding, add entity to that bucket's list
 		}
 	}
 }

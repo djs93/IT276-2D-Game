@@ -537,9 +537,18 @@ float getLowestPoint() {
 void gf2d_entity_update_all()
 {
 	int i = 0;
+	Entity* currEnt;
+	bucket_precalc();
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
 	{
-		if (entity_list[i]._inuse == 0)continue;
+		currEnt = &entity_list[i];
+		if (currEnt->_inuse == 0)continue;
+		if (currEnt->prethink) {
+			currEnt->prethink(&entity_list[i]);
+		}
+		if (!vector2d_equal(vector2d(0, 0), currEnt->velocity)) {
+			bucket_update(currEnt);
+		}
 		gf2d_entity_update(&entity_list[i]);
 	}
 }

@@ -2,6 +2,7 @@
 #define __BUCKET_H__
 
 #include "Geometry2D.h"
+#include "gf2d_entity.h"
 
 typedef struct Bucket_S {
 	Shape shape;
@@ -28,5 +29,17 @@ void bucket_manager_init(Uint32 bucket_width, Uint32 bucket_height);
 * @brief debug function to draw all bucket rectangles
 */
 void draw_buckets();
+
+/**
+* @brief update buckets for a specified entity
+* @param ent the entity to update buckets for
+*/
+void bucket_update(Entity* ent);
+
+/**
+* @brief removes all entities about to move from buckets before calculating new buckets
+* @note all entities with zero velocity are not removed from their buckets
+*/
+void bucket_precalc();
 
 #endif
