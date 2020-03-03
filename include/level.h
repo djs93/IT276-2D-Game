@@ -7,8 +7,8 @@
 typedef struct Level_S{
 	Sprite* background; /**<The background for the level*/
 	List* paths; /**<The paths for enemies to follow. Must be at least one*/
-	List* buckets; /**<Buckets used to store entities for faster distance and collision checks*/
 	List* optimalBuckets; /**<Buckets used for extremely efficient tower enemy checking*/
+	List* allyBuckets; /**<Buckets containing allies for support tower checking*/
 }Level;
 
 Level* get_loaded_level();

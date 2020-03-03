@@ -1,6 +1,7 @@
 #include "level.h"
 #include "gf2d_sprite.h"
 #include "simple_json.h"
+#include "simple_logger.h"
 
 static Level* LOADED_LEVEL;
 
@@ -18,15 +19,53 @@ Level* level_new(char* backgroundFile)
 		level->background = gf2d_sprite_load_image(backgroundFile);
 	}
 	level->paths = gfc_list_new();
-	level->buckets = gfc_list_new();
+	level->allyBuckets = gfc_list_new();
 	level->optimalBuckets = gfc_list_new();
 	return level;
 }
 
 Level* level_load(char* levelFile)
 {
-	LOADED_LEVEL = level_new("images/backgrounds/bg_flat.png");
-	return LOADED_LEVEL;
+	SJson* levelJson;
+	SJson* background;
+	SJson* paths;
+	SJson* currPath;
+	char* backgroundName;
+	Level* level;
+	levelJson = sj_load(levelFile);
+	if (!levelJson) {
+		slog("Level json %s not found!", levelFile);
+		return level_new("images/backgrounds/bg_flat.png");
+	}
+	background = sj_object_get_value(levelJson, "background");
+	if (!background) {
+		slog("No background key found in level file! Defaulting...");
+		backgroundName = "images/backgrounds/bg_flat.png";
+	}
+	else {
+		backgroundName = sj_get_string_value(background);
+		if (!backgroundName) {
+			slog("No string found after background key in level file! Defaulting...");
+			backgroundName = "images/backgrounds/bg_flat.png";
+		}
+	}
+	level = level_new(backgroundName);
+
+	paths = sj_object_get_value(levelJson, "paths");
+	if (!paths) {
+		slog("No paths key found in level file! Defaulting...");
+		
+	}
+	
+
+
+	sj_free(levelJson);
+	sj_free(background);
+	sj_free(paths);
+	sj_free(currPath);
+
+	LOADED_LEVEL = level;
+	return level;
 }
 
 void level_save(char* fileName, Level* level) {
