@@ -23,6 +23,7 @@ void bucket_manager_init(Uint32 bucket_width, Uint32 bucket_height)
 		for (c = 0; c < columns; c++) {
 			bucket_manager.bucket_array[r][c].shape.s.r = rectangle2d(point2d(c * bucket_width, r * bucket_height),vector2d(bucket_width,bucket_height));
 			bucket_manager.bucket_array[r][c].shape.type = ST_RECT;
+			bucket_manager.bucket_array[r][c].entities = gfc_list_new();
 		}
 	}
 
@@ -55,7 +56,9 @@ void bucket_precalc()
 	for (r = 0; r < bucket_manager.rows; r++) {
 		for (c = 0; c < bucket_manager.columns; c++) {
 			currBucket = &bucket_manager.bucket_array[r][c];
-			gfc_list_foreach(currBucket->entities, bucket_check_remove, currBucket->entities);
+			if(currBucket->entities->count>0){
+				gfc_list_foreach(currBucket->entities, bucket_check_remove, currBucket->entities);
+			}
 		}
 	}
 }
