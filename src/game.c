@@ -6,6 +6,7 @@
 #include "gf2d_entity.h"
 #include "level.h"
 #include "bucket.h"
+#include "Geometry2D.h"
 
 Entity* entity_list;
 void draw_normal_entities();
@@ -66,6 +67,7 @@ int main(int argc, char * argv[])
 	mouseEnt->scale = vector2d(1, 1);
 	mouseEnt->colorShift = vector4d(255, 255, 255, 255);
 
+	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
 	Line2D line2 = line2d(point2d(0, 1), point2d(1, 1));
@@ -74,8 +76,9 @@ int main(int argc, char * argv[])
 
 	Path2D testPath = path2d(testLines);
 	slog("%f", testPath.totalLength);
+	*/
 
-    level_load("this string doesn't matter right now");
+    level_load("Levels/test.json");
 
     /*main game loop*/
     while(!done)
@@ -88,7 +91,7 @@ int main(int argc, char * argv[])
         //if (mf >= 16.0)mf = 0;
 		mouseEnt->position.x = mx;
 		mouseEnt->position.y = my;
-        slog("%i %i", mx, my);
+        //slog("%i %i", mx, my);
         gf2d_graphics_clear_screen();// clears drawing buffers
         // all drawing should happen betweem clear_screen and next_frame
             //backgrounds drawn first
@@ -100,6 +103,7 @@ int main(int argc, char * argv[])
         gf2d_entity_update_all();
 		draw_normal_entities();
 		draw_buckets();
+		drawPaths();
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 		
 

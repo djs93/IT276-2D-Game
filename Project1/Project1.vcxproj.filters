@@ -208,5 +208,8 @@
     <None Include="..\levels\template.json">
       <Filter>Resource Files\Levels</Filter>
     </None>
+    <None Include="..\levels\test.json">
+      <Filter>Resource Files\Levels</Filter>
+    </None>
   </ItemGroup>
 </Project>

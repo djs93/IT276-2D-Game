@@ -213,13 +213,14 @@
   <ItemGroup>
     <None Include="..\actors\mouse.actor" />
     <None Include="..\levels\template.json" />
+    <None Include="..\levels\test.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties _1_1_4levels_4template_1json__JsonSchema="http://json-schema.org/draft-04/schema" />
+      <UserProperties _1_1_4levels_4test_1json__JsonSchema="http://json-schema.org/draft-04/schema" _1_1_4levels_4template_1json__JsonSchema="http://json-schema.org/draft-04/schema" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -2,6 +2,7 @@
 #include "gf2d_sprite.h"
 #include "simple_json.h"
 #include "simple_logger.h"
+#include "Geometry2D.h"
 
 static Level* LOADED_LEVEL;
 
@@ -30,6 +31,12 @@ Level* level_load(char* levelFile)
 	SJson* background;
 	SJson* paths;
 	SJson* currPath;
+	Path2D* currPathPath;
+	Path2D currPathPathPath;
+	List* lines;
+	List* pathsList;
+	Line2D currLine;
+	Line2D* currLineLine;
 	char* backgroundName;
 	Level* level;
 	levelJson = sj_load(levelFile);
@@ -54,15 +61,29 @@ Level* level_load(char* levelFile)
 	paths = sj_object_get_value(levelJson, "paths");
 	if (!paths) {
 		slog("No paths key found in level file! Defaulting...");
-		
+		lines = gfc_list_new();
+		currLine = line2d(point2d(0, 0), point2d(1200, 720));
+		currLineLine = gfc_allocate_array(sizeof(Line2D), 1);
+		currLineLine->end = currLine.end;
+		currLineLine->start = currLine.start;
+		gfc_list_append(lines, currLineLine);
+		currPathPath = gfc_allocate_array(sizeof(Path2D), 1);
+		currPathPathPath = path2d(lines);
+		currPathPath->end = currPathPathPath.end;
+		currPathPath->start = currPathPathPath.start;
+		currPathPath->lines = currPathPathPath.lines;
+		currPathPath->totalLength = currPathPathPath.totalLength;
+		pathsList = gfc_list_new();
+		gfc_list_append(pathsList, currPathPath);
+		level->paths = pathsList;
 	}
 	
 
 
-	sj_free(levelJson);
-	sj_free(background);
-	sj_free(paths);
-	sj_free(currPath);
+	//sj_free(levelJson);
+	//sj_free(background);
+	//sj_free(paths);
+	//sj_free(currPath);
 
 	LOADED_LEVEL = level;
 	return level;
