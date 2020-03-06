@@ -160,6 +160,11 @@ Bool LineRectangle(Line2D l, Rectangle2D r);
 */
 Bool LineOrientedRectangle(Line2D line, OrientedRectangle rectangle);
 
+/**
+* @brief Debug method to draw all paths on the screen
+*/
+void drawPaths();
+
 #define PointLine(point, line) PointOnLine(point, line)
 #define LinePoint(line, point) PointOnLine(point, line)
 #define CircleLine(circle, line) LineCircle(line, circle)

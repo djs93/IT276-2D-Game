@@ -3,20 +3,26 @@
 #include <math.h>
 #include "local.h"
 #include "simple_logger.h"
+#include "level.h"
 #define FLT_EPSILON 1.192092896e-07F 
 #define DEG2RAD 0.01745329251994329576923690768489f
 
 #define CMP(x,y) (fabsf((x)-(y))) <= FLT_EPSILON * fmaxf(1.0f, fmaxf(fabsf(x),fabsf(y))) //CMP macro for comparing floats
 void path2dTotal(void* data, void* context);
+void drawPath(void* data, void* context);
+void drawLine(void* data, void* context);
 
 Path2D path2d(List* lines)
 {
+	Line2D* tempLine;
 	Path2D path;
 	path.lines = lines;
 	path.totalLength = 0.f;
 	gfc_list_foreach(path.lines, path2dTotal, &path);
-	path.start = (Point2D*)gfc_list_get_nth(lines, 0);
-	path.start = (Point2D*)gfc_list_get_nth(lines, lines->count-1);
+	tempLine = (Line2D*)gfc_list_get_nth(lines, 0);
+	path.start = &tempLine->start;
+	tempLine = (Point2D*)gfc_list_get_nth(lines, lines->count-1);
+	path.end = &tempLine->end;
 	return path;
 }
 
@@ -25,6 +31,28 @@ void path2dTotal(void* data, void* context) {
 	Path2D* path = (Path2D*)context;
 	float len = LengthLine2D(*line);
 	path->totalLength += len;
+}
+
+void drawPaths() {
+	Level* level;
+	List* paths;
+	level = get_loaded_level();
+	paths = level->paths;
+	Path2D* testPath = gfc_list_get_nth(paths, 0);
+	SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 0, 0, 255, 255);
+	gfc_list_foreach(paths, drawPath, paths);
+	SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
+}
+
+void drawPath(void* data, void* context) {
+	Path2D* path = (Path2D*)data;
+	List* lines = path->lines;
+	gfc_list_foreach(lines, drawLine, NULL);
+}
+
+void drawLine(void* data, void* context) {
+	Line2D* line = (Line2D*)data;
+	SDL_RenderDrawLine(gf2d_graphics_get_renderer(), line->start.x, line->start.y, line->end.x, line->end.y);
 }
 
 Point2D point2d(float x, float y) {
