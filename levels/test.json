@@ -1,3 +1,19 @@
 {
-  "background": "images/backgrounds/bg_flat.png"
+  "background": "images/backgrounds/bg_flat.png",
+  "paths": [
+    [
+      [ 0, 0 ],
+      [ 1200, 720 ]
+    ],
+    [
+      [ 0, 0 ],
+      [ 900, 180 ],
+      [ 1200, 720 ]
+    ],
+    [
+      [ 0, 0 ],
+      [ 300, 540 ],
+      [ 1200, 720 ]
+    ]
+  ]
 }

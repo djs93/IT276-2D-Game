@@ -31,6 +31,8 @@ Level* level_load(char* levelFile)
 	SJson* background;
 	SJson* paths;
 	SJson* currPath;
+	SJson* currPoint;
+	SJson* nextPoint;
 	Path2D* currPathPath;
 	Path2D currPathPathPath;
 	List* lines;
@@ -39,6 +41,10 @@ Level* level_load(char* levelFile)
 	Line2D* currLineLine;
 	char* backgroundName;
 	Level* level;
+	int i;
+	int j;
+	int k;
+
 	levelJson = sj_load(levelFile);
 	if (!levelJson) {
 		slog("Level json %s not found!", levelFile);
@@ -77,8 +83,35 @@ Level* level_load(char* levelFile)
 		gfc_list_append(pathsList, currPathPath);
 		level->paths = pathsList;
 	}
-	
-
+	else {
+		pathsList = gfc_list_new();
+		for (i = 0; i < sj_array_get_count(paths); i++) {
+			currPath = sj_array_get_nth(paths, i);
+			lines = gfc_list_new();
+			for (j = 0; j < sj_array_get_count(currPath) - 1; j++) {
+				currPoint = sj_array_get_nth(currPath, j);
+				nextPoint = sj_array_get_nth(currPath, j + 1);
+				currLineLine = gfc_allocate_array(sizeof(Line2D), 1);
+				sj_get_integer_value(sj_array_get_nth(currPoint, 0), &k);
+				currLineLine->start.x = k;
+				sj_get_integer_value(sj_array_get_nth(currPoint, 1), &k);
+				currLineLine->start.y = k;
+				sj_get_integer_value(sj_array_get_nth(nextPoint, 0), &k);
+				currLineLine->end.x = k;
+				sj_get_integer_value(sj_array_get_nth(nextPoint, 1), &k);
+				currLineLine->end.y = k;
+				gfc_list_append(lines, currLineLine);
+			}
+			currPathPath = gfc_allocate_array(sizeof(Path2D), 1);
+			currPathPathPath = path2d(lines);
+			currPathPath->end = currPathPathPath.end;
+			currPathPath->start = currPathPathPath.start;
+			currPathPath->lines = currPathPathPath.lines;
+			currPathPath->totalLength = currPathPathPath.totalLength;
+			gfc_list_append(pathsList, currPathPath);
+		}
+		level->paths = pathsList;
+	}
 
 	//sj_free(levelJson);
 	//sj_free(background);
