@@ -7,6 +7,7 @@
 typedef struct Level_S{
 	Sprite* background; /**<The background for the level*/
 	List* paths; /**<The paths for enemies to follow. Must be at least one*/
+	List* collisionPaths; /**<The lines for stopping towers from being placed on paths. Not paths, just a lotta lines. Made automatically*/
 	List* optimalBuckets; /**<Buckets used for extremely efficient tower enemy checking*/
 	List* allyBuckets; /**<Buckets containing allies for support tower checking*/
 }Level;

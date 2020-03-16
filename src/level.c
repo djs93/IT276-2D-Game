@@ -7,6 +7,8 @@
 static Level* LOADED_LEVEL;
 
 void paths_save(void* data, void* context);
+void calcPathBoundaries(void* data, void* context);
+void calcBoundaryLines(void* data, void* context);
 
 Level* get_loaded_level() {
 	return LOADED_LEVEL;
@@ -20,6 +22,7 @@ Level* level_new(char* backgroundFile)
 		level->background = gf2d_sprite_load_image(backgroundFile);
 	}
 	level->paths = gfc_list_new();
+	level->collisionPaths = gfc_list_new();
 	level->allyBuckets = gfc_list_new();
 	level->optimalBuckets = gfc_list_new();
 	return level;
@@ -44,6 +47,7 @@ Level* level_load(char* levelFile)
 	int i;
 	int j;
 	int k;
+	float pathDist;
 
 	levelJson = sj_load(levelFile);
 	if (!levelJson) {
@@ -113,6 +117,10 @@ Level* level_load(char* levelFile)
 		level->paths = pathsList;
 	}
 
+
+
+	gfc_list_foreach(pathsList, calcPathBoundaries, NULL);
+
 	//sj_free(levelJson);
 	//sj_free(background);
 	//sj_free(paths);
@@ -143,4 +151,30 @@ void level_save(char* fileName, Level* level) {
 
 void paths_save(void* data, void* context) {
 
+}
+
+void calcPathBoundaries(void* data, void* context) {
+	gfc_list_foreach(((Path2D*)data)->lines, calcBoundaryLines, NULL);
+}
+
+void calcBoundaryLines(void* data, void* context) {
+	float dx, dy;
+	Vector2D normal1;
+	Vector2D normal2;
+	Line2D* border1;
+	Line2D* border2;
+
+	border1 = gfc_allocate_array(sizeof(Line2D), 1);
+	border2 = gfc_allocate_array(sizeof(Line2D), 1);
+	//get normal of line
+	Line2D* line = data;
+	dx = line->end.x - line->start.x;
+	dy = line->end.y - line->start.y;
+	normal1 = vector2d(-dx, dy);
+	normal2 = vector2d(dx, -dy);
+
+	border1->end.x = line->end.x;
+	//make two lines
+	//move them along normal
+	//add them to collision line list
 }
