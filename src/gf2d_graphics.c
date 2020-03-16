@@ -295,4 +295,15 @@ SDL_Surface *gf2d_graphics_screen_convert(SDL_Surface **surface)
     return convert;
 }
 
+Vector2D gf2d_graphics_get_resolution() {
+    int window_width, window_height;
+    SDL_DisplayMode currentWindow;
+    Vector2D res;
+    SDL_GetCurrentDisplayMode(0, &currentWindow);
+    window_width = currentWindow.w;
+    window_height = currentWindow.h;
+    res = vector2d(window_width, window_height);
+    return res;
+}
+
 /*eol@eof*/
