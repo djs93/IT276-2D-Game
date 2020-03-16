@@ -36,6 +36,7 @@ Level* level_load(char* levelFile)
 	SJson* currPath;
 	SJson* currPoint;
 	SJson* nextPoint;
+	SJson* tempJson;
 	Path2D* currPathPath;
 	Path2D currPathPathPath;
 	List* lines;
@@ -116,10 +117,15 @@ Level* level_load(char* levelFile)
 		}
 		level->paths = pathsList;
 	}
+	tempJson = sj_object_get_value(levelJson, "pathWidth");
+	if (tempJson) {
+		sj_get_float_value(tempJson, &pathDist);
+		level->pathDistance = pathDist;
+	}
 
 
 
-	gfc_list_foreach(pathsList, calcPathBoundaries, NULL);
+	gfc_list_foreach(pathsList, calcPathBoundaries, level);
 
 	//sj_free(levelJson);
 	//sj_free(background);
@@ -154,7 +160,7 @@ void paths_save(void* data, void* context) {
 }
 
 void calcPathBoundaries(void* data, void* context) {
-	gfc_list_foreach(((Path2D*)data)->lines, calcBoundaryLines, NULL);
+	gfc_list_foreach(((Path2D*)data)->lines, calcBoundaryLines, context);
 }
 
 void calcBoundaryLines(void* data, void* context) {
@@ -163,6 +169,8 @@ void calcBoundaryLines(void* data, void* context) {
 	Vector2D normal2;
 	Line2D* border1;
 	Line2D* border2;
+	Level* level;
+	level = context;
 
 	border1 = gfc_allocate_array(sizeof(Line2D), 1);
 	border2 = gfc_allocate_array(sizeof(Line2D), 1);
@@ -170,11 +178,24 @@ void calcBoundaryLines(void* data, void* context) {
 	Line2D* line = data;
 	dx = line->end.x - line->start.x;
 	dy = line->end.y - line->start.y;
-	normal1 = vector2d(-dx, dy);
-	normal2 = vector2d(dx, -dy);
+	normal1 = vector2d(-dy, dx);
+	vector2d_normalize(&normal1);
+	normal2 = vector2d(dy, -dx);
+	vector2d_normalize(&normal2);
 
-	border1->end.x = line->end.x;
 	//make two lines
 	//move them along normal
+	border1->end.x = line->end.x + normal1.x*level->pathDistance;
+	border1->end.y = line->end.y + normal1.y * level->pathDistance;
+	border1->start.x = line->start.x + normal1.x * level->pathDistance;
+	border1->start.y = line->start.y + normal1.y * level->pathDistance;
+
+	border2->end.x = line->end.x + normal2.x * level->pathDistance;
+	border2->end.y = line->end.y + normal2.y * level->pathDistance;
+	border2->start.x = line->start.x + normal2.x * level->pathDistance;
+	border2->start.y = line->start.y + normal2.y * level->pathDistance;
+	
 	//add them to collision line list
+	gfc_list_append(level->collisionPaths, border1);
+	gfc_list_append(level->collisionPaths, border2);
 }

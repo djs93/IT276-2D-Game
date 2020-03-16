@@ -36,11 +36,14 @@ void path2dTotal(void* data, void* context) {
 void drawPaths() {
 	Level* level;
 	List* paths;
+	List* collisionPaths;
 	level = get_loaded_level();
 	paths = level->paths;
 	Path2D* testPath = gfc_list_get_nth(paths, 0);
 	SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 0, 0, 255, 255);
 	gfc_list_foreach(paths, drawPath, paths);
+	SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 0, 0, 255);
+	gfc_list_foreach(level->collisionPaths, drawLine, NULL);
 	SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
 }
 
