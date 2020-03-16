@@ -4,6 +4,8 @@
 #include "gf2d_entity.h"
 
 extern Entity* entity_list;
+extern int mx;
+extern int my;
 // edict->movetype values
 
 #endif

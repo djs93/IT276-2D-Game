@@ -12,6 +12,7 @@ Entity* entity_list;
 void draw_normal_entities();
 void draw_level();
 Vector2D vector2d_zero;
+int mx, my;
 
 
 int main(int argc, char * argv[])
@@ -21,7 +22,8 @@ int main(int argc, char * argv[])
     const Uint8 * keys;
     Sprite *sprite;
     
-    int mx,my;
+    mx = 0;
+    my = 0;
     float mf = 0;
     Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};

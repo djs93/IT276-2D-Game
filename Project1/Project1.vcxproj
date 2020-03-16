@@ -179,6 +179,7 @@
     <ClCompile Include="..\src\gf2d_graphics.c" />
     <ClCompile Include="..\src\gf2d_sprite.c" />
     <ClCompile Include="..\src\level.c" />
+    <ClCompile Include="..\src\tower.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gfc\include\gfc_audio.h" />
@@ -209,9 +210,17 @@
     <ClInclude Include="..\include\gf2d_sprite.h" />
     <ClInclude Include="..\include\level.h" />
     <ClInclude Include="..\include\local.h" />
+    <ClInclude Include="..\include\tower.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\actors\laser.actor" />
     <None Include="..\actors\mouse.actor" />
+    <None Include="..\actors\music.actor" />
+    <None Include="..\actors\slingshot.actor" />
+    <None Include="..\actors\snowglobe.actor" />
+    <None Include="..\actors\stinger.actor" />
+    <None Include="..\actors\techno.actor" />
+    <None Include="..\actors\water.actor" />
     <None Include="..\levels\template.json" />
     <None Include="..\levels\test.json" />
   </ItemGroup>

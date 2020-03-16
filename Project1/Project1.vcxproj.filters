@@ -114,6 +114,9 @@
     <ClCompile Include="..\src\bucket.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\tower.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\gf2d_draw.h">
@@ -200,6 +203,9 @@
     <ClInclude Include="..\include\bucket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\tower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\actors\mouse.actor">
@@ -210,6 +216,27 @@
     </None>
     <None Include="..\levels\test.json">
       <Filter>Resource Files\Levels</Filter>
+    </None>
+    <None Include="..\actors\laser.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\actors\slingshot.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\actors\stinger.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\actors\music.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\actors\snowglobe.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\actors\techno.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\actors\water.actor">
+      <Filter>Resource Files\Actors</Filter>
     </None>
   </ItemGroup>
 </Project>
