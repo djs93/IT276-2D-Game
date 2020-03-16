@@ -91,6 +91,10 @@ Entity* placement_spawn(TowerTypes type) {
 		break;
 	}
 	self->think = placement_think;
+	self->position.x = mx;
+	self->position.y = my;
+	self->name = "placement";
+	self->data = type;
 }
 #pragma endregion
 
@@ -126,5 +130,53 @@ void music_think(Entity* self){
 void placement_think(Entity* self) {
 	self->position.x = mx;
 	self->position.y = my;
+	if()
 }
 #pragma endregion
+
+#pragma region PlacementExtras
+void placement_detach() {
+	Entity* placeEnt = find_entity("placement");
+	if (!placeEnt){
+		slog("No place entity!");
+		return;
+	}
+	switch ((TowerTypes)placeEnt->data)
+	{
+	case TT_Stinger:
+		placeEnt->think = stinger_think;
+		placeEnt->name = "stinger";
+		break;
+	case TT_Slingshot:
+		placeEnt->think = slingshot_think;
+		placeEnt->name = "slingshot";
+		break;
+	case TT_Laser:
+		placeEnt->think = laser_think;
+		placeEnt->name = "laser";
+		break;
+	case TT_Water:
+		placeEnt->think = water_think;
+		placeEnt->name = "water";
+		break;
+	case TT_Techno:
+		placeEnt->think = techno_think;
+		placeEnt->name = "techno";
+		break;
+	case TT_Snowglobe:
+		placeEnt->think = snowglobe_think;
+		placeEnt->name = "snowglobe";
+		break;
+	case TT_Music:
+		placeEnt->think = music_think;
+		placeEnt->name = "music";
+		break;
+	default:
+		placeEnt->think = stinger_think;
+		placeEnt->name = "stinger";
+		slog("Invalid detach tower type! Defaulting...");
+		break;
+	}
+}
+#pragma endregion
+

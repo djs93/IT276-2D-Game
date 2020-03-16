@@ -33,5 +33,6 @@ void snowglobe_think(Entity* self);
 void music_think(Entity* self);
 
 void placement_think(Entity* self);
+void placement_detach();
 
 #endif
