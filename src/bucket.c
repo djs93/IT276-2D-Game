@@ -1,7 +1,10 @@
 #include "bucket.h"
 #include "simple_logger.h"
+#include <level.h>
 
 void bucket_check_remove(void* entity, void* entList);
+void draw_buckets_optimal_foreach(void* data, void* context);
+
 
 void bucket_manager_init(Uint32 bucket_width, Uint32 bucket_height)
 {
@@ -49,6 +52,24 @@ void draw_buckets() {
 	}
 }
 
+void draw_buckets_optimal() {
+	gfc_list_foreach(get_loaded_level()->optimalBuckets, draw_buckets_optimal_foreach, NULL);
+}
+
+void draw_buckets_optimal_foreach(void* data, void* context) {
+	SDL_Rect rect;
+	Bucket* bucket;
+	int r, c;
+	bucket = data;
+	rect.h = bucket->shape.s.r.size.y;
+	rect.w = bucket->shape.s.r.size.x;
+	rect.x = bucket->shape.s.r.origin.x;
+	rect.y = bucket->shape.s.r.origin.y;
+	SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 0, 255, 0, 255);
+	SDL_RenderDrawRect(gf2d_graphics_get_renderer(), &rect);
+	SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
+}
+
 void bucket_precalc()
 {
 	int r, c, i;
@@ -80,6 +101,23 @@ void bucket_update(Entity* entity) {
 			currBucket = &bucket_manager.bucket_array[r][c];
 			//do collision between rect of bucket and circle of ent
 			//add if colliding, add entity to that bucket's list
+		}
+	}
+}
+
+void calcOptimalLineBuckets(void* data, void* context) {
+	int r, c, i;
+	Bucket* currBucket;
+	Line2D* line = data;
+	Level* level = context;
+	for (r = 0; r < bucket_manager.rows; r++) {
+		for (c = 0; c < bucket_manager.columns; c++) {
+			currBucket = &bucket_manager.bucket_array[r][c];
+			//do collision between rect of bucket and line
+			if (LineRectangle(*line, currBucket->shape.s.r)) {
+				//add if colliding, add bucket to level's optimal list
+				level->optimalBuckets = gfc_list_append(level->optimalBuckets, currBucket);
+			}
 		}
 	}
 }

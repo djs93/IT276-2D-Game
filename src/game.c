@@ -100,10 +100,17 @@ int main(int argc, char * argv[])
             //UI elements last
             //gf2d_sprite_draw(mouse, vector2d(mx,my), NULL, NULL, NULL, NULL, &mouseColor, (int)mf);
         draw_level();
+        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
         gf2d_entity_update_all();
+        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
 		draw_normal_entities();
+        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
 		draw_buckets();
+        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
+        draw_buckets_optimal();
+        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
 		drawPaths();
+        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 		
 

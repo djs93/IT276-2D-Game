@@ -31,6 +31,11 @@ void bucket_manager_init(Uint32 bucket_width, Uint32 bucket_height);
 void draw_buckets();
 
 /**
+* @brief debug function to draw all optimal bucket rectangles
+*/
+void draw_buckets_optimal();
+
+/**
 * @brief update buckets for a specified entity
 * @param ent the entity to update buckets for
 */
@@ -41,5 +46,13 @@ void bucket_update(Entity* ent);
 * @note all entities with zero velocity are not removed from their buckets
 */
 void bucket_precalc();
+
+/**
+* @brief calculates which buckets intersect with a line
+* @param data pointer to the line to calculate buckets for
+* @param context the level pointer to store the buckets in
+*/
+void calcOptimalLineBuckets(void* data, void* context);
+
 
 #endif

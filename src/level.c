@@ -3,12 +3,14 @@
 #include "simple_json.h"
 #include "simple_logger.h"
 #include "Geometry2D.h"
+#include "bucket.h"
 
 static Level* LOADED_LEVEL;
 
 void paths_save(void* data, void* context);
 void calcPathBoundaries(void* data, void* context);
 void calcBoundaryLines(void* data, void* context);
+void calcOptimalBuckets(void* data, void* context);
 
 Level* get_loaded_level() {
 	return LOADED_LEVEL;
@@ -122,10 +124,12 @@ Level* level_load(char* levelFile)
 		sj_get_float_value(tempJson, &pathDist);
 		level->pathDistance = pathDist;
 	}
-
-
-
+	else {
+		level->pathDistance = 15.0f;
+	}
 	gfc_list_foreach(pathsList, calcPathBoundaries, level);
+
+	gfc_list_foreach(pathsList, calcOptimalBuckets, level);
 
 	//sj_free(levelJson);
 	//sj_free(background);
@@ -198,4 +202,8 @@ void calcBoundaryLines(void* data, void* context) {
 	//add them to collision line list
 	gfc_list_append(level->collisionPaths, border1);
 	gfc_list_append(level->collisionPaths, border2);
+}
+
+void calcOptimalBuckets(void* data, void* context) {
+	gfc_list_foreach(((Path2D*)data)->lines, calcOptimalLineBuckets, context);
 }
