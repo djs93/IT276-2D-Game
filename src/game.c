@@ -7,6 +7,14 @@
 #include "level.h"
 #include "bucket.h"
 #include "Geometry2D.h"
+#include "gf2d_windows.h"
+#include "gf2d_elements.h"
+#include "gf2d_font.h"
+#include "gfc_input.h"
+#include "gf2d_element_button.h"
+#include "gf2d_element_label.h"
+#include "gf2d_element_actor.h"
+#include "gf2d_mouse.h"
 
 Entity* entity_list;
 void draw_normal_entities();
@@ -21,14 +29,15 @@ int main(int argc, char * argv[])
     int done = 0;
     const Uint8 * keys;
     Sprite *sprite;
+    Window* ui;
     
     mx = 0;
     my = 0;
     float mf = 0;
-    Sprite *mouse;
+    //Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};
 
-	Entity* mouseEnt;
+	//Entity* mouseEnt;
 	Entity* backgroundEnt;
 
     vector2d_zero = vector2d(0, 0);
@@ -50,7 +59,7 @@ int main(int argc, char * argv[])
     
     /*demo setup*/
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
-    mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
+    //mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     gf2d_action_list_init(128);
 	gf2d_entity_manager_init(300);
     bucket_manager_init(65, 65);
@@ -63,11 +72,21 @@ int main(int argc, char * argv[])
 	backgroundEnt->colorShift = vector4d(255, 255, 255, 255);
     */
 
-	mouseEnt = gf2d_entity_new(); 
-    gf2d_actor_load(&mouseEnt->actor, "actors/mouse.actor");
-	mouseEnt->position = vector2d(0, 0);
-	mouseEnt->scale = vector2d(1, 1);
-	mouseEnt->colorShift = vector4d(255, 255, 255, 255);
+	//mouseEnt = gf2d_entity_new(); 
+    //gf2d_actor_load(&mouseEnt->actor, "actors/mouse.actor");
+	//mouseEnt->position = vector2d(0, 0);
+	//mouseEnt->scale = vector2d(1, 1);
+	//mouseEnt->colorShift = vector4d(255, 255, 255, 255);
+
+    
+
+    gf2d_font_init("config/font.cfg");
+    gfc_input_init("config/input.cfg");
+    gf2d_windows_init(32);
+
+    ui = gf2d_window_new();
+
+    ui = gf2d_window_load("config/yes_no_window.json");
 
 	/*
 	List* testLines = gfc_list_new();
@@ -79,20 +98,21 @@ int main(int argc, char * argv[])
 	Path2D testPath = path2d(testLines);
 	slog("%f", testPath.totalLength);
 	*/
-
+    gf2d_mouse_load("actors/mouse.actor");
     level_load("Levels/test.json");
-
     /*main game loop*/
     while(!done)
     {
-        SDL_PumpEvents();   // update SDL's internal event structures
+        gfc_input_update();
         keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
         /*update things here*/
         SDL_GetMouseState(&mx,&my);
         mf+=0.1;
         //if (mf >= 16.0)mf = 0;
-		mouseEnt->position.x = mx;
-		mouseEnt->position.y = my;
+		//mouseEnt->position.x = mx;
+		//mouseEnt->position.y = my;
+        gf2d_mouse_update();
+        gf2d_windows_update_all();
         //slog("%i %i", mx, my);
         gf2d_graphics_clear_screen();// clears drawing buffers
         // all drawing should happen betweem clear_screen and next_frame
@@ -113,9 +133,15 @@ int main(int argc, char * argv[])
         SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
 		drawPaths();
         SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
+        gf2d_windows_draw_all();
+        gf2d_mouse_draw();
+        //gf2d_sprite_draw(mouseEnt->actor.sprite, mouseEnt->position, &mouseEnt->scale, &mouseEnt->scaleCenter, &mouseEnt->rotation, &mouseEnt->flip, &mouseEnt->colorShift, (Uint32)mouseEnt->actor.frame);
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 		
-
+        if (gfc_input_command_down("yes"))
+        {
+            slog("yes");
+        }
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
         //slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
