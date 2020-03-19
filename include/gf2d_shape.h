@@ -4,29 +4,32 @@
 #include <SDL.h>
 #include "gfc_vector.h"
 #include "gfc_color.h"
+#include "Geometry2D.h"
 
 typedef struct
 {
     double x1,y1,x2,y2;
 }Edge;
 
+/*
 typedef struct
 {
     double       x,y,r;
 }Circle;
-
+*/
 typedef struct
 {
     double x,y,w,h;
 }Rect;
 
+/*
 typedef enum
 {
     ST_RECT,
     ST_CIRCLE,
     ST_EDGE
 }ShapeTypes;
-
+*/
 
 typedef struct
 {

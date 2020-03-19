@@ -5,7 +5,7 @@
 #include "gf2d_entity.h"
 
 typedef struct Bucket_S {
-	Shape shape;
+	Shape2D shape;
     List* entities;
 }Bucket;
 

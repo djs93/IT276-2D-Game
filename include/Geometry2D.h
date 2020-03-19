@@ -94,7 +94,7 @@ typedef struct
         Rectangle2D r;
         Line2D e;
     }s;
-}Shape;
+}Shape2D;
 
 /**
  * @brief create and return an oriented rectangle

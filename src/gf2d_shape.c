@@ -121,7 +121,7 @@ Vector2D gf2d_circle_get_normal_for_rect(Circle c, Rect r)
         slog("can't calculate normal, no collision!");
         return out;
     }
-    vector2d_sub(out,poc,c);
+    vector2d_sub(out,poc,c.position);
     vector2d_normalize(&out);
     return out;
 }
@@ -155,42 +155,42 @@ Vector2D gf2d_rect_get_normal_for_rect(Rect r, Rect ref)
 Vector2D gf2d_rect_get_normal_for_cirlce(Rect r, Circle c)
 {
     Vector2D out = {0};
-    if (c.x < r.x)out.x = -1;
-    if (c.y < r.y)out.y = -1;
-    if (c.x > r.x + r.w)out.x = 1;
-    if (c.y > r.y + r.h)out.y = 1;
+    if (c.position.x < r.x)out.x = -1;
+    if (c.position.y < r.y)out.y = -1;
+    if (c.position.x > r.x + r.w)out.x = 1;
+    if (c.position.y > r.y + r.h)out.y = 1;
     if ((out.x != 0)&&(out.y != 0))
     {
         if ((out.x < 0)&&(out.y < 0))
         {
-            out.x = c.x - r.x;
-            out.y = c.y - r.y;
+            out.x = c.position.x - r.x;
+            out.y = c.position.y - r.y;
         }
         else if ((out.x > 0)&&(out.y < 0))
         {
-            out.x = c.x - (r.x + r.w);
-            out.y = c.y - r.y;
+            out.x = c.position.x - (r.x + r.w);
+            out.y = c.position.y - r.y;
         }
         else if ((out.x < 0)&&(out.y > 0))
         {
-            out.x = c.x - r.x;
-            out.y = c.y - (r.y + r.h);// this breaks without the parenthesis, I HAVE NO IDEA WHY
+            out.x = c.position.x - r.x;
+            out.y = c.position.y - (r.y + r.h);// this breaks without the parenthesis, I HAVE NO IDEA WHY
 
         }
         else if ((out.x > 0)&&(out.y > 0))
         {
-            out.x = c.x - (r.x + r.w);
-            out.y = c.y - (r.y + r.h);
+            out.x = c.position.x - (r.x + r.w);
+            out.y = c.position.y - (r.y + r.h);
         }
         vector2d_normalize(&out);
         // edge case where it has to be perfect 
         // check angle between the corner and the c, if its not damn near perfect 45, pick the dominant side
     }
     if ((out.x) ||(out.y))return out;
-    if (gf2d_point_in_rect(vector2d(c.x,c.y),r))
+    if (gf2d_point_in_rect(vector2d(c.position.x,c.position.y),r))
     {
         out = gf2d_rect_get_center_point(r);
-        vector2d_sub(out,c,out);
+        vector2d_sub(out,c.position,out);
         return out;
     }
     return out;
@@ -199,7 +199,7 @@ Vector2D gf2d_rect_get_normal_for_cirlce(Rect r, Circle c)
 Vector2D gf2d_circle_get_normal_for_cirlce(Circle c, Circle c2)
 {
     Vector2D out = {0};
-    vector2d_sub(out,c2,c);
+    vector2d_sub(out,c2.position,c.position);
     vector2d_normalize(&out);
     return out;
 }
@@ -222,29 +222,29 @@ Vector2D gf2d_edge_get_normal_for_cirlce(Edge e, Circle c)
     vector2d_normalize(&n1);
     vector2d_negate(n2,n1);
     
-    vector2d_scale(parallel,parallel,c.r-1);
-    vector2d_scale(dir,n1,(c.r));
-    if (gf2d_edge_intersect(gf2d_edge(p1.x - parallel.x,p1.y - parallel.y,p2.x + parallel.x,p2.y + parallel.y),gf2d_edge(c.x, c.y, c.x + dir.x, c.y + dir.y)))
+    vector2d_scale(parallel,parallel,c.radius-1);
+    vector2d_scale(dir,n1,(c.radius));
+    if (gf2d_edge_intersect(gf2d_edge(p1.x - parallel.x,p1.y - parallel.y,p2.x + parallel.x,p2.y + parallel.y),gf2d_edge(c.position.x, c.position.y, c.position.x + dir.x, c.position.y + dir.y)))
     {
         return n2;
     }
-    vector2d_scale(dir,n2,(c.r));
-    if (gf2d_edge_intersect(gf2d_edge(p1.x - parallel.x,p1.y - parallel.y,p2.x + parallel.x,p2.y + parallel.y),gf2d_edge(c.x, c.y, c.x + dir.x, c.y + dir.y)))
+    vector2d_scale(dir,n2,(c.radius));
+    if (gf2d_edge_intersect(gf2d_edge(p1.x - parallel.x,p1.y - parallel.y,p2.x + parallel.x,p2.y + parallel.y),gf2d_edge(c.position.x, c.position.y, c.position.x + dir.x, c.position.y + dir.y)))
     {
         return n1;
     }
-    c.r += 1;
+    c.radius += 1;
     if (gf2d_point_in_cicle(p1,c))
     {
-        out.x = c.x - p1.x;
-        out.y = c.y - p1.y;
+        out.x = c.position.x - p1.x;
+        out.y = c.position.y - p1.y;
         vector2d_normalize(&out);
         return out;
     }
     if (gf2d_point_in_cicle(p2,c))
     {
-        out.x = c.x - p2.x;
-        out.y = c.y - p2.y;
+        out.x = c.position.x - p2.x;
+        out.y = c.position.y - p2.y;
         vector2d_normalize(&out);
         return out;
     }
@@ -354,7 +354,7 @@ void gf2d_shape_draw(Shape shape,Color color,Vector2D offset)
             gf2d_rect_draw(shape.s.r,color);
             break;
         case ST_CIRCLE:
-            gf2d_draw_circle(vector2d(shape.s.c.x + offset.x,shape.s.c.y + offset.y), shape.s.c.r,gfc_color_to_vector4(color));
+            gf2d_draw_circle(vector2d(shape.s.c.position.x + offset.x,shape.s.c.position.y + offset.y), shape.s.c.radius,gfc_color_to_vector4(color));
             break;
         case ST_EDGE:
             gf2d_draw_line(vector2d(shape.s.e.x1 + offset.x,shape.s.e.y1 + offset.y),vector2d(shape.s.e.x2 + offset.x,shape.s.e.y2 + offset.y), gfc_color_to_vector4(color));
@@ -365,7 +365,10 @@ void gf2d_shape_draw(Shape shape,Color color,Vector2D offset)
 Circle gf2d_circle(float x, float y, float r)
 {
     Circle c;
-    gf2d_circle_set(c,x,y,r);
+    //gf2d_circle_set(c,x,y,r);
+    c.position.x = x;
+    c.position.y = y;
+    c.radius = r;
     return c;
 }
 
@@ -442,15 +445,15 @@ Uint8 gf2d_rect_overlap(Rect a,Rect b)
 
 Uint8 gf2d_point_in_cicle(Vector2D p,Circle c)
 {
-    if (vector2d_magnitude_compare(vector2d(c.x-p.x,c.y-p.y),c.r) <= 0)return 1;
+    if (vector2d_magnitude_compare(vector2d(c.position.x-p.x,c.position.y-p.y),c.radius) <= 0)return 1;
     return 0;
 }
 
 Uint8 gf2d_circle_overlap_poc(Circle a, Circle b,Vector2D *poc,Vector2D *normal)
 {
     Vector2D v;
-    vector2d_set(v,a.x - b.x,a.y - b.y);
-    if (vector2d_magnitude_compare(v,a.r+b.r) <= 0)
+    vector2d_set(v,a.position.x - b.position.x,a.position.y - b.position.y);
+    if (vector2d_magnitude_compare(v,a.radius+b.radius) <= 0)
     {
         if (poc)
         {
@@ -460,9 +463,9 @@ Uint8 gf2d_circle_overlap_poc(Circle a, Circle b,Vector2D *poc,Vector2D *normal)
                 normal->x = v.x;
                 normal->y = v.y;
             }
-            vector2d_scale(v,v,a.r);
-            poc->x = a.x + v.x;
-            poc->y = a.y + v.y;
+            vector2d_scale(v,v,a.radius);
+            poc->x = a.position.x + v.x;
+            poc->y = a.position.y + v.y;
             
         }
         return 1;
@@ -478,8 +481,8 @@ Uint8 gf2d_circle_overlap(Circle a, Circle b)
 Uint8 gf2d_circle_rect_overlap_poc(Circle a, Rect b,Vector2D *poc,Vector2D * normal)
 {
     Rect newrect1,newrect2;
-    gf2d_rect_set(newrect1,b.x - a.r,b.y,b.w + a.r+ a.r,b.h);
-    gf2d_rect_set(newrect2,b.x,b.y - a.r,b.w,b.h + a.r + a.r);
+    gf2d_rect_set(newrect1,b.x - a.radius,b.y,b.w + a.radius+ a.radius,b.h);
+    gf2d_rect_set(newrect2,b.x,b.y - a.radius,b.w,b.h + a.radius + a.radius);
     if (gf2d_point_in_cicle(vector2d(b.x,b.y),a))
     {
         if (poc)
@@ -489,8 +492,8 @@ Uint8 gf2d_circle_rect_overlap_poc(Circle a, Rect b,Vector2D *poc,Vector2D * nor
         }
         if (normal)
         {
-            normal->x = a.x-b.x;
-            normal->y = a.y-b.y;
+            normal->x = a.position.x-b.x;
+            normal->y = a.position.y-b.y;
             vector2d_normalize(normal);
         }
         return 1;
@@ -504,8 +507,8 @@ Uint8 gf2d_circle_rect_overlap_poc(Circle a, Rect b,Vector2D *poc,Vector2D * nor
         }
         if (normal)
         {
-            normal->x = a.x-(b.x+b.w);
-            normal->y = a.y-b.y;
+            normal->x = a.position.x-(b.x+b.w);
+            normal->y = a.position.y-b.y;
             vector2d_normalize(normal);
         }
         return 1;
@@ -519,8 +522,8 @@ Uint8 gf2d_circle_rect_overlap_poc(Circle a, Rect b,Vector2D *poc,Vector2D * nor
         }
         if (normal)
         {
-            normal->x = a.x-b.x;
-            normal->y = a.y-(b.y + b.h);
+            normal->x = a.position.x-b.x;
+            normal->y = a.position.y-(b.y + b.h);
             vector2d_normalize(normal);
         }
         return 1;
@@ -534,21 +537,21 @@ Uint8 gf2d_circle_rect_overlap_poc(Circle a, Rect b,Vector2D *poc,Vector2D * nor
         }
         if (normal)
         {
-            normal->x = a.x-(b.x+b.w);
-            normal->y = a.y-(b.y + b.h);
+            normal->x = a.position.x-(b.x+b.w);
+            normal->y = a.position.y-(b.y + b.h);
             vector2d_normalize(normal);
         }
         return 1;
     }
 
-    if ((gf2d_point_in_rect(vector2d(a.x,a.y),newrect1))||
-        (gf2d_point_in_rect(vector2d(a.x,a.y),newrect2)))
+    if ((gf2d_point_in_rect(vector2d(a.position.x,a.position.y),newrect1))||
+        (gf2d_point_in_rect(vector2d(a.position.x,a.position.y),newrect2)))
     {
         if (poc)
         {
-            if (a.x < b.x)
+            if (a.position.x < b.x)
             {
-                poc->y = a.y;
+                poc->y = a.position.y;
                 poc->x = b.x;
                 if (normal)
                 {
@@ -556,9 +559,9 @@ Uint8 gf2d_circle_rect_overlap_poc(Circle a, Rect b,Vector2D *poc,Vector2D * nor
                     normal->y = 0;
                 }
             }
-            else if (a.x > b.x + b.w)
+            else if (a.position.x > b.x + b.w)
             {
-                poc->y = a.y;
+                poc->y = a.position.y;
                 poc->x = b.x + b.w;
                 if (normal)
                 {
@@ -566,20 +569,20 @@ Uint8 gf2d_circle_rect_overlap_poc(Circle a, Rect b,Vector2D *poc,Vector2D * nor
                     normal->y = 0;
                 }
             }
-            if (a.y < b.y)
+            if (a.position.y < b.y)
             {
                 poc->y = b.y;
-                poc->x = a.x;
+                poc->x = a.position.x;
                 if (normal)
                 {
                     normal->x = 0;
                     normal->y = -1;
                 }
             }
-            else if (a.y > b.y + b.y)
+            else if (a.position.y > b.y + b.y)
             {
                 poc->y = b.y + b.h;
-                poc->x = a.x;
+                poc->x = a.position.x;
                 if (normal)
                 {
                     normal->x = 0;
@@ -595,10 +598,10 @@ Uint8 gf2d_circle_rect_overlap_poc(Circle a, Rect b,Vector2D *poc,Vector2D * nor
 Uint8 gf2d_circle_rect_overlap(Circle a, Rect b)
 {
     Rect newrect;
-    gf2d_rect_set(newrect,b.x - a.r,b.y,b.w + a.r+ a.r,b.h);
-    if (gf2d_point_in_rect(vector2d(a.x,a.y),newrect))return 1;
-    gf2d_rect_set(newrect,b.x,b.y - a.r,b.w,b.h + a.r + a.r);
-    if (gf2d_point_in_rect(vector2d(a.x,a.y),newrect))return 1;
+    gf2d_rect_set(newrect,b.x - a.radius,b.y,b.w + a.radius+ a.radius,b.h);
+    if (gf2d_point_in_rect(vector2d(a.position.x,a.position.y),newrect))return 1;
+    gf2d_rect_set(newrect,b.x,b.y - a.radius,b.w,b.h + a.radius + a.radius);
+    if (gf2d_point_in_rect(vector2d(a.position.x,a.position.y),newrect))return 1;
     
     if (gf2d_point_in_cicle(vector2d(b.x,b.y),a))return 1;
     if (gf2d_point_in_cicle(vector2d(b.x+b.w,b.y),a))return 1;
@@ -687,9 +690,9 @@ Shape gf2d_shape_circle(float x, float y, float r)
 {
     Shape shape;
     shape.type = ST_CIRCLE;
-    shape.s.c.x = x; 
-    shape.s.c.y = y;
-    shape.s.c.r = r;
+    shape.s.c.position.x = x; 
+    shape.s.c.position.y = y;
+    shape.s.c.radius = r;
     return shape;
 }
 
@@ -697,9 +700,9 @@ Shape gf2d_shape_from_circle(Circle c)
 {
     Shape shape;
     shape.type = ST_CIRCLE;
-    shape.s.c.x = c.x;
-    shape.s.c.y = c.y;
-    shape.s.c.r = c.r;
+    shape.s.c.position.x = c.position.x;
+    shape.s.c.position.y = c.position.y;
+    shape.s.c.radius = c.radius;
     return shape;
 }
 
@@ -950,10 +953,10 @@ Uint8 gf2d_circle_to_edge_intersection_poc(Edge e,Circle c,Vector2D *poc,Vector2
     dy = e.y2 - e.y1;
 
     A = dx * dx + dy * dy;
-    B = 2 * (dx * (e.x1 - c.x) + dy * (e.y1 - c.y));
-    C = (e.x1 - c.x) * (e.x1 - c.x) +
-        (e.y1 - c.y) * (e.y1 - c.y) -
-        c.r * c.r;
+    B = 2 * (dx * (e.x1 - c.position.x) + dy * (e.y1 - c.position.y));
+    C = (e.x1 - c.position.x) * (e.x1 - c.position.x) +
+        (e.y1 - c.position.y) * (e.y1 - c.position.y) -
+        c.radius * c.radius;
 
     det = B * B - 4 * A * C;
     if ((A <= 0.0000001) || (det < 0))
@@ -1032,13 +1035,13 @@ Uint8 gf2d_edge_to_circle_intersection_poc(Edge e,Circle c,Vector2D *poc,Vector2
     dx = e.x2 - e.x1;
     dy = e.y2 - e.y1;
 
-    cp.x = c.x;
-    cp.y = c.y;
+    cp.x = c.position.x;
+    cp.y = c.position.y;
     A = dx * dx + dy * dy;
-    B = 2 * (dx * (e.x1 - c.x) + dy * (e.y1 - c.y));
-    C = (e.x1 - c.x) * (e.x1 - c.x) +
-        (e.y1 - c.y) * (e.y1 - c.y) -
-        c.r * c.r;
+    B = 2 * (dx * (e.x1 - c.position.x) + dy * (e.y1 - c.position.y));
+    C = (e.x1 - c.position.x) * (e.x1 - c.position.x) +
+        (e.y1 - c.position.y) * (e.y1 - c.position.y) -
+        c.radius * c.radius;
 
     det = B * B - 4 * A * C;
     if ((A <= 0.0000001) || (det < 0))
@@ -1128,13 +1131,13 @@ Uint8 gf2d_edge_circle_intersection(Edge e,Circle c)
     vector2d_normalize(&n1);
     vector2d_negate(n2,n1);
     
-    vector2d_scale(dir,n1,c.r);
-    if (gf2d_edge_intersect(e,gf2d_edge(c.x, c.y, c.x + dir.x, c.y + dir.y)))
+    vector2d_scale(dir,n1,c.radius);
+    if (gf2d_edge_intersect(e,gf2d_edge(c.position.x, c.position.y, c.position.x + dir.x, c.position.y + dir.y)))
     {
         return 1;
     }
-    vector2d_scale(dir,n2,c.r);
-    if (gf2d_edge_intersect(e,gf2d_edge(c.x, c.y, c.x + dir.x, c.y + dir.y)))
+    vector2d_scale(dir,n2,c.radius);
+    if (gf2d_edge_intersect(e,gf2d_edge(c.position.x, c.position.y, c.position.x + dir.x, c.position.y + dir.y)))
     {
         return 1;
     }
@@ -1161,7 +1164,7 @@ void gf2d_rect_slog(Rect r)
 
 void gf2d_circle_slog(Circle c)
 {
-    slog("Circle: (%f,%f) radius (%f)",c.x,c.y,c.r);
+    slog("Circle: (%f,%f) radius (%f)",c.position.x,c.position.y,c.radius);
 }
 
 void gf2d_shape_slog(Shape shape)
@@ -1193,10 +1196,10 @@ Rect gf2d_edge_get_bounds(Edge e)
 Rect gf2d_circle_get_bounds(Circle c)
 {
     Rect r;
-    r.x = c.x-c.r;
-    r.y = c.y-c.r;
-    r.w = c.r*2;
-    r.h = c.r*2;
+    r.x = c.position.x-c.radius;
+    r.y = c.position.y-c.radius;
+    r.w = c.radius*2;
+    r.h = c.radius*2;
     return r;
 }
 
