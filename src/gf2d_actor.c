@@ -159,17 +159,17 @@ void gf2d_action_file_load_actions(FILE *file,ActionList *actionList)
         }
         if(strcmp(buf,"scale:") == 0)
         {
-            fscanf(file,"%lf,%lf",&actionList->scale.x,&actionList->scale.y);
+            fscanf(file,"%f,%f",&actionList->scale.x,&actionList->scale.y);
             continue;
         }
         if(strcmp(buf,"color:") == 0)
         {
-            fscanf(file,"%lf,%lf,%lf,%lf",&actionList->color.x,&actionList->color.y,&actionList->color.z,&actionList->color.w);
+            fscanf(file,"%f,%f,%f,%f",&actionList->color.x,&actionList->color.y,&actionList->color.z,&actionList->color.w);
             continue;
         }
         if(strcmp(buf,"colorSpecial:") == 0)
         {
-            fscanf(file,"%lf,%lf,%lf,%lf",&actionList->colorSpecial.x,&actionList->colorSpecial.y,&actionList->colorSpecial.z,&actionList->colorSpecial.w);
+            fscanf(file,"%f,%f,%f,%f",&actionList->colorSpecial.x,&actionList->colorSpecial.y,&actionList->colorSpecial.z,&actionList->colorSpecial.w);
             continue;
         }
         if(strcmp(buf,"action:") == 0)
