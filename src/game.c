@@ -15,6 +15,7 @@
 #include "gf2d_element_label.h"
 #include "gf2d_element_actor.h"
 #include "gf2d_mouse.h"
+#include "tower.h"
 
 Entity* entity_list;
 void draw_normal_entities();
@@ -100,6 +101,8 @@ int main(int argc, char * argv[])
 	*/
     gf2d_mouse_load("actors/mouse.actor");
     level_load("Levels/test.json");
+
+    gfc_input_set_callbacks("test", placement_spawn, NULL, NULL, NULL, TT_Stinger);
     /*main game loop*/
     while(!done)
     {
@@ -158,7 +161,6 @@ void draw_normal_entities() {
 			i++;
 			continue;
 		}
-
 		if (ent->actor.sprite) {
 			//if (!ent->name || strcmp(ent->name, "axes_attach") != 0) { //These are checks just in case there are specific things we don't want to draw
 			gf2d_sprite_draw(ent->actor.sprite, ent->position, &ent->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);

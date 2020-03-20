@@ -52,6 +52,7 @@ List *gf2d_element_button_update(Element *element,Vector2D offset)
         if (gf2d_mouse_button_state(0))
         {
             element->state = ES_active;
+            gfc_command_trigger(button->hotkey, IET_Press);
         }
         else if (gf2d_mouse_button_released(0))
         {
