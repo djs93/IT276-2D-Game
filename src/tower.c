@@ -138,60 +138,74 @@ void music_think(Entity* self){
 }
 
 void placement_think(Entity* self) {
+	Bool colliding;
 	self->position = gf2d_mouse_get_position();
-	if (pathCollision(self)) {
+	colliding = pathCollision(self);
+	if (colliding) {
 		self->colorShift = vector4d(255.0f, 0.0f, 0.0f, 255.0f);
 	}
 	else {
 		self->colorShift = vector4d(0.0f, 255.0f, 0.0f, 255.0f);
 	}
 	self->boundingBox.position = self->position;
+	if (!colliding&&gf2d_mouse_button_pressed(0)) {
+		placement_detach(self);
+	}
 }
 #pragma endregion
 
 #pragma region PlacementExtras
-void placement_detach() {
-	Entity* placeEnt = find_entity("placement");
-	if (!placeEnt){
+void placement_detach(Entity* ent) {
+	if (!ent){
 		slog("No place entity!");
 		return;
 	}
-	switch ((TowerTypes)placeEnt->data)
+	switch ((TowerTypes)ent->data)
 	{
 	case TT_Stinger:
-		placeEnt->think = stinger_think;
-		placeEnt->name = "stinger";
+		ent->think = stinger_think;
+		ent->name = "stinger";
+		ent->shootRadius.radius = 150.0f;
 		break;
 	case TT_Slingshot:
-		placeEnt->think = slingshot_think;
-		placeEnt->name = "slingshot";
+		ent->think = slingshot_think;
+		ent->name = "slingshot";
+		ent->shootRadius.radius = 150.0f;
 		break;
 	case TT_Laser:
-		placeEnt->think = laser_think;
-		placeEnt->name = "laser";
+		ent->think = laser_think;
+		ent->name = "laser";
+		ent->shootRadius.radius = 150.0f;
 		break;
 	case TT_Water:
-		placeEnt->think = water_think;
-		placeEnt->name = "water";
+		ent->think = water_think;
+		ent->name = "water";
+		ent->shootRadius.radius = 150.0f;
 		break;
 	case TT_Techno:
-		placeEnt->think = techno_think;
-		placeEnt->name = "techno";
+		ent->think = techno_think;
+		ent->name = "techno";
+		ent->shootRadius.radius = 150.0f;
 		break;
 	case TT_Snowglobe:
-		placeEnt->think = snowglobe_think;
-		placeEnt->name = "snowglobe";
+		ent->think = snowglobe_think;
+		ent->name = "snowglobe";
+		ent->shootRadius.radius = 150.0f;
 		break;
 	case TT_Music:
-		placeEnt->think = music_think;
-		placeEnt->name = "music";
+		ent->think = music_think;
+		ent->name = "music";
+		ent->shootRadius.radius = 150.0f;
 		break;
 	default:
-		placeEnt->think = stinger_think;
-		placeEnt->name = "stinger";
+		ent->think = stinger_think;
+		ent->name = "stinger";
+		ent->shootRadius.radius = 150.0f;
 		slog("Invalid detach tower type! Defaulting...");
 		break;
 	}
+	ent->shootRadius.position = ent->position;
+	ent->colorShift = vector4d(255.0f, 255.0f, 255.0f, 255.0f);
 }
 #pragma endregion
 

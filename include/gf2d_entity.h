@@ -48,6 +48,7 @@ typedef struct Entity_S
 	Vector3D old_origin;
 	int flags;
 	Circle boundingBox;
+	Circle shootRadius;
 	float fireRate;
 	Bool dead;						/**<when true, the entity system will delete the entity on the next update*/
 	void* data;                     /**<additional entity specific data*/

@@ -103,7 +103,7 @@ int main(int argc, char * argv[])
     gf2d_mouse_load("actors/mouse.actor");
     level_load("Levels/test.json");
 
-    gfc_input_set_callbacks("test", placement_spawn, NULL, NULL, NULL, TT_Stinger);
+    gfc_input_set_callbacks("test", placement_spawn, NULL, NULL, NULL, TT_Laser);
     /*main game loop*/
     while(!done)
     {
@@ -163,6 +163,12 @@ void draw_normal_entities() {
 			i++;
 			continue;
 		}
+        if (ent->boundingBox.radius > 0.1f) {
+            gf2d_draw_circle(ent->boundingBox.position, ent->boundingBox.radius, vector4d(0.0f, 255.0f, 0.0f, 255.0f));
+        }
+        if (ent->shootRadius.radius > 0.1f) {
+            gf2d_draw_circle(ent->shootRadius.position, ent->shootRadius.radius, vector4d(255.0f, 255.0f, 0.0f, 255.0f));
+        }
 		if (ent->actor.sprite) {
 			//if (!ent->name || strcmp(ent->name, "axes_attach") != 0) { //These are checks just in case there are specific things we don't want to draw
             vector2d_copy(newPos, ent->position);
@@ -171,10 +177,6 @@ void draw_normal_entities() {
 			gf2d_sprite_draw(ent->actor.sprite, newPos, &ent->actor.al->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);
 			//}
 		}
-        if (ent->boundingBox.radius > 0.1f) {
-            gf2d_draw_circle(ent->boundingBox.position, ent->boundingBox.radius, vector4d(0.0f,255.0f,0.0f,255.0f));
-        }
-
 		i++;
 	}
 }
