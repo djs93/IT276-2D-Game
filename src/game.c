@@ -163,7 +163,7 @@ void draw_normal_entities() {
 		}
 		if (ent->actor.sprite) {
 			//if (!ent->name || strcmp(ent->name, "axes_attach") != 0) { //These are checks just in case there are specific things we don't want to draw
-			gf2d_sprite_draw(ent->actor.sprite, ent->position, &ent->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);
+			gf2d_sprite_draw(ent->actor.sprite, ent->position, &ent->actor.al->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);
 			//}
 		}
 

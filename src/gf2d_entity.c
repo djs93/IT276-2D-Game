@@ -43,6 +43,7 @@ Entity *gf2d_entity_new()
 		gf2d_entity_manager.num_ents++;
 		//ent->movetype = MOVETYPE_NONE;
 		ent->touch = NULL;
+		ent->colorShift = vector4d(255, 255, 255, 255);
         return &entity_list[i];
     }
     slog("request for entity failed: all full up");
@@ -575,6 +576,9 @@ void gf2d_entity_update(Entity* self)
 	if (self->update != NULL)
 	{
 		self->update(self);
+	}
+	else if (self->think) {
+		self->think(self);
 	}
 }
 /*eol@eof*/
