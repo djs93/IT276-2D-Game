@@ -207,3 +207,17 @@ void calcBoundaryLines(void* data, void* context) {
 void calcOptimalBuckets(void* data, void* context) {
 	gfc_list_foreach(((Path2D*)data)->lines, calcOptimalLineBuckets, context);
 }
+
+Bool pathCollision(Entity* entity) {
+	int i;
+	Line2D* currLine;
+	List* colpaths = get_loaded_level()->collisionPaths;
+	for (i = 0; i < colpaths->count; i++)
+	{
+		currLine = colpaths->elements[i].data;
+		if (LineCircle(*currLine, entity->boundingBox)) {
+			return true;
+		}
+	}
+	return false;
+}

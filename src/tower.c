@@ -1,6 +1,8 @@
 #include "tower.h"
 #include "simple_logger.h"
 #include "local.h"
+//#include "level.h"
+#include "gf2d_mouse.h"
 
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
@@ -94,7 +96,9 @@ Entity* placement_spawn(TowerTypes type) {
 	self->position.x = mx;
 	self->position.y = my;
 	self->name = "placement";
-	self->data = type;
+	self->data = (int)type;
+
+	return self;
 }
 #pragma endregion
 
@@ -128,9 +132,13 @@ void music_think(Entity* self){
 }
 
 void placement_think(Entity* self) {
-	self->position.x = mx;
-	self->position.y = my;
-	if()
+	self->position = gf2d_mouse_get_position();
+	if (pathCollision(self)) {
+		self->actor.color = vector4d(1.0f, 0.0f, 0.0f, 1.0f);
+	}
+	else {
+		self->actor.color = vector4d(0.0f, 1.0f, 0.0f, 1.0f);
+	}
 }
 #pragma endregion
 
