@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include "gf2d_graphics.h"
+#include "gf2d_draw.h"
 #include "gf2d_sprite.h"
 #include "simple_logger.h"
 #include "local.h"
@@ -155,6 +156,7 @@ int main(int argc, char * argv[])
 void draw_normal_entities() {
 	int i = 0;
 	Entity* ent;
+    Vector2D newPos;
 	while (i < gf2d_entity_manager.entity_max) {
 		ent = &entity_list[i];
 		if (ent->_inuse == 0) {
@@ -163,9 +165,15 @@ void draw_normal_entities() {
 		}
 		if (ent->actor.sprite) {
 			//if (!ent->name || strcmp(ent->name, "axes_attach") != 0) { //These are checks just in case there are specific things we don't want to draw
-			gf2d_sprite_draw(ent->actor.sprite, ent->position, &ent->actor.al->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);
+            vector2d_copy(newPos, ent->position);
+            newPos.x -= ent->actor.sprite->frame_w/2* ent->actor.al->scale.x;
+            newPos.y -= ent->actor.sprite->frame_h/2 * ent->actor.al->scale.y;
+			gf2d_sprite_draw(ent->actor.sprite, newPos, &ent->actor.al->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);
 			//}
 		}
+        if (ent->boundingBox.radius > 0.1f) {
+            gf2d_draw_circle(ent->boundingBox.position, ent->boundingBox.radius, vector4d(0.0f,255.0f,0.0f,255.0f));
+        }
 
 		i++;
 	}
