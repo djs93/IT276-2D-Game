@@ -307,5 +307,11 @@
     <None Include="..\actors\water.actor">
       <Filter>Resource Files\Actors</Filter>
     </None>
+    <None Include="..\config\yes_no_window.json">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\config\yes_no_window2.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

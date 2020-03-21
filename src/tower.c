@@ -3,6 +3,7 @@
 #include "local.h"
 #include "level.h"
 #include "gf2d_mouse.h"
+#include "gf2d_element_button.h"
 
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
@@ -211,4 +212,69 @@ void placement_detach(Entity* ent) {
 	ent->colorShift = vector4d(255.0f, 255.0f, 255.0f, 255.0f);
 }
 #pragma endregion
+
+void setPrices(Window* window) {
+	Element* list;
+	Element* currButton;
+	Element* currLabel;
+	TextLine str;
+	list = gf2d_window_get_element_by_id(window, 0);
+	currButton = gf2d_element_list_get_item_by_id(list, 50);
+	currLabel = ((ButtonElement*)currButton->data)->label;
+	sprintf(str, "Stinger - $%i", getPrice(TT_Stinger));
+	gf2d_element_label_set_text(currLabel, str);
+
+	currButton = gf2d_element_list_get_item_by_id(list, 51);
+	currLabel = ((ButtonElement*)currButton->data)->label;
+	sprintf(str, "Slinger - $%i", getPrice(TT_Slingshot));
+	gf2d_element_label_set_text(currLabel, str);
+
+	currButton = gf2d_element_list_get_item_by_id(list, 52);
+	currLabel = ((ButtonElement*)currButton->data)->label;
+	sprintf(str, "Laser - $%i", getPrice(TT_Laser));
+	gf2d_element_label_set_text(currLabel, str);
+
+	currButton = gf2d_element_list_get_item_by_id(list, 53);
+	currLabel = ((ButtonElement*)currButton->data)->label;
+	sprintf(str, "Water - $%i", getPrice(TT_Water));
+	gf2d_element_label_set_text(currLabel, str);
+
+	currButton = gf2d_element_list_get_item_by_id(list, 54);
+	currLabel = ((ButtonElement*)currButton->data)->label;
+	sprintf(str, "Techno - $%i", getPrice(TT_Techno));
+	gf2d_element_label_set_text(currLabel, str);
+
+	currButton = gf2d_element_list_get_item_by_id(list, 55);
+	currLabel = ((ButtonElement*)currButton->data)->label;
+	sprintf(str, "Snow - $%i", getPrice(TT_Snowglobe));
+	gf2d_element_label_set_text(currLabel, str);
+
+	currButton = gf2d_element_list_get_item_by_id(list, 56);
+	currLabel = ((ButtonElement*)currButton->data)->label;
+	sprintf(str, "Music - $%i", getPrice(TT_Music));
+	gf2d_element_label_set_text(currLabel, str);
+}
+
+int getPrice(TowerTypes type)
+{
+	switch (type)
+	{
+	case TT_Stinger:
+		return 100;
+	case TT_Slingshot:
+		return 175;
+	case TT_Laser:
+		return 250;
+	case TT_Water:
+		return 250;
+	case TT_Techno:
+		return 350;
+	case TT_Snowglobe:
+		return 150;
+	case TT_Music:
+		return 200;
+	default:
+		return 100;
+	}
+}
 

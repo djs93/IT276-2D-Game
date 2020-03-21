@@ -1,0 +1,225 @@
+{
+"window":{
+    "color" : [255,255,255, 255],
+    "dimensions" : [0,0,1200,90],
+    "justify" : "left",
+    "align" : "bottom",
+    "elements":
+    [
+      {
+        "type": "list",
+        "name": "list",
+        "id" : 0,
+        "bounds": [10,10,1,1],
+        "color" : [255,255,255,255],
+        "style": "horizontal",
+        "item_size": [ 168, 64 ],
+        "elements": [
+          {
+            "type": "button",
+            "name": "stingerBuy",
+            "id": 50,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "buyStinger",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "stingerLabel",
+              "id": 501,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Stinger - $",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 502,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "slingshotBuy",
+            "id": 51,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "buySlingshot",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "slingshotLabel",
+              "id": 511,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Slinger - $",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 512,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "laserBuy",
+            "id": 52,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "buyLaser",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "laserLabel",
+              "id": 521,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Laser - $",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 522,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "waterBuy",
+            "id": 53,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "buyWater",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "waterLabel",
+              "id": 531,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Water - $",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 532,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "technoBuy",
+            "id": 54,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "buyStinger",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "technoLabel",
+              "id": 541,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Techno - $",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 542,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "snowglobeBuy",
+            "id": 55,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "buySnowglobe",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "snowglobeLabel",
+              "id": 551,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Snow - $",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 552,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "musicBuy",
+            "id": 56,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "buyMusic",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "musicLabel",
+              "id": 561,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Music - $",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 562,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          }
+        ]
+      }
+    ]
+    }
+}

@@ -2,6 +2,9 @@
 #define __TOWER_H__
 
 #include "gf2d_entity.h"
+#include "gf2d_windows.h"
+#include "gf2d_element_label.h"
+#include "gf2d_element_list.h"
 
 typedef enum
 {
@@ -34,5 +37,8 @@ void music_think(Entity* self);
 
 void placement_think(Entity* self);
 void placement_detach(Entity* ent);
+
+void setPrices(Window* window);
+int getPrice(TowerTypes type);
 
 #endif
