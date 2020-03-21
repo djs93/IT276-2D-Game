@@ -14,6 +14,7 @@ typedef struct Level_S{
 	List* allyBuckets; /**<Buckets containing allies for support tower checking*/
 	float pathDistance; /**<Minimum distance player can place towers away from path*/
 	List* needUpdating; /**<Entities needing to have their buckets updated. Made automatically*/
+	int playerHealth; /**<How much health the player has*/
 }Level;
 
 Level* get_loaded_level();
