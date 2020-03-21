@@ -32,6 +32,7 @@ typedef struct Entity_S
 	char* name;			/**<name of the entity*/
 	EntityType* type;			/**Type of the entitiy*/
 	int           _inuse;         /**<flag to keep track if this isntance is in use and should not be reassigned*/
+	int health;						/**<Health of the entity*/
 	Actor actor;                     /**<animated sprite information*/
 	Vector2D         position;       /**<position of the entity in 2d space*/
 	Vector2D         velocity;       /**<velocity of the entity in 2d space*/
@@ -59,6 +60,8 @@ typedef struct Entity_S
 	float fireRate;
 	Bool dead;						/**<when true, the entity system will delete the entity on the next update*/
 	List* noTouch;					/**<List of entities this entity won't see when touching*/
+	Path2D* path;					/**<Path for entity to follow*/
+	float distanceLeft;				/**<Distance until the end of the current line on the path*/
 	void* data;                     /**<additional entity specific data*/
 
 }Entity;
