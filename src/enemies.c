@@ -116,6 +116,7 @@ void flowerMove(Entity* self)
 			index += 1;
 			if (index >= gfc_list_get_count(self->path->lines)) {
 				//reached end of path, do damage
+				gf2d_entity_free(self);
 				return;
 			}
 			else {
