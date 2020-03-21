@@ -58,7 +58,7 @@ void gf2d_entity_free(Entity *self)
         return;
     }
     self->_inuse = 0;
-	gf2d_sprite_free(self->actor.sprite);
+	gf2d_actor_free(&self->actor);
     if (self->data != NULL)
     {
         slog("warning: data not freed at entity free!");
