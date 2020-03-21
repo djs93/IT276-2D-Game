@@ -302,7 +302,8 @@ Vector2D gf2d_graphics_get_resolution() {
     SDL_GetCurrentDisplayMode(0, &currentWindow);
     window_width = currentWindow.w;
     window_height = currentWindow.h;
-    res = vector2d(window_width, window_height);
+    //res = vector2d(window_width, window_height);
+    res = vector2d(1200, 720);
     return res;
 }
 
