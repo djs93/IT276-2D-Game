@@ -33,6 +33,37 @@ void path2dTotal(void* data, void* context) {
 	path->totalLength += len;
 }
 
+Bool CircleRectangle(Circle circle, Rectangle2D rect)
+{
+	Line2D left;
+	Line2D top;
+	Line2D right;
+	Line2D bottom;
+	Bool result = false;
+	Vector2D rectMin = GetMinRect(rect);
+	Vector2D rectMax = GetMaxRect(rect);
+	if (PointInRectangle(circle.position, rect)) {
+		return true;
+	}
+	left = line2d(rectMin, vector2d(rectMin.x, rectMax.y));
+	if (LineCircle(left, circle)) {
+		return true;
+	}
+	top = line2d(vector2d(rectMin.x, rectMax.y), rectMax);
+	if (LineCircle(top, circle)) {
+		return true;
+	}
+	right = line2d(rectMax, vector2d(rectMax.x, rectMin.y));
+	if (LineCircle(right, circle)) {
+		return true;
+	}
+	bottom = line2d(rectMin, vector2d(rectMax.x, rectMin.y));
+	if (LineCircle(bottom, circle)) {
+		return true;
+	}
+	return false;
+}
+
 void drawPaths() {
 	Level* level;
 	List* paths;

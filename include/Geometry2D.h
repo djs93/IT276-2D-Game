@@ -154,11 +154,19 @@ Bool LineRectangle(Line2D l, Rectangle2D r);
 
 /**
 * @brief test if a line is interesting or contained within an oriented rectangle
-* @param l the line to check
-* @param r the oriented rectangle to check if the line has a point in
+* @param line the line to check
+* @param rectangle the oriented rectangle to check if the line has a point in
 * @return true if line has point in rectangle, false otherwise
 */
 Bool LineOrientedRectangle(Line2D line, OrientedRectangle rectangle);
+
+/**
+* @brief test if a circle is interesting or contained within a rectangle
+* @param circle the circle to check
+* @param rect the rectangle to check if the circle has a point in
+* @return true if circle has point in rect, false otherwise
+*/
+Bool CircleRectangle(Circle circle, Rectangle2D rect);
 
 /**
 * @brief Debug method to draw all paths on the screen
