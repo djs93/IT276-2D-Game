@@ -109,7 +109,10 @@ void bucket_update(Entity* entity, void* context) {
 		for (c = 0; c < bucket_manager.columns; c++) {
 			currBucket = &bucket_manager.bucket_array[r][c];
 			//do collision between rect of bucket and circle of ent
-			//add if colliding, add entity to that bucket's list
+			if (CircleRectangle(entity->boundingBox, currBucket->shape.s.r)) {
+				//and if colliding, add entity to that bucket's list
+				gfc_list_append(currBucket->entities, entity);
+			}
 		}
 	}
 }
