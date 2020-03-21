@@ -64,7 +64,7 @@ int main(int argc, char * argv[])
     //mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     gf2d_action_list_init(128);
 	gf2d_entity_manager_init(300);
-    bucket_manager_init(65, 65);
+    bucket_manager_init(100, 100);
     /*
 	backgroundEnt = gf2d_entity_new();
     gf2d_actor_load(&backgroundEnt->actor, "actors/mouse.actor");
@@ -88,7 +88,8 @@ int main(int argc, char * argv[])
 
     ui = gf2d_window_new();
 
-    ui = gf2d_window_load("config/yes_no_window.json");
+    ui = gf2d_window_load("config/yes_no_window2.json");
+    setPrices(ui);
 
 	/*
 	List* testLines = gfc_list_new();
@@ -104,6 +105,13 @@ int main(int argc, char * argv[])
     level_load("Levels/test.json");
 
     gfc_input_set_callbacks("test", placement_spawn, NULL, NULL, NULL, TT_Laser);
+    gfc_input_set_callbacks("buyStinger", placement_spawn, NULL, NULL, NULL, TT_Stinger);
+    gfc_input_set_callbacks("buySlingshot", placement_spawn, NULL, NULL, NULL, TT_Slingshot);
+    gfc_input_set_callbacks("buyLaser", placement_spawn, NULL, NULL, NULL, TT_Laser);
+    gfc_input_set_callbacks("buyWater", placement_spawn, NULL, NULL, NULL, TT_Water);
+    gfc_input_set_callbacks("buyTechno", placement_spawn, NULL, NULL, NULL, TT_Techno);
+    gfc_input_set_callbacks("buySnowglobe", placement_spawn, NULL, NULL, NULL, TT_Snowglobe);
+    gfc_input_set_callbacks("buyMusic", placement_spawn, NULL, NULL, NULL, TT_Music);
     /*main game loop*/
     while(!done)
     {
