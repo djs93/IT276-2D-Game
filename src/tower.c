@@ -148,8 +148,11 @@ void placement_think(Entity* self) {
 		self->colorShift = vector4d(0.0f, 255.0f, 0.0f, 255.0f);
 	}
 	self->boundingBox.position = self->position;
-	if (!colliding&&gf2d_mouse_button_pressed(0)) {
+	if (!colliding&&gf2d_mouse_button_pressed(0)&& (self->flags & FL_PLACEABLE)) {
 		placement_detach(self);
+	}
+	if (!(self->flags & FL_PLACEABLE)&&gf2d_mouse_button_released(0)) {
+		self->flags = self->flags | FL_PLACEABLE;
 	}
 }
 #pragma endregion

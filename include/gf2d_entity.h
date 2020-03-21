@@ -21,6 +21,11 @@ typedef enum
 	Type_Enemy = 2
 }EntityType;
 
+typedef enum
+{
+	FL_PLACEABLE = 0x00000001
+} EntityFlags;
+
 typedef struct Entity_S
 {
 	char* name;			/**<name of the entity*/
