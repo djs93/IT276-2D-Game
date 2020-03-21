@@ -2,7 +2,7 @@
 #define __BUCKET_H__
 
 #include "Geometry2D.h"
-#include "gf2d_entity.h"
+#include "level.h"
 
 typedef struct Bucket_S {
 	Shape2D shape;

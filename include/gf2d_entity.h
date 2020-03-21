@@ -5,7 +5,7 @@
 #include "gf2d_actor.h"
 //#include "local.h"
 #include "Geometry2D.h"
-#include "bucket.h"
+//#include "bucket.h"
 
 typedef enum
 {
@@ -58,6 +58,7 @@ typedef struct Entity_S
 	Circle shootRadius;
 	float fireRate;
 	Bool dead;						/**<when true, the entity system will delete the entity on the next update*/
+	List* noTouch;					/**<List of entities this entity won't see when touching*/
 	void* data;                     /**<additional entity specific data*/
 
 }Entity;
