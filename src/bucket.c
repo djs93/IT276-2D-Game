@@ -16,7 +16,7 @@ void bucket_manager_init(Uint32 bucket_width, Uint32 bucket_height)
 	columns = (int)round((float)window_width / bucket_width);
 	rows = (int)round((float)window_height / bucket_height);
 
-	Bucket test[20][20];
+	Bucket test[25][25];
 
 	bucket_manager.bucket_array = gfc_allocate_array(sizeof(Bucket*), columns);
 	for (i = 0; i < columns; i++) {
@@ -75,6 +75,9 @@ void bucket_precalc()
 {
 	int r, c, i;
 	Bucket* currBucket;
+
+	gfc_list_delete(get_loaded_level()->needUpdating);
+	get_loaded_level()->needUpdating = gfc_list_new();
 	for (r = 0; r < bucket_manager.rows; r++) {
 		for (c = 0; c < bucket_manager.columns; c++) {
 			currBucket = &bucket_manager.bucket_array[r][c];
@@ -86,32 +89,30 @@ void bucket_precalc()
 }
 
 void bucket_calc() {
-	gfc_list_foreach(get_loaded_level()->needUpdating, bucket_update, NULL);
-	gfc_list_delete(get_loaded_level()->needUpdating);
-	get_loaded_level()->needUpdating = gfc_list_new();
+	List* updateList = get_loaded_level()->needUpdating;
+	gfc_list_foreach(updateList, bucket_update, NULL);
 }
 
-void bucket_check_remove(void* entity, void* entList) {
-	Entity* ent = (Entity*)entity;
-	List* entityList = (List*)entList;
-	if (vector2d_equal(vector2d(0, 0), ent->velocity)) {
+void bucket_check_remove(Entity* entity, List* entList) {
+	if (vector2d_equal(vector2d(0, 0), entity->velocity)) {
 		return;
 	}
-	gfc_list_append(get_loaded_level()->needUpdating, ent);
-	gfc_list_delete_data(entityList, entity);
+	get_loaded_level()->needUpdating = gfc_list_append(get_loaded_level()->needUpdating, entity);
+	gfc_list_delete_data(entList, entity);
 }
 
 void bucket_update(Entity* entity, void* context) {
 	int r, c, i;
 	Bucket* currBucket;
-	for (r = 0; r < bucket_manager.rows; r++) {
-		for (c = 0; c < bucket_manager.columns; c++) {
-			currBucket = &bucket_manager.bucket_array[r][c];
-			//do collision between rect of bucket and circle of ent
-			if (CircleRectangle(entity->boundingBox, currBucket->shape.s.r)) {
-				//and if colliding, add entity to that bucket's list
-				gfc_list_append(currBucket->entities, entity);
-			}
+	List* list;
+	list = get_loaded_level()->optimalBuckets;
+	for (i = 0; i < list->count; i++)
+	{
+		currBucket = gfc_list_get_nth(list, i);
+		//do collision between rect of bucket and circle of ent
+		if (CircleRectangle(entity->boundingBox, currBucket->shape.s.r)) {
+			//and if colliding, add entity to that bucket's list
+			currBucket->entities = gfc_list_append(currBucket->entities, entity);
 		}
 	}
 }

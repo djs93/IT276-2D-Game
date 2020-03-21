@@ -80,7 +80,7 @@ Level* level_load(char* levelFile)
 		currLineLine = gfc_allocate_array(sizeof(Line2D), 1);
 		currLineLine->end = currLine.end;
 		currLineLine->start = currLine.start;
-		gfc_list_append(lines, currLineLine);
+		lines = gfc_list_append(lines, currLineLine);
 		currPathPath = gfc_allocate_array(sizeof(Path2D), 1);
 		currPathPathPath = path2d(lines);
 		currPathPath->end = currPathPathPath.end;
@@ -88,7 +88,7 @@ Level* level_load(char* levelFile)
 		currPathPath->lines = currPathPathPath.lines;
 		currPathPath->totalLength = currPathPathPath.totalLength;
 		pathsList = gfc_list_new();
-		gfc_list_append(pathsList, currPathPath);
+		pathsList = gfc_list_append(pathsList, currPathPath);
 		level->paths = pathsList;
 	}
 	else {
@@ -108,7 +108,7 @@ Level* level_load(char* levelFile)
 				currLineLine->end.x = k;
 				sj_get_integer_value(sj_array_get_nth(nextPoint, 1), &k);
 				currLineLine->end.y = k;
-				gfc_list_append(lines, currLineLine);
+				lines = gfc_list_append(lines, currLineLine);
 			}
 			currPathPath = gfc_allocate_array(sizeof(Path2D), 1);
 			currPathPathPath = path2d(lines);
@@ -116,7 +116,7 @@ Level* level_load(char* levelFile)
 			currPathPath->start = currPathPathPath.start;
 			currPathPath->lines = currPathPathPath.lines;
 			currPathPath->totalLength = currPathPathPath.totalLength;
-			gfc_list_append(pathsList, currPathPath);
+			pathsList = gfc_list_append(pathsList, currPathPath);
 		}
 		level->paths = pathsList;
 	}
@@ -203,8 +203,8 @@ void calcBoundaryLines(void* data, void* context) {
 	border2->start.y = line->start.y + normal2.y * level->pathDistance;
 	
 	//add them to collision line list
-	gfc_list_append(level->collisionPaths, border1);
-	gfc_list_append(level->collisionPaths, border2);
+	level->collisionPaths = gfc_list_append(level->collisionPaths, border1);
+	level->collisionPaths = gfc_list_append(level->collisionPaths, border2);
 }
 
 void calcOptimalBuckets(void* data, void* context) {

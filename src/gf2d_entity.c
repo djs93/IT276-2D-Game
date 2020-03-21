@@ -576,10 +576,6 @@ void gf2d_entity_update(Entity* self)
 		return;
 	}
 
-	if (!vector2d_equal(vector2d(0, 0), self->velocity)) {
-		bucket_update(self);
-	}
-
 	/*collision handles position and velocity*/
 	vector2d_add(self->velocity, self->velocity, self->acceleration);
 
