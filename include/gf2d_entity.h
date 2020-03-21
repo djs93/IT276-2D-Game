@@ -33,8 +33,8 @@ typedef struct Entity_S
 	EntityType* type;			/**Type of the entitiy*/
 	int           _inuse;         /**<flag to keep track if this isntance is in use and should not be reassigned*/
 	Actor actor;                     /**<animated sprite information*/
-	Vector2D         position;       /**<DO NOT DIRECTLY MODIFY - position of the entity in 3d space*/
-	Vector2D         velocity;       /**<velocity of the entity in 3d space*/
+	Vector2D         position;       /**<position of the entity in 2d space*/
+	Vector2D         velocity;       /**<velocity of the entity in 2d space*/
 	Vector2D         acceleration;   /**<acceleration of the entity in 3d space*/
 	Vector3D         rotation;       /**<x and y of center of rotation, then degrees of rotation*/
 	Vector2D         scale;          /**<*please default to 1,1*/
@@ -46,7 +46,7 @@ typedef struct Entity_S
 	void (*think)(struct Entity_S* self);   /**<function called on entity think*/
 	void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<function called when an entity touches another*/
 	void (*die)(struct Entity_S* self);   /**<function called when an entity dies*/
-	void (*update)(struct Entity_S* self);  /**<called after system entity update*/
+	void (*update)(struct Entity_S* self);  /**<Optional, override normal update*/
 	void (*move)(struct Entity_S* self);  /**<defines how the entity moves. Called before updating buckets*/
 	float nextThink;				/**<the next time the entity will think (in seconds)*/
 	float maxSpeed;					/**<the max speed of the entity*/
