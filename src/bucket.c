@@ -17,6 +17,8 @@ void bucket_manager_init(Uint32 bucket_width, Uint32 bucket_height)
 	columns = (int)round((float)window_width / bucket_width);
 	rows = (int)round((float)window_height / bucket_height);
 
+	Bucket test[20][20];
+
 	bucket_manager.bucket_array = gfc_allocate_array(sizeof(Bucket*), columns);
 	for (i = 0; i < columns; i++) {
 		bucket_manager.bucket_array[i] = gfc_allocate_array(sizeof(Bucket), rows);
