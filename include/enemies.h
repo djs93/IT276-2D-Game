@@ -23,7 +23,7 @@ void greenThink(Entity* self);
 void yellowThink(Entity* self);
 void superThink(Entity* self);
 
-void redMove(Entity* self);
+void flowerMove(Entity* self);
 void blueMove(Entity* self);
 void greenMove(Entity* self);
 void yellowMove(Entity* self);

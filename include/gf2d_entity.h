@@ -33,9 +33,11 @@ typedef struct Entity_S
 	EntityType* type;			/**Type of the entitiy*/
 	int           _inuse;         /**<flag to keep track if this isntance is in use and should not be reassigned*/
 	int health;						/**<Health of the entity*/
+	int damage;						/**<damage the entity does*/
 	Actor actor;                     /**<animated sprite information*/
 	Vector2D         position;       /**<position of the entity in 2d space*/
 	Vector2D         velocity;       /**<velocity of the entity in 2d space*/
+	float			speed;			/**<magnitude of how fast the entity should move*/
 	Vector2D         acceleration;   /**<acceleration of the entity in 3d space*/
 	Vector3D         rotation;       /**<x and y of center of rotation, then degrees of rotation*/
 	Vector2D         scale;          /**<*please default to 1,1*/

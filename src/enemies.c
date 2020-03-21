@@ -15,6 +15,8 @@ Entity* commonSpawn() {
 	vector2d_normalize(&deltas);
 	vector2d_copy(ent->velocity, deltas);
 	ent->health = 1;
+	ent->distanceLeft = LengthLine2D(*line);
+	ent->boundingBox.radius = 20.0f;
 	return ent;
 }
 
@@ -23,8 +25,10 @@ Entity* redSpawn()
 	Entity* ent;
 	ent = commonSpawn();
 	gf2d_actor_load(&ent->actor, "actors/enemies/red.actor");
-	ent->velocity.x *= 5;
-	ent->velocity.y *= 5;
+	ent->speed = 5;
+	ent->velocity.x *= ent->speed;
+	ent->velocity.y *= ent->speed;
+	ent->move = flowerMove;
 	return ent;
 }
 
@@ -33,8 +37,9 @@ Entity* blueSpawn()
 	Entity* ent;
 	ent = commonSpawn();
 	gf2d_actor_load(&ent->actor, "actors/enemies/blue.actor");
-	ent->velocity.x *= 7;
-	ent->velocity.y *= 7;
+	ent->speed = 7;
+	ent->velocity.x *= ent->speed;
+	ent->velocity.y *= ent->speed;
 	return ent;
 }
 
@@ -43,8 +48,9 @@ Entity* greenSpawn()
 	Entity* ent;
 	ent = commonSpawn();
 	gf2d_actor_load(&ent->actor, "actors/enemies/green.actor");
-	ent->velocity.x *= 10;
-	ent->velocity.y *= 10;
+	ent->speed = 10;
+	ent->velocity.x *= ent->speed;
+	ent->velocity.y *= ent->speed;
 	return ent;
 }
 
@@ -53,8 +59,9 @@ Entity* yellowSpawn()
 	Entity* ent;
 	ent = commonSpawn();
 	gf2d_actor_load(&ent->actor, "actors/enemies/yellow.actor");
-	ent->velocity.x *= 14;
-	ent->velocity.y *= 14;
+	ent->speed = 14;
+	ent->velocity.x *= ent->speed;
+	ent->velocity.y *= ent->speed;
 	return ent;
 }
 
@@ -63,15 +70,15 @@ Entity* superSpawn()
 	Entity* ent;
 	ent = commonSpawn();
 	gf2d_actor_load(&ent->actor, "actors/enemies/super.actor");
-	ent->velocity.x *= 4;
-	ent->velocity.y *= 4;
+	ent->speed = 4;
+	ent->velocity.x *= ent->speed;
+	ent->velocity.y *= ent->speed;
 	ent->health = 50;
 	return ent;
 }
 
 void redThink(Entity* self)
 {
-	//You were here
 }
 
 void blueThink(Entity* self)
@@ -90,8 +97,48 @@ void superThink(Entity* self)
 {
 }
 
-void redMove(Entity* self)
+void flowerMove(Entity* self)
 {
+	float moveDistLeft, overflowDist;
+	int index;
+	Line2D* line;
+	Vector2D deltas;
+	Vector2D newPos;
+	line = NULL;
+	moveDistLeft = self->distanceLeft - self->speed;
+	if (moveDistLeft <= 0.000001f) { // go onto next line
+		//grab next line and set vel
+		moveDistLeft = fabsf(moveDistLeft);
+		overflowDist = moveDistLeft;
+		while (moveDistLeft >= 0.000001f) {
+			index = (int)self->data;
+			self->data = index + 1;
+			index += 1;
+			if (index >= gfc_list_get_count(self->path->lines)) {
+				//reached end of path, do damage
+				return;
+			}
+			else {
+				line = gfc_list_get_nth(self->path->lines, index);
+				moveDistLeft -= LengthLine2D(*line);
+			}
+		}
+		self->distanceLeft = fabsf(moveDistLeft);
+		vector2d_sub(deltas, line->end, line->start);
+		vector2d_normalize(&deltas);
+		vector2d_copy(self->velocity, deltas);
+		self->velocity.x *= self->speed;
+		self->velocity.y *= self->speed;
+
+		newPos.x = line->start.x + deltas.x * overflowDist;
+		newPos.y = line->start.y + deltas.y * overflowDist;
+		vector2d_copy(self->position, newPos);
+	}
+	else { //same line
+		self->distanceLeft = moveDistLeft;
+		vector2d_add(self->position, self->position, self->velocity);
+	}
+	vector2d_copy(self->boundingBox.position, self->position);
 }
 
 void blueMove(Entity* self)
