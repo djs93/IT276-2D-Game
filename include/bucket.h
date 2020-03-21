@@ -38,14 +38,20 @@ void draw_buckets_optimal();
 /**
 * @brief update buckets for a specified entity
 * @param ent the entity to update buckets for
+* @param context not used, only so gfc_list_foreach operates normally
 */
-void bucket_update(Entity* ent);
+void bucket_update(Entity* entity, void* context);
 
 /**
-* @brief removes all entities about to move from buckets before calculating new buckets
+* @brief removes all entities that have moved from buckets before calculating new buckets
 * @note all entities with zero velocity are not removed from their buckets
 */
 void bucket_precalc();
+
+/**
+* @brief calculates all buckets for entities within level.needUpdate
+*/
+void bucket_calc();
 
 /**
 * @brief calculates which buckets intersect with a line

@@ -12,6 +12,7 @@ typedef struct Level_S{
 	List* optimalBuckets; /**<Buckets used for extremely efficient tower enemy checking*/
 	List* allyBuckets; /**<Buckets containing allies for support tower checking*/
 	float pathDistance; /**<Minimum distance player can place towers away from path*/
+	List* needUpdating; /**<Entities needing to have their buckets updated. Made automatically*/
 }Level;
 
 Level* get_loaded_level();

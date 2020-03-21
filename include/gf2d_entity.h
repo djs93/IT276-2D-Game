@@ -5,6 +5,7 @@
 #include "gf2d_actor.h"
 //#include "local.h"
 #include "Geometry2D.h"
+#include "bucket.h"
 
 typedef enum
 {
@@ -46,6 +47,7 @@ typedef struct Entity_S
 	void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<function called when an entity touches another*/
 	void (*die)(struct Entity_S* self);   /**<function called when an entity dies*/
 	void (*update)(struct Entity_S* self);  /**<called after system entity update*/
+	void (*move)(struct Entity_S* self);  /**<defines how the entity moves. Called before updating buckets*/
 	float nextThink;				/**<the next time the entity will think (in seconds)*/
 	float maxSpeed;					/**<the max speed of the entity*/
 	int frame;						/**<the frame of animation the entity is on*/

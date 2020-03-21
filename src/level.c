@@ -27,6 +27,7 @@ Level* level_new(char* backgroundFile)
 	level->collisionPaths = gfc_list_new();
 	level->allyBuckets = gfc_list_new();
 	level->optimalBuckets = gfc_list_new();
+	level->needUpdating = gfc_list_new();
 	return level;
 }
 

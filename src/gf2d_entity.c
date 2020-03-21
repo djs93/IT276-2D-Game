@@ -539,16 +539,30 @@ void gf2d_entity_update_all()
 {
 	int i = 0;
 	Entity* currEnt;
+	for (i = 0; i < gf2d_entity_manager.entity_max; i++) //everything moves before everything else
+	{
+		currEnt = &entity_list[i];
+		if (currEnt->_inuse == 0)continue;
+		if (currEnt->move) {
+			currEnt->move(currEnt);
+		}
+	}
 	bucket_precalc();
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
 	{
 		currEnt = &entity_list[i];
 		if (currEnt->_inuse == 0)continue;
 		if (currEnt->prethink) {
-			currEnt->prethink(&entity_list[i]);
+			currEnt->prethink(currEnt);
 		}
-		gf2d_entity_update(&entity_list[i]);
+		if (currEnt->update) {
+			currEnt->update(currEnt);
+		}
+		else {
+			gf2d_entity_update(&entity_list[i]);
+		}
 	}
+	bucket_calc();
 }
 
 void gf2d_entity_update(Entity* self)
@@ -569,16 +583,10 @@ void gf2d_entity_update(Entity* self)
 	/*collision handles position and velocity*/
 	vector2d_add(self->velocity, self->velocity, self->acceleration);
 
-	//gf2d_particle_emitter_update(self->pe);
-
 	gf2d_actor_next_frame(&self->actor);
 
-	if (self->update != NULL)
-	{
-		self->update(self);
-	}
-	else if (self->think) {
-		self->think(self);
+	if (self->think) {
+		self->think(self); //Enemy movement will be done in their thinks. This is to easily adjust their positions on the line and change lines if necessary
 	}
 }
 /*eol@eof*/
