@@ -132,6 +132,8 @@ Level* level_load(char* levelFile)
 
 	gfc_list_foreach(pathsList, calcOptimalBuckets, level);
 
+	level->currPath = 0;
+
 	//sj_free(levelJson);
 	//sj_free(background);
 	//sj_free(paths);
@@ -221,4 +223,11 @@ Bool pathCollision(Entity* entity) {
 		}
 	}
 	return false;
+}
+
+Path2D* nextPath()
+{
+	Path2D* path = gfc_list_get_nth(LOADED_LEVEL->paths, LOADED_LEVEL->currPath);
+	LOADED_LEVEL->currPath = (LOADED_LEVEL->currPath + 1) % gfc_list_get_count(LOADED_LEVEL->paths);
+	return path;
 }
