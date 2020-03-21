@@ -172,6 +172,7 @@
     <ClCompile Include="..\gfc\src\gfc_types.c" />
     <ClCompile Include="..\gfc\src\gfc_vector.c" />
     <ClCompile Include="..\src\bucket.c" />
+    <ClCompile Include="..\src\enemies.c" />
     <ClCompile Include="..\src\game.c" />
     <ClCompile Include="..\src\Geometry2D.c" />
     <ClCompile Include="..\src\gf2d_actor.c" />
@@ -213,6 +214,7 @@
     <ClInclude Include="..\gfc\simple_json\include\simple_json_value.h" />
     <ClInclude Include="..\gfc\simple_logger\include\simple_logger.h" />
     <ClInclude Include="..\include\bucket.h" />
+    <ClInclude Include="..\include\enemies.h" />
     <ClInclude Include="..\include\game.h" />
     <ClInclude Include="..\include\Geometry2D.h" />
     <ClInclude Include="..\include\gf2d_actor.h" />
@@ -236,6 +238,11 @@
     <ClInclude Include="..\include\tower.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\actors\enemies\blue.actor" />
+    <None Include="..\actors\enemies\green.actor" />
+    <None Include="..\actors\enemies\red.actor" />
+    <None Include="..\actors\enemies\super.actor" />
+    <None Include="..\actors\enemies\yellow.actor" />
     <None Include="..\actors\laser.actor" />
     <None Include="..\actors\mouse.actor" />
     <None Include="..\actors\music.actor" />

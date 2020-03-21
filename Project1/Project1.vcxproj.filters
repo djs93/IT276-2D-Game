@@ -37,18 +37,18 @@
     <Filter Include="Resource Files\Levels">
       <UniqueIdentifier>{39e8e48e-5c5a-4f76-970f-367e50911647}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\gf2d">
+      <UniqueIdentifier>{e808d568-ca1d-4d70-a029-8f61dfacd07c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gf2d">
+      <UniqueIdentifier>{62edb420-d892-4288-bc74-d1eaf6610d13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Actors\enemies">
+      <UniqueIdentifier>{9779c04b-5fe6-440d-945d-b84464654bbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\game.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_draw.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_graphics.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_sprite.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\gfc\src\gfc_audio.c">
@@ -102,13 +102,7 @@
     <ClCompile Include="..\src\Geometry2D.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gf2d_entity.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\level.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_actor.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\bucket.c">
@@ -117,56 +111,62 @@
     <ClCompile Include="..\src\tower.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gf2d_element_actor.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_element_button.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_element_entry.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_element_label.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_element_list.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_elements.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_windows.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_mouse.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_config.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\gf2d_font.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\gfc\src\gfc_color.c">
       <Filter>Source Files\gfc</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\gf2d_shape.c">
+    <ClCompile Include="..\src\enemies.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_actor.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_config.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_draw.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_element_actor.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_element_button.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_element_entry.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_element_label.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_element_list.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_elements.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_entity.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_font.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_graphics.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_mouse.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_shape.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_sprite.c">
+      <Filter>Source Files\gf2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gf2d_windows.c">
+      <Filter>Source Files\gf2d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\gf2d_draw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\gf2d_graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\gf2d_sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\gf2d_entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\gfc\include\gfc_audio.h">
       <Filter>Header Files\gfc</Filter>
     </ClInclude>
@@ -233,47 +233,62 @@
     <ClInclude Include="..\include\level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\gf2d_actor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\bucket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\tower.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\gf2d_shape.h">
+    <ClInclude Include="..\include\enemies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\gf2d_windows.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\gf2d_element_actor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\gf2d_element_button.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\gf2d_element_entry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\gf2d_element_label.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\gf2d_element_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\gf2d_elements.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\gf2d_mouse.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\include\gf2d_actor.h">
+      <Filter>Header Files\gf2d</Filter>
     </ClInclude>
     <ClInclude Include="..\include\gf2d_config.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_draw.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_element_actor.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_element_button.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_element_entry.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_element_label.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_element_list.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_elements.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_entity.h">
+      <Filter>Header Files\gf2d</Filter>
     </ClInclude>
     <ClInclude Include="..\include\gf2d_font.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_graphics.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_mouse.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_shape.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_sprite.h">
+      <Filter>Header Files\gf2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\gf2d_windows.h">
+      <Filter>Header Files\gf2d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +327,21 @@
     </None>
     <None Include="..\config\yes_no_window2.json">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\actors\enemies\red.actor">
+      <Filter>Resource Files\Actors\enemies</Filter>
+    </None>
+    <None Include="..\actors\enemies\blue.actor">
+      <Filter>Resource Files\Actors\enemies</Filter>
+    </None>
+    <None Include="..\actors\enemies\green.actor">
+      <Filter>Resource Files\Actors\enemies</Filter>
+    </None>
+    <None Include="..\actors\enemies\yellow.actor">
+      <Filter>Resource Files\Actors\enemies</Filter>
+    </None>
+    <None Include="..\actors\enemies\super.actor">
+      <Filter>Resource Files\Actors\enemies</Filter>
     </None>
   </ItemGroup>
 </Project>

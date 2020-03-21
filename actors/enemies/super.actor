@@ -1,0 +1,13 @@
+sprite: images/enemies/super.png
+frameWidth: 62
+frameHeight: 62
+framesPerLine: 1
+scale: 2,2
+color: 255,255,255,255
+colorSpecial: 255,255,255,255
+
+action: idle
+startFrame: 0
+endFrame: 0
+frameRate: 0.1
+type:   loop
