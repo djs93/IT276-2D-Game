@@ -236,6 +236,7 @@ void placement_detach(Entity* ent) {
 	ent->type = Type_Tower;
 	ent->rotation.x = ent->actor.sprite->frame_w/2;
 	ent->rotation.y = ent->actor.sprite->frame_h/2;
+	ent->fireRate = 0.5f;
 	setSeekBuckets(ent);
 }
 #pragma endregion
