@@ -326,7 +326,7 @@ Entity* findClosest(Entity* self) {
 			bucket = gfc_list_get_nth(self->seekBuckets, i);
 		}
 		for (j = 0; j < bucket->entities->count; j++) { //I think the problem is we're clearing buckets before thinking and not recalcing until after.
-			currEnemy = gfc_list_get_nth(bucket->entities, i);
+			currEnemy = gfc_list_get_nth(bucket->entities, j);
 			if (!currEnemy) { continue; }
 			if (currEnemy->type == Type_Enemy) {
 				if (CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
