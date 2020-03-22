@@ -312,4 +312,8 @@ Vector2D gf2d_graphics_get_resolution() {
     return res;
 }
 
+void gf2d_graphics_set_title(char* title) {
+    SDL_SetWindowTitle(gf2d_graphics.main_window, title);
+}
+
 /*eol@eof*/

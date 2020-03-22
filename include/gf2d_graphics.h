@@ -89,5 +89,11 @@ Vector2D gf2d_graphics_get_resolution();
 */
 float gf2d_graphics_get_milli_delta();
 
+/**
+* @brief set the title of the window
+* @param title the new title to set the window to
+*/
+void gf2d_graphics_set_title(char* title);
+
 
 #endif
