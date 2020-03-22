@@ -192,6 +192,7 @@
     <ClCompile Include="..\src\gf2d_sprite.c" />
     <ClCompile Include="..\src\gf2d_windows.c" />
     <ClCompile Include="..\src\level.c" />
+    <ClCompile Include="..\src\projectiles.c" />
     <ClCompile Include="..\src\tower.c" />
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +236,7 @@
     <ClInclude Include="..\include\gf2d_windows.h" />
     <ClInclude Include="..\include\level.h" />
     <ClInclude Include="..\include\local.h" />
+    <ClInclude Include="..\include\projectiles.h" />
     <ClInclude Include="..\include\tower.h" />
   </ItemGroup>
   <ItemGroup>
