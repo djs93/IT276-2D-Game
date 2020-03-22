@@ -4,6 +4,11 @@
 #include "level.h"
 #include "gf2d_mouse.h"
 #include "gf2d_element_button.h"
+#include "gf2d_graphics.h"
+#include "bucket.h"
+#include "projectiles.h"
+
+Entity* findClosest(Entity* self);
 
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
@@ -111,7 +116,20 @@ Entity* placement_spawn(TowerTypes type) {
 
 #pragma region Thinks
 void stinger_think(Entity* self){
-
+	Entity* target;
+	if (self->cooldown < 0.0000001f) {
+		//try to fire
+		target = findClosest(self);
+		//if fire, reset cooldown to fireRate
+		if (target) {
+			gf2d_actor_set_action(&self->actor, "fire");
+			stingerBolt_spawn(self);
+			self->cooldown = self->fireRate;
+		}
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
 }
 
 void slingshot_think(Entity* self){
@@ -210,6 +228,7 @@ void placement_detach(Entity* ent) {
 	}
 	ent->shootRadius.position = ent->position;
 	ent->colorShift = vector4d(255.0f, 255.0f, 255.0f, 255.0f);
+	ent->type = Type_Tower;
 }
 #pragma endregion
 
@@ -278,3 +297,33 @@ int getPrice(TowerTypes type)
 	}
 }
 
+Entity* findClosest(Entity* self) {
+	int i,j;
+	Bucket* bucket;
+	Entity* currEnemy;
+	Entity* targetEnemy;
+	float currClosestDist;
+	float testDist;
+	targetEnemy = NULL;
+	currClosestDist = -1.0f;
+	for (i = 0; i < self->seekBuckets->count; i++) {
+		bucket = gfc_list_get_nth(self->seekBuckets, i);
+		for (j = 0; j < bucket->entities->count; j++) {
+			currEnemy = gfc_list_get_nth(self->seekBuckets, i);
+			if (currEnemy->type == Type_Enemy) {
+				if (CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
+					testDist = LengthSqLine2D(line2d(self->shootRadius.position, currEnemy->boundingBox.position));
+					if (currClosestDist < 0.0f) {
+						targetEnemy = currEnemy;
+						currClosestDist = testDist;
+					}
+					else if (testDist < currClosestDist) {
+						targetEnemy = currEnemy;
+						currClosestDist = testDist;
+					}
+				}
+			}
+		}
+	}
+	return targetEnemy;
+}
