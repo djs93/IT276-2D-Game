@@ -596,9 +596,13 @@ void gf2d_entity_look_at(Entity* self, Entity* lookAt)
 	vector2d_sub(deltas, self->position, lookAt->position);
 
 	degree = atan2f(deltas.y, deltas.x);
-	if (deltas.y < 0) {
-		degree -= GFC_PI;
+
+	degree = (degree > 0.0f?degree:(GFC_2PI+degree));
+
+	if (deltas.y > 0.0f && deltas.x == 0.0f) {
+		degree = -GFC_PI / 2;
 	}
+
 	self->rotation.z = degree*GFC_RADTODEG;
 }
 /*eol@eof*/
