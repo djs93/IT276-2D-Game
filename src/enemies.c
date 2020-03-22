@@ -25,7 +25,7 @@ Entity* redSpawn()
 	Entity* ent;
 	ent = commonSpawn();
 	gf2d_actor_load(&ent->actor, "actors/enemies/red.actor");
-	ent->speed = 5;
+	ent->speed = 0.8f;
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
@@ -37,9 +37,10 @@ Entity* blueSpawn()
 	Entity* ent;
 	ent = commonSpawn();
 	gf2d_actor_load(&ent->actor, "actors/enemies/blue.actor");
-	ent->speed = 7;
+	ent->speed = 1.2f;
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
+	ent->move = flowerMove;
 	return ent;
 }
 
@@ -48,9 +49,10 @@ Entity* greenSpawn()
 	Entity* ent;
 	ent = commonSpawn();
 	gf2d_actor_load(&ent->actor, "actors/enemies/green.actor");
-	ent->speed = 10;
+	ent->speed = 1.4f;
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
+	ent->move = flowerMove;
 	return ent;
 }
 
@@ -59,9 +61,10 @@ Entity* yellowSpawn()
 	Entity* ent;
 	ent = commonSpawn();
 	gf2d_actor_load(&ent->actor, "actors/enemies/yellow.actor");
-	ent->speed = 14;
+	ent->speed = 1.8f;
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
+	ent->move = flowerMove;
 	return ent;
 }
 
@@ -70,10 +73,12 @@ Entity* superSpawn()
 	Entity* ent;
 	ent = commonSpawn();
 	gf2d_actor_load(&ent->actor, "actors/enemies/super.actor");
-	ent->speed = 4;
+	ent->speed = 0.3f;
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->health = 50;
+	ent->move = flowerMove;
+	ent->boundingBox.radius = 45.0f;
 	return ent;
 }
 
