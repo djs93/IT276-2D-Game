@@ -39,6 +39,11 @@ void draw_buckets();
 void draw_buckets_optimal();
 
 /**
+* @brief debug function to draw all buckets with towers in them
+*/
+void draw_buckets_ally();
+
+/**
 * @brief update buckets for a specified entity
 * @param ent the entity to update buckets for
 * @param context not used, only so gfc_list_foreach operates normally
@@ -63,5 +68,6 @@ void bucket_calc();
 */
 void calcOptimalLineBuckets(void* data, void* context);
 
+void setAllyBuckets(Entity* self);
 
 #endif

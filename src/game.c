@@ -140,6 +140,7 @@ int main(int argc, char * argv[])
 		draw_buckets();
         draw_buckets_optimal();
         draw_normal_entities();
+        draw_buckets_ally();
 		drawPaths();
         gf2d_windows_draw_all();
         gf2d_mouse_draw();

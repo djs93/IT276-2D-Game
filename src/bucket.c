@@ -74,6 +74,25 @@ void draw_buckets_optimal_foreach(void* data, void* context) {
 	SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
 }
 
+void draw_buckets_ally() {
+	int i;
+	SDL_Rect rect;
+	Bucket* bucket;
+	int r, c;
+	List* allyBuckets = get_loaded_level()->allyBuckets;
+	SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 100, 255, 255);
+	for (i = 0; i < allyBuckets->count; i++) {
+		bucket = gfc_list_get_nth(allyBuckets, i);
+		rect.h = bucket->shape.s.r.size.y;
+		rect.w = bucket->shape.s.r.size.x;
+		rect.x = bucket->shape.s.r.origin.x;
+		rect.y = bucket->shape.s.r.origin.y;
+		SDL_RenderDrawRect(gf2d_graphics_get_renderer(), &rect);
+	}
+	SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
+}
+
+
 void bucket_precalc()
 {
 	int r, c, i;
@@ -140,6 +159,25 @@ void calcOptimalLineBuckets(void* data, void* context) {
 			if (LineRectangle(*line, currBucket->shape.s.r)) {
 				//add if colliding, add bucket to level's optimal list
 				level->optimalBuckets = gfc_list_append(level->optimalBuckets, currBucket);
+			}
+		}
+	}
+}
+
+void setAllyBuckets(Entity* self) {
+	int r, c;
+	Bucket* currBucket;
+	List* allyBuckets = get_loaded_level()->allyBuckets;
+	if (!get_loaded_level()->allyBuckets) {
+		get_loaded_level()->allyBuckets = gfc_list_new();
+	}
+	for (r = 0; r < bucket_manager.rows; r++) {
+		for (c = 0; c < bucket_manager.columns; c++) {
+			currBucket = &bucket_manager.bucket_array[r][c];
+			if (CircleRectangle(self->boundingBox, currBucket->shape.s.r)) {
+				if (gfc_list_in_list(allyBuckets, currBucket) < 0) {
+					get_loaded_level()->allyBuckets = gfc_list_append(allyBuckets, currBucket);
+				}
 			}
 		}
 	}

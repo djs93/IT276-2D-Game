@@ -238,6 +238,7 @@ void placement_detach(Entity* ent) {
 	ent->rotation.y = ent->actor.sprite->frame_h/2;
 	ent->fireRate = 0.5f;
 	setSeekBuckets(ent);
+	setAllyBuckets(ent);
 }
 #pragma endregion
 
@@ -356,7 +357,7 @@ void setSeekBuckets(Entity* self) {
 	for (i = 0; i < optiBuckets->count; i++) {
 		currBucket = gfc_list_get_nth(optiBuckets, i);
 		if (CircleRectangle(self->shootRadius, currBucket->shape.s.r)) {
-			gfc_list_append(self->seekBuckets, currBucket);
+			self->seekBuckets = gfc_list_append(self->seekBuckets, currBucket);
 		}
 	}	
 }
