@@ -4,13 +4,16 @@
 #include "Geometry2D.h"
 #include "level.h"
 
+#define NUMROWS = 13;
+#define NUMCOLS = 8;
+
 typedef struct Bucket_S {
 	Shape2D shape;
     List* entities;
 }Bucket;
 
 typedef struct {
-	Bucket** bucket_array;
+	Bucket bucket_array[8][13];
 	int rows;
 	int columns;
 	Uint32 bucket_width;
