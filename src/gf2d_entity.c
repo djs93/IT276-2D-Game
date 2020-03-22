@@ -44,6 +44,8 @@ Entity *gf2d_entity_new()
 		//ent->movetype = MOVETYPE_NONE;
 		ent->touch = NULL;
 		ent->colorShift = vector4d(255, 255, 255, 255);
+		ent->cooldown = 0.0f;
+		ent->seekBuckets = NULL;
         return &entity_list[i];
     }
     slog("request for entity failed: all full up");
