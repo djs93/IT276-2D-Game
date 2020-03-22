@@ -172,9 +172,6 @@ void draw_normal_entities() {
 			i++;
 			continue;
 		}
-        if (ent->boundingBox.radius > 0.1f) {
-            gf2d_draw_circle(ent->boundingBox.position, ent->boundingBox.radius, vector4d(0.0f, 255.0f, 0.0f, 255.0f));
-        }
         if (ent->shootRadius.radius > 0.1f) {
             gf2d_draw_circle(ent->shootRadius.position, ent->shootRadius.radius, vector4d(255.0f, 255.0f, 0.0f, 255.0f));
         }
@@ -186,6 +183,9 @@ void draw_normal_entities() {
 			gf2d_sprite_draw(ent->actor.sprite, newPos, &ent->actor.al->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);
 			//}
 		}
+        if (ent->boundingBox.radius > 0.1f) {
+            gf2d_draw_circle(ent->boundingBox.position, ent->boundingBox.radius, vector4d(0.0f, 255.0f, 0.0f, 255.0f));
+        }
 		i++;
 	}
 }
