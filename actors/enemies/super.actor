@@ -2,7 +2,7 @@ sprite: images/enemies/super.png
 frameWidth: 62
 frameHeight: 62
 framesPerLine: 1
-scale: 2,2
+scale: 1.8,1.8
 color: 255,255,255,255
 colorSpecial: 255,255,255,255
 
