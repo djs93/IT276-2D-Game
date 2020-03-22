@@ -17,6 +17,7 @@ Entity* commonSpawn() {
 	ent->health = 1;
 	ent->distanceLeft = LengthLine2D(*line);
 	ent->boundingBox.radius = 20.0f;
+	ent->type = Type_Enemy;
 	return ent;
 }
 
