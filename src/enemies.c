@@ -1,5 +1,6 @@
 #include "enemies.h"
 #include "level.h"
+#include "bucket.h"
 
 Entity* commonSpawn();
 
@@ -18,6 +19,9 @@ Entity* commonSpawn() {
 	ent->distanceLeft = LengthLine2D(*line);
 	ent->boundingBox.radius = 20.0f;
 	ent->type = Type_Enemy;
+	vector2d_copy(ent->position, line->start);
+	vector2d_copy(ent->boundingBox.position, line->start);
+	bucket_update(ent, NULL);
 	return ent;
 }
 
@@ -30,6 +34,7 @@ Entity* redSpawn()
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
+	ent->name = "red";
 	return ent;
 }
 
@@ -42,6 +47,7 @@ Entity* blueSpawn()
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
+	ent->name = "blue";
 	return ent;
 }
 
@@ -54,6 +60,7 @@ Entity* greenSpawn()
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
+	ent->name = "green";
 	return ent;
 }
 
@@ -66,6 +73,7 @@ Entity* yellowSpawn()
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
+	ent->name = "yellow";
 	return ent;
 }
 
@@ -80,6 +88,7 @@ Entity* superSpawn()
 	ent->health = 50;
 	ent->move = flowerMove;
 	ent->boundingBox.radius = 45.0f;
+	ent->name = "super";
 	return ent;
 }
 
