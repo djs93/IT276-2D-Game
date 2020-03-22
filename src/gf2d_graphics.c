@@ -16,6 +16,7 @@ typedef struct
     Uint32 frame_delay;
     Uint32 now;
     Uint32 then;
+    Uint32 delta;
     Bool print_fps;
     float fps; 
 
@@ -188,16 +189,20 @@ float gf2d_graphics_get_frames_per_second()
     return gf2d_graphics.fps;
 }
 
+float gf2d_graphics_get_milli_delta()
+{
+    return gf2d_graphics.delta/1000.0f;
+}
+
 void gf2d_graphics_frame_delay()
 {
-    Uint32 diff;
     gf2d_graphics.then = gf2d_graphics.now;
     slog_sync();// make sure logs get written when we have time to write it
     gf2d_graphics.now = SDL_GetTicks();
-    diff = (gf2d_graphics.now - gf2d_graphics.then);
-    if (diff < gf2d_graphics.frame_delay)
+    gf2d_graphics.delta = (gf2d_graphics.now - gf2d_graphics.then);
+    if (gf2d_graphics.delta < gf2d_graphics.frame_delay)
     {
-        SDL_Delay(gf2d_graphics.frame_delay - diff);
+        SDL_Delay(gf2d_graphics.frame_delay - gf2d_graphics.delta);
     }
     gf2d_graphics.fps = 1000.0/MAX(SDL_GetTicks() - gf2d_graphics.then,0.001);
 }

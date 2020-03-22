@@ -84,4 +84,10 @@ SDL_Surface *gf2d_graphics_screen_convert(SDL_Surface **surface);
  */
 Vector2D gf2d_graphics_get_resolution();
 
+/**
+* @brief get time in between frames
+*/
+float gf2d_graphics_get_milli_delta();
+
+
 #endif
