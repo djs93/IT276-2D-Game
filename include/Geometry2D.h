@@ -163,10 +163,18 @@ Bool LineOrientedRectangle(Line2D line, OrientedRectangle rectangle);
 /**
 * @brief test if a circle is interesting or contained within a rectangle
 * @param circle the circle to check
-* @param rect the rectangle to check if the circle has a point in
+* @param rect the rectangle to check if the circle is intersecting
 * @return true if circle has point in rect, false otherwise
 */
 Bool CircleRectangle(Circle circle, Rectangle2D rect);
+
+/**
+* @brief test if a circle is interesting or contained within another circle
+* @param circle1 the circle to check
+* @param circle2 the circle to check if the circle1 is intersecting
+* @return true if circle has point in rect, false otherwise
+*/
+Bool CircleCircle(Circle circle1, Circle circle2);
 
 /**
 * @brief Debug method to draw all paths on the screen

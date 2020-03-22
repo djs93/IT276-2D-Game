@@ -64,6 +64,23 @@ Bool CircleRectangle(Circle circle, Rectangle2D rect)
 	return false;
 }
 
+Bool CircleCircle(Circle circle1, Circle circle2)
+{
+	Line2D measure;
+	float posDistSq;
+	float radiiDistSq;
+	radiiDistSq= circle1.radius * circle1.radius + circle2.radius * circle2.radius;
+	measure = line2d(circle1.position, circle2.position);
+	posDistSq = LengthSqLine2D(measure);
+	if (PointInCircle(circle2.position, circle1)) {
+		return true;
+	}
+	if (radiiDistSq < posDistSq) {
+		return true;
+	}
+	return false;
+}
+
 void drawPaths() {
 	Level* level;
 	List* paths;
