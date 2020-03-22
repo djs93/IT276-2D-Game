@@ -173,4 +173,11 @@ void gf2d_entity_update_all();
 * @param self the entity to update
 */
 void gf2d_entity_update(Entity* self);
+
+/**
+* @brief have an entity look at another
+* @param self the entity being rotated
+* @param lookAt the entity to look at
+*/
+void gf2d_entity_look_at(Entity* self, Entity* lookAt);
 #endif

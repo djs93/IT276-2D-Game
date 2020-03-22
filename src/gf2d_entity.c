@@ -585,4 +585,18 @@ void gf2d_entity_update(Entity* self)
 		self->think(self); //Enemy movement will be done in their thinks. This is to easily adjust their positions on the line and change lines if necessary
 	}
 }
+
+void gf2d_entity_look_at(Entity* self, Entity* lookAt)
+{
+	float degree;
+	Vector2D deltas;
+
+	vector2d_sub(deltas, self->position, lookAt->position);
+
+	degree = atan2f(deltas.y, deltas.x);
+	if (deltas.y < 0) {
+		degree += GFC_PI;
+	}
+	self->rotation.z = degree;
+}
 /*eol@eof*/
