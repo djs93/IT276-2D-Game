@@ -67,17 +67,39 @@ Bool CircleRectangle(Circle circle, Rectangle2D rect)
 Bool CircleCircle(Circle circle1, Circle circle2)
 {
 	Line2D measure;
-	float posDistSq;
-	float radiiDistSq;
-	radiiDistSq= circle1.radius * circle1.radius + circle2.radius * circle2.radius;
-	measure = line2d(circle1.position, circle2.position);
-	posDistSq = LengthSqLine2D(measure);
+	float posDist;
+	float radDelta;
+
 	if (PointInCircle(circle2.position, circle1)) {
 		return true;
 	}
-	if (radiiDistSq < posDistSq) {
+	measure = line2d(circle1.position, circle2.position);
+	posDist = LengthLine2D(measure);
+	radDelta = circle1.radius + circle2.radius;
+
+	if (posDist < radDelta) {
 		return true;
 	}
+	/*
+	
+	measureC1 = line2d(circle1.position, vector2d(circle1.position.x + circle1.radius, circle1.position.y));
+	measureC2 = line2d(circle2.position, vector2d(circle2.position.x + circle2.radius, circle2.position.y));
+	//radiiDistSq1= circle1.radius * circle1.radius + circle2.radius * circle2.radius;
+	radiiDistSq1 = LengthSqLine2D(measureC1);
+	radiiDistSq2 = LengthSqLine2D(measureC2);
+	measure = line2d(circle1.position, circle2.position);
+	posDistSq = LengthSqLine2D(measure);
+
+	xDeltaSq = (circle2.position.x - circle1.position.x) * (circle2.position.x - circle1.position.x);
+	yDeltaSq = (circle2.position.y - circle1.position.y) * (circle2.position.y - circle1.position.y);
+	radDeltaSq = (circle2.radius - circle1.radius) * (circle2.radius - circle1.radius);
+	if (xDeltaSq + yDeltaSq <= radDeltaSq) {
+		return true;
+	}
+	if (posDistSq <= radiiDistSq1+radiiDistSq2) {
+		return true;
+	}
+	*/
 	return false;
 }
 
