@@ -541,6 +541,7 @@ void gf2d_entity_update_all()
 {
 	int i = 0;
 	Entity* currEnt;
+	bucket_precalc();
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++) //everything moves before everything else
 	{
 		currEnt = &entity_list[i];
@@ -549,7 +550,7 @@ void gf2d_entity_update_all()
 			currEnt->move(currEnt);
 		}
 	}
-	bucket_precalc();
+	bucket_calc();
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
 	{
 		currEnt = &entity_list[i];
@@ -564,7 +565,6 @@ void gf2d_entity_update_all()
 			gf2d_entity_update(&entity_list[i]);
 		}
 	}
-	bucket_calc();
 }
 
 void gf2d_entity_update(Entity* self)
@@ -597,8 +597,8 @@ void gf2d_entity_look_at(Entity* self, Entity* lookAt)
 
 	degree = atan2f(deltas.y, deltas.x);
 	if (deltas.y < 0) {
-		degree += GFC_PI;
+		degree -= GFC_PI;
 	}
-	self->rotation.z = degree;
+	self->rotation.z = degree*GFC_RADTODEG;
 }
 /*eol@eof*/

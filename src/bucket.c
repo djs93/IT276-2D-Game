@@ -79,8 +79,7 @@ void bucket_precalc()
 	int r, c, i;
 	Bucket* currBucket;
 
-	gfc_list_delete(get_loaded_level()->needUpdating);
-	get_loaded_level()->needUpdating = gfc_list_new();
+	
 	for (r = 0; r < bucket_manager.rows; r++) {
 		for (c = 0; c < bucket_manager.columns; c++) {
 			currBucket = &bucket_manager.bucket_array[r][c];
@@ -94,14 +93,18 @@ void bucket_precalc()
 void bucket_calc() {
 	List* updateList = get_loaded_level()->needUpdating;
 	gfc_list_foreach(updateList, bucket_update, NULL);
+	gfc_list_delete(get_loaded_level()->needUpdating);
+	get_loaded_level()->needUpdating = gfc_list_new();
 }
 
 void bucket_check_remove(Entity* entity, List* entList) {
 	if (vector2d_equal(vector2d(0, 0), entity->velocity)) {
 		return;
 	}
-	get_loaded_level()->needUpdating = gfc_list_append(get_loaded_level()->needUpdating, entity);
-	gfc_list_delete_data(entList, entity);
+	if (gfc_list_in_list(get_loaded_level()->needUpdating, entity) < 0) {
+		get_loaded_level()->needUpdating = gfc_list_append(get_loaded_level()->needUpdating, entity);
+		gfc_list_delete_data(entList, entity);
+	}
 }
 
 void bucket_update(Entity* entity, void* context) {
@@ -115,7 +118,9 @@ void bucket_update(Entity* entity, void* context) {
 		//do collision between rect of bucket and circle of ent
 		if (CircleRectangle(entity->boundingBox, currBucket->shape.s.r)) {
 			//and if colliding, add entity to that bucket's list
-			currBucket->entities = gfc_list_append(currBucket->entities, entity);
+			if (gfc_list_in_list(currBucket->entities, entity) < 0) {
+				currBucket->entities = gfc_list_append(currBucket->entities, entity);
+			}
 		}
 	}
 }
@@ -128,6 +133,9 @@ void calcOptimalLineBuckets(void* data, void* context) {
 	for (r = 0; r < bucket_manager.rows; r++) {
 		for (c = 0; c < bucket_manager.columns; c++) {
 			currBucket = &bucket_manager.bucket_array[r][c];
+			if (gfc_list_in_list(level->optimalBuckets, currBucket)>=0) {
+				continue;
+			}
 			//do collision between rect of bucket and line
 			if (LineRectangle(*line, currBucket->shape.s.r)) {
 				//add if colliding, add bucket to level's optimal list
