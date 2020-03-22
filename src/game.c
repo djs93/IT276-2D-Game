@@ -33,6 +33,7 @@ int main(int argc, char * argv[])
     const Uint8 * keys;
     Sprite *sprite;
     Window* ui;
+    char windowTitle [30];
     
     mx = 0;
     my = 0;
@@ -135,17 +136,11 @@ int main(int argc, char * argv[])
             //UI elements last
             //gf2d_sprite_draw(mouse, vector2d(mx,my), NULL, NULL, NULL, NULL, &mouseColor, (int)mf);
         draw_level();
-        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
-        gf2d_entity_update_all();
-        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
-		draw_normal_entities();
-        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
+        gf2d_entity_update_all();		
 		draw_buckets();
-        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
         draw_buckets_optimal();
-        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
+        draw_normal_entities();
 		drawPaths();
-        SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
         gf2d_windows_draw_all();
         gf2d_mouse_draw();
         //gf2d_sprite_draw(mouseEnt->actor.sprite, mouseEnt->position, &mouseEnt->scale, &mouseEnt->scaleCenter, &mouseEnt->rotation, &mouseEnt->flip, &mouseEnt->colorShift, (Uint32)mouseEnt->actor.frame);
@@ -156,7 +151,8 @@ int main(int argc, char * argv[])
             slog("yes");
         }
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
-        //slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
+        sprintf(windowTitle, "gf2d - %f fps", gf2d_graphics_get_frames_per_second());
+        gf2d_graphics_set_title(windowTitle);
     }
     slog("---==== END ====---");
     return 0;
@@ -164,14 +160,31 @@ int main(int argc, char * argv[])
 
 void draw_normal_entities() {
 	int i = 0;
+    int j;
 	Entity* ent;
     Vector2D newPos;
+    SDL_Rect rect;
+    Bucket* bucket;
 	while (i < gf2d_entity_manager.entity_max) {
 		ent = &entity_list[i];
 		if (ent->_inuse == 0) {
 			i++;
 			continue;
 		}
+        if (ent->seekBuckets) {
+            SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 0, 0, 255, 255);
+            for (j = 0; j < ent->seekBuckets->count; j++) {
+                bucket = gfc_list_get_nth(ent->seekBuckets, j);
+                rect.h = bucket->shape.s.r.size.y;
+                rect.w = bucket->shape.s.r.size.x;
+                rect.x = bucket->shape.s.r.origin.x;
+                rect.y = bucket->shape.s.r.origin.y;
+                
+                SDL_RenderDrawRect(gf2d_graphics_get_renderer(), &rect);
+               
+            }
+            SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
+        }
         if (ent->shootRadius.radius > 0.1f) {
             gf2d_draw_circle(ent->shootRadius.position, ent->shootRadius.radius, vector4d(255.0f, 255.0f, 0.0f, 255.0f));
         }
