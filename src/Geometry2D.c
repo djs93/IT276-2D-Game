@@ -53,7 +53,7 @@ Bool CircleRectangle(Circle circle, Rectangle2D rect)
 	if (LineCircle(top, circle)) {
 		return true;
 	}
-	right = line2d(rectMax, vector2d(rectMax.x, rectMin.y));
+	right = line2d(vector2d(rectMax.x, rectMin.y), rectMax);
 	if (LineCircle(right, circle)) {
 		return true;
 	}
@@ -236,6 +236,9 @@ Bool PointInOrientedRectangle(Point2D point, OrientedRectangle rectangle)
 
 Bool LineCircle(Line2D line, Circle circle)
 {
+	if (PointInCircle(line.start, circle) || PointInCircle(line.end, circle)) {
+		return true;
+	}
 	Vector2D ab;
 	vector2d_sub(ab,line.end,line.start);
 	Vector2D dif;

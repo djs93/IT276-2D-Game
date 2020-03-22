@@ -9,6 +9,7 @@
 #include "projectiles.h"
 
 Entity* findClosest(Entity* self);
+void setSeekBuckets(Entity* self);
 
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
@@ -124,11 +125,15 @@ void stinger_think(Entity* self){
 		if (target) {
 			gf2d_actor_set_action(&self->actor, "fire");
 			stingerBolt_spawn(self);
+			gf2d_entity_look_at(self, target);
 			self->cooldown = self->fireRate;
 		}
 	}
 	else {
 		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
+	if (gf2d_actor_get_frames_remaining(&self->actor)) {
+		//gf2d_actor_set_action(&self->actor, "idle");
 	}
 }
 
@@ -229,6 +234,9 @@ void placement_detach(Entity* ent) {
 	ent->shootRadius.position = ent->position;
 	ent->colorShift = vector4d(255.0f, 255.0f, 255.0f, 255.0f);
 	ent->type = Type_Tower;
+	ent->rotation.x = ent->actor.sprite->frame_w/2;
+	ent->rotation.y = ent->actor.sprite->frame_h/2;
+	setSeekBuckets(ent);
 }
 #pragma endregion
 
@@ -302,14 +310,23 @@ Entity* findClosest(Entity* self) {
 	Bucket* bucket;
 	Entity* currEnemy;
 	Entity* targetEnemy;
+	int count;
 	float currClosestDist;
 	float testDist;
 	targetEnemy = NULL;
 	currClosestDist = -1.0f;
-	for (i = 0; i < self->seekBuckets->count; i++) {
-		bucket = gfc_list_get_nth(self->seekBuckets, i);
-		for (j = 0; j < bucket->entities->count; j++) {
-			currEnemy = gfc_list_get_nth(self->seekBuckets, i);
+
+	count = self->seekBuckets ? self->seekBuckets->count : get_loaded_level()->optimalBuckets->count;
+	for (i = 0; i < count; i++) {
+		if (!self->seekBuckets) {
+			bucket = gfc_list_get_nth(get_loaded_level()->optimalBuckets, i);
+		}
+		else {
+			bucket = gfc_list_get_nth(self->seekBuckets, i);
+		}
+		for (j = 0; j < bucket->entities->count; j++) { //I think the problem is we're clearing buckets before thinking and not recalcing until after.
+			currEnemy = gfc_list_get_nth(bucket->entities, i);
+			if (!currEnemy) { continue; }
 			if (currEnemy->type == Type_Enemy) {
 				if (CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
 					testDist = LengthSqLine2D(line2d(self->shootRadius.position, currEnemy->boundingBox.position));
@@ -326,4 +343,19 @@ Entity* findClosest(Entity* self) {
 		}
 	}
 	return targetEnemy;
+}
+
+void setSeekBuckets(Entity* self) {
+	int i;
+	Bucket* currBucket;
+	List* optiBuckets = get_loaded_level()->optimalBuckets;
+	if (!self->seekBuckets) {
+		self->seekBuckets = gfc_list_new();
+	}
+	for (i = 0; i < optiBuckets->count; i++) {
+		currBucket = gfc_list_get_nth(optiBuckets, i);
+		if (CircleRectangle(self->shootRadius, currBucket->shape.s.r)) {
+			gfc_list_append(self->seekBuckets, currBucket);
+		}
+	}	
 }
