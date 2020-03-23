@@ -227,15 +227,36 @@ Entity* blueDie(Entity* self)
 
 Entity* greenDie(Entity* self)
 {
-	return NULL;
+	Entity* ent;
+	level_addCash(1.0f);
+	ent = blueSpawn(self);
+	gf2d_entity_free(self);
+	return ent;
 }
 
 Entity* yellowDie(Entity* self)
 {
-	return NULL;
+	Entity* ent;
+	level_addCash(1.0f);
+	ent = greenSpawn(self);
+	gf2d_entity_free(self);
+	return ent;
 }
 
 Entity* superDie(Entity* self)
 {
+	Entity* ent;
+	level_addCash(50.0f);
+	yellowSpawn(self);
+	ent = yellowSpawn(self);
+	ent->move(self);
+	ent = yellowSpawn(self);
+	ent->move(self);
+	ent->move(self);
+	ent = yellowSpawn(self);
+	ent->move(self);
+	ent->move(self);
+	ent->move(self);
+	gf2d_entity_free(self);
 	return NULL;
 }
