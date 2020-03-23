@@ -10,6 +10,7 @@
 
 Entity* findClosest(Entity* self);
 void setSeekBuckets(Entity* self);
+Bool allyCollision(Entity* self);
 
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
@@ -79,6 +80,7 @@ Entity* placement_spawn(TowerTypes type) {
 	{
 	case TT_Stinger:
 		gf2d_actor_load(&self->actor, "actors/stinger.actor");
+		self->shootRadius.radius = 150.0f;
 		break;
 	case TT_Slingshot:
 		gf2d_actor_load(&self->actor, "actors/slingshot.actor");
@@ -164,7 +166,7 @@ void music_think(Entity* self){
 void placement_think(Entity* self) {
 	Bool colliding;
 	self->position = gf2d_mouse_get_position();
-	colliding = pathCollision(self);
+	colliding = (pathCollision(self)||allyCollision(self));
 	if (colliding) {
 		self->colorShift = vector4d(255.0f, 0.0f, 0.0f, 255.0f);
 	}
@@ -172,6 +174,7 @@ void placement_think(Entity* self) {
 		self->colorShift = vector4d(0.0f, 255.0f, 0.0f, 255.0f);
 	}
 	self->boundingBox.position = self->position;
+	self->shootRadius.position = self->position;
 	if (!colliding&&gf2d_mouse_button_pressed(0)&& (self->flags & FL_PLACEABLE)) {
 		placement_detach(self);
 	}
@@ -360,4 +363,22 @@ void setSeekBuckets(Entity* self) {
 			self->seekBuckets = gfc_list_append(self->seekBuckets, currBucket);
 		}
 	}	
+}
+
+Bool allyCollision(Entity* self) {
+	int i,j;
+	Entity* currOther;
+	Bucket* bucket;
+	List* allyBuckets = get_loaded_level()->allyBuckets;
+	for (i = 0; i < allyBuckets->count; i++)
+	{
+		bucket = gfc_list_get_nth(allyBuckets, i);
+		for (j = 0; j < bucket->entities->count; j++) {
+			currOther = gfc_list_get_nth(bucket->entities, j);
+			if (CircleCircle(self->boundingBox, currOther->boundingBox)) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
