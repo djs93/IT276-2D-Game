@@ -35,6 +35,7 @@ Entity* redSpawn()
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
 	ent->name = "red";
+	ent->die = redDie;
 	return ent;
 }
 
@@ -48,6 +49,7 @@ Entity* blueSpawn()
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
 	ent->name = "blue";
+	ent->die = blueDie;
 	return ent;
 }
 
@@ -61,6 +63,7 @@ Entity* greenSpawn()
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
 	ent->name = "green";
+	ent->die = greenDie;
 	return ent;
 }
 
@@ -74,6 +77,7 @@ Entity* yellowSpawn()
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
 	ent->name = "yellow";
+	ent->die = yellowDie;
 	return ent;
 }
 
@@ -89,6 +93,7 @@ Entity* superSpawn()
 	ent->move = flowerMove;
 	ent->boundingBox.radius = 45.0f;
 	ent->name = "super";
+	ent->die = superDie;
 	return ent;
 }
 
@@ -175,6 +180,8 @@ void superMove(Entity* self)
 
 Entity* redDie(Entity* self)
 {
+	level_addCash(1.0f);
+	gf2d_entity_free(self);
 	return NULL;
 }
 
