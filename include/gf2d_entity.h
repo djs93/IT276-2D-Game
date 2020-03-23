@@ -19,7 +19,8 @@ typedef enum
 {
 	Type_Decor = 0,
 	Type_Tower = 1,
-	Type_Enemy = 2
+	Type_Enemy = 2,
+	Type_Projectile = 3
 }EntityType;
 
 typedef enum
@@ -48,7 +49,7 @@ typedef struct Entity_S
 	void (*prethink)(struct Entity_S* self);   /**<function called before entity think*/
 	void (*think)(struct Entity_S* self);   /**<function called on entity think*/
 	void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<function called when an entity touches another*/
-	void (*die)(struct Entity_S* self);   /**<function called when an entity dies*/
+	void* (*die)(struct Entity_S* self);   /**<function called when an entity dies*/
 	void (*update)(struct Entity_S* self);  /**<Optional, override normal update*/
 	void (*move)(struct Entity_S* self);  /**<defines how the entity moves. Called before updating buckets*/
 	float nextThink;				/**<the next time the entity will think (in seconds)*/
