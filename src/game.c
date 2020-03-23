@@ -65,7 +65,7 @@ int main(int argc, char * argv[])
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
     //mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     gf2d_action_list_init(128);
-	gf2d_entity_manager_init(300);
+	gf2d_entity_manager_init(400);
     bucket_manager_init(100, 100);
     /*
 	backgroundEnt = gf2d_entity_new();
