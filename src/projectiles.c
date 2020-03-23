@@ -24,6 +24,8 @@ Entity* stingerBolt_spawn(Entity* parent)
 	bucket_update(bolt, NULL);
 	bolt->noTouch = gfc_list_new();
 	bolt->damage = 2;
+	bolt->health = 2;
+	bolt->die = boltDie;
 	return bolt;
 }
 
@@ -34,8 +36,8 @@ void boltMove(Entity* self) {
 }
 
 void boltThink(Entity* self) {
-	if (self->position.x < 0 || self->position.x>1200 || self->position.y < 0 || self->position.y>720) {
-		gf2d_entity_free(self);
+	if (self->position.x < 0 || self->position.x>1200 || self->position.y < 0 || self->position.y>720 || self->health<=0) {
+		self->die(self);
 	}
 }
 
@@ -45,16 +47,24 @@ void boltTouch(Entity* self, Entity* other) {
 	if (!self || !other) {
 		return;
 	}
+	if (self->health <= 0) {
+		return;
+	}
 	if (other->type != Type_Enemy || other->_inuse!=1) {
 		return;
 	}
 	if (!other->die) {
 		return;
 	}
+
+	if (other->health <= 0) {
+		return;
+	}
 	if (gfc_list_in_list(self->noTouch, other) >= 0) {
 		return;
 	}
 	other->health -= damageLeft;
+	self->health -= 1;
 	if (other->health <= 0){
 		damageLeft = abs(other->health);
 	}
@@ -68,6 +78,7 @@ void boltTouch(Entity* self, Entity* other) {
 			break;
 		}
 		child->health -= damageLeft;
+		self->health -= 1;
 		if (child->health < 0) {
 			damageLeft = abs(child->health);
 		}
@@ -79,4 +90,8 @@ void boltTouch(Entity* self, Entity* other) {
 			damageLeft = 0;
 		}
 	}
+}
+
+void boltDie(Entity* self) {
+	gf2d_entity_free(self);
 }

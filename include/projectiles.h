@@ -7,5 +7,6 @@ Entity* stingerBolt_spawn(Entity* parent);
 void boltMove(Entity* self);
 void boltThink(Entity* self);
 void boltTouch(Entity* self, Entity* other);
+void boltDie(Entity* self);
 
 #endif
