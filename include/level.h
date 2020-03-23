@@ -15,6 +15,7 @@ typedef struct Level_S{
 	float pathDistance; /**<Minimum distance player can place towers away from path*/
 	List* needUpdating; /**<Entities needing to have their buckets updated. Made automatically*/
 	int playerHealth; /**<How much health the player has*/
+	float playerCash; /**<How much cash the player has*/
 }Level;
 
 Level* get_loaded_level();
@@ -27,5 +28,13 @@ Level* level_load(char* levelFile);
 Bool pathCollision(Entity* entity);
 
 Path2D* nextPath();
+
+void do_collisions();
+
+/**
+* @brief Modifies player cash and sets UI accordingly
+* @param amount The amount to add or subtract from the player
+*/
+void level_addCash(float amount);
 
 #endif

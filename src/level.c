@@ -231,3 +231,42 @@ Path2D* nextPath()
 	LOADED_LEVEL->currPath = (LOADED_LEVEL->currPath + 1) % gfc_list_get_count(LOADED_LEVEL->paths);
 	return path;
 }
+
+void do_collisions() {
+	int i,j,k;
+	List* optis = LOADED_LEVEL->optimalBuckets;
+	Bucket* bucket;
+	Entity* currEnt;
+	Entity* otherEnt;
+	for (i = 0; i < optis->count; i++) {
+		bucket = gfc_list_get_nth(optis, i);
+		if (bucket->entities->count < 2) {
+			continue;
+		}
+		for (j = 0; j < bucket->entities->count; j++) {
+			currEnt = gfc_list_get_nth(bucket->entities, j);
+			if (currEnt->_inuse != 1) {
+				continue;
+			}
+			if (!currEnt->touch) {
+				continue;
+			}
+			for (k = 0; k < bucket->entities->count; k++) {
+				if (k == j) {
+					continue;
+				}
+				otherEnt = gfc_list_get_nth(bucket->entities, k);
+				if (CircleCircle(currEnt->boundingBox, otherEnt->boundingBox)) {
+					currEnt->touch(currEnt, otherEnt);
+				}
+			}
+		}
+	}
+}
+
+void level_addCash(float amount)
+{
+	LOADED_LEVEL->playerCash += amount;
+	slog("Cash: $%f", LOADED_LEVEL->playerCash);
+	//update UI
+}
