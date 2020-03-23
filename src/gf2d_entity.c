@@ -7,7 +7,6 @@
 #include "gf2d_entity.h"
 #include "local.h"
 
-
 void gf2d_entity_manager_close()
 {
     if(entity_list != NULL)
@@ -46,6 +45,7 @@ Entity *gf2d_entity_new()
 		ent->colorShift = vector4d(255, 255, 255, 255);
 		ent->cooldown = 0.0f;
 		ent->seekBuckets = NULL;
+		ent->noTouch = NULL;
         return &entity_list[i];
     }
     slog("request for entity failed: all full up");
@@ -558,6 +558,11 @@ void gf2d_entity_update_all()
 		if (currEnt->prethink) {
 			currEnt->prethink(currEnt);
 		}
+	}
+	do_collisions();
+	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
+	{
+		currEnt = &entity_list[i];
 		if (currEnt->update) {
 			currEnt->update(currEnt);
 		}
