@@ -43,7 +43,7 @@ void boltThink(Entity* self) {
 }
 
 void boltTouch(Entity* self, Entity* other) {
-	Entity* child;
+	Entity* child = NULL;
 	int damageLeft = self->damage;
 	if (!self || !other) {
 		return;
@@ -79,17 +79,20 @@ void boltTouch(Entity* self, Entity* other) {
 			break;
 		}
 		child->health -= damageLeft;
-		self->health -= 1;
 		if (child->health < 0) {
 			damageLeft = abs(child->health);
 		}
 		else if (child->health == 0) {
-			break;
+			damageLeft = 0;
+			child = child->die(child);
 		}
 		else {
-			self->noTouch = gfc_list_append(self->noTouch, child);
 			damageLeft = 0;
+			child = NULL;
 		}
+	}
+	if (child) {
+		self->noTouch = gfc_list_append(self->noTouch, child);
 	}
 }
 
