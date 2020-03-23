@@ -84,6 +84,7 @@ Entity* placement_spawn(TowerTypes type) {
 		break;
 	case TT_Slingshot:
 		gf2d_actor_load(&self->actor, "actors/slingshot.actor");
+		self->shootRadius.radius = 225.0f;
 		break;
 	case TT_Laser:
 		gf2d_actor_load(&self->actor, "actors/laser.actor");
@@ -112,7 +113,8 @@ Entity* placement_spawn(TowerTypes type) {
 	self->data = (int)type;
 	self->boundingBox.radius = 15.0f * self->actor.al->scale.x;
 	self->boundingBox.position = self->position;
-
+	self->rotation.z = 270.0f;
+	slog("Rot: %f", self->rotation.z);
 	return self;
 }
 #pragma endregion
@@ -128,6 +130,15 @@ void stinger_think(Entity* self){
 			gf2d_actor_set_action(&self->actor, "fire");
 			gf2d_entity_look_at(self, target);
 			stingerBolt_spawn(self);
+			if (self->rotation.z >= 360.0f) {
+				self->rotation.z = fmodf(self->rotation.z, 360.0f);
+			}
+			if (self->rotation.z >= 90.0f && self->rotation.z <= 270.0f) {
+				self->flip = vector2d(0, 1);
+			}
+			else {
+				self->flip = vector2d(0, 0);
+			}
 			self->cooldown = self->fireRate;
 		}
 	}
@@ -140,7 +151,34 @@ void stinger_think(Entity* self){
 }
 
 void slingshot_think(Entity* self){
-
+	Entity* target;
+	if (self->cooldown < 0.0000001f) {
+		//try to fire
+		target = findClosest(self);
+		//if fire, reset cooldown to fireRate
+		if (target) {
+			gf2d_actor_set_action(&self->actor, "fire");
+			gf2d_entity_look_at(self, target);
+			stingerBolt_spawn(self);
+			self->rotation.z += 180;
+			if (self->rotation.z >= 360.0f) {
+				self->rotation.z = fmodf(self->rotation.z, 360.0f);
+			}
+			if (self->rotation.z >= 90.0f && self->rotation.z <= 270.0f) {
+				self->flip = vector2d(0, 1);
+			}
+			else {
+				self->flip = vector2d(0, 0);
+			}
+			self->cooldown = self->fireRate;
+		}
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
+	if (gf2d_actor_get_frames_remaining(&self->actor)) {
+		//gf2d_actor_set_action(&self->actor, "idle");
+	}
 }
 
 void laser_think(Entity* self){
@@ -200,7 +238,7 @@ void placement_detach(Entity* ent) {
 	case TT_Slingshot:
 		ent->think = slingshot_think;
 		ent->name = "slingshot";
-		ent->shootRadius.radius = 150.0f;
+		ent->shootRadius.radius = 225.0f;
 		break;
 	case TT_Laser:
 		ent->think = laser_think;
