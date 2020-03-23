@@ -2,33 +2,44 @@
 #include "level.h"
 #include "bucket.h"
 
-Entity* commonSpawn();
+Entity* commonSpawn(Entity* parent);
 
-Entity* commonSpawn() {
+Entity* commonSpawn(Entity* parent) {
 	Entity* ent;
 	Vector2D deltas;
 	Line2D* line;
 	ent = gf2d_entity_new();
-	ent->path = nextPath();
-	ent->data = 0; //enemy data will keep track of what line of the path they're on
-	line = gfc_list_get_nth(ent->path->lines, 0);
-	vector2d_sub(deltas, line->end, line->start);
-	vector2d_normalize(&deltas);
+	if (parent) {
+		ent->path = parent->path;
+		ent->data = parent->data;
+		vector2d_copy(deltas, parent->velocity);
+		vector2d_normalize(&deltas);
+		vector2d_copy(ent->position, parent->position);
+		vector2d_copy(ent->boundingBox.position, parent->boundingBox.position);
+		ent->distanceLeft = parent->distanceLeft;
+	}
+	else {
+		ent->path = nextPath();
+		ent->data = 0; //enemy data will keep track of what line of the path they're on
+		line = gfc_list_get_nth(ent->path->lines, 0);
+		vector2d_sub(deltas, line->end, line->start);
+		vector2d_normalize(&deltas);
+		vector2d_copy(ent->position, line->start);
+		vector2d_copy(ent->boundingBox.position, line->start);
+		ent->distanceLeft = LengthLine2D(*line);
+	}
 	vector2d_copy(ent->velocity, deltas);
 	ent->health = 1;
-	ent->distanceLeft = LengthLine2D(*line);
 	ent->boundingBox.radius = 20.0f;
 	ent->type = Type_Enemy;
-	vector2d_copy(ent->position, line->start);
-	vector2d_copy(ent->boundingBox.position, line->start);
 	bucket_update(ent, NULL);
 	return ent;
 }
 
-Entity* redSpawn()
+Entity* redSpawn(Entity* parent)
 {
 	Entity* ent;
-	ent = commonSpawn();
+	ent = commonSpawn(parent);
 	gf2d_actor_load(&ent->actor, "actors/enemies/red.actor");
 	ent->speed = 0.8f;
 	ent->velocity.x *= ent->speed;
@@ -36,13 +47,14 @@ Entity* redSpawn()
 	ent->move = flowerMove;
 	ent->name = "red";
 	ent->die = redDie;
+	ent->think = redThink;
 	return ent;
 }
 
-Entity* blueSpawn()
+Entity* blueSpawn(Entity* parent)
 {
 	Entity* ent;
-	ent = commonSpawn();
+	ent = commonSpawn(parent);
 	gf2d_actor_load(&ent->actor, "actors/enemies/blue.actor");
 	ent->speed = 1.2f;
 	ent->velocity.x *= ent->speed;
@@ -50,13 +62,14 @@ Entity* blueSpawn()
 	ent->move = flowerMove;
 	ent->name = "blue";
 	ent->die = blueDie;
+	ent->think = blueThink;
 	return ent;
 }
 
-Entity* greenSpawn()
+Entity* greenSpawn(Entity* parent)
 {
 	Entity* ent;
-	ent = commonSpawn();
+	ent = commonSpawn(parent);
 	gf2d_actor_load(&ent->actor, "actors/enemies/green.actor");
 	ent->speed = 1.4f;
 	ent->velocity.x *= ent->speed;
@@ -64,13 +77,14 @@ Entity* greenSpawn()
 	ent->move = flowerMove;
 	ent->name = "green";
 	ent->die = greenDie;
+	ent->think = greenThink;
 	return ent;
 }
 
-Entity* yellowSpawn()
+Entity* yellowSpawn(Entity* parent)
 {
 	Entity* ent;
-	ent = commonSpawn();
+	ent = commonSpawn(parent);
 	gf2d_actor_load(&ent->actor, "actors/enemies/yellow.actor");
 	ent->speed = 1.8f;
 	ent->velocity.x *= ent->speed;
@@ -78,13 +92,14 @@ Entity* yellowSpawn()
 	ent->move = flowerMove;
 	ent->name = "yellow";
 	ent->die = yellowDie;
+	ent->think = yellowThink;
 	return ent;
 }
 
-Entity* superSpawn()
+Entity* superSpawn(Entity* parent)
 {
 	Entity* ent;
-	ent = commonSpawn();
+	ent = commonSpawn(parent);
 	gf2d_actor_load(&ent->actor, "actors/enemies/super.actor");
 	ent->speed = 0.3f;
 	ent->velocity.x *= ent->speed;
@@ -94,27 +109,43 @@ Entity* superSpawn()
 	ent->boundingBox.radius = 45.0f;
 	ent->name = "super";
 	ent->die = superDie;
+	ent->think = superThink;
 	return ent;
 }
 
 void redThink(Entity* self)
 {
+	if (self->health <= 0) {
+		self->die(self);
+	}
 }
 
 void blueThink(Entity* self)
 {
+	if (self->health <= 0) {
+		self->die(self);
+	}
 }
 
 void greenThink(Entity* self)
 {
+	if (self->health <= 0) {
+		self->die(self);
+	}
 }
 
 void yellowThink(Entity* self)
 {
+	if (self->health <= 0) {
+		self->die(self);
+	}
 }
 
 void superThink(Entity* self)
 {
+	if (self->health <= 0) {
+		self->die(self);
+	}
 }
 
 void flowerMove(Entity* self)
@@ -187,7 +218,11 @@ Entity* redDie(Entity* self)
 
 Entity* blueDie(Entity* self)
 {
-	return NULL;
+	Entity* ent;
+	level_addCash(1.0f);
+	ent = redSpawn(self);
+	gf2d_entity_free(self);
+	return ent;
 }
 
 Entity* greenDie(Entity* self)

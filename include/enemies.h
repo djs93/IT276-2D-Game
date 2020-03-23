@@ -11,11 +11,11 @@ typedef enum {
 	ET_SUPER
 }EnemyTypes;
 
-Entity* redSpawn();
-Entity* blueSpawn();
-Entity* greenSpawn();
-Entity* yellowSpawn();
-Entity* superSpawn();
+Entity* redSpawn(Entity* parent);
+Entity* blueSpawn(Entity* parent);
+Entity* greenSpawn(Entity* parent);
+Entity* yellowSpawn(Entity* parent);
+Entity* superSpawn(Entity* parent);
 
 void redThink(Entity* self);
 void blueThink(Entity* self);
