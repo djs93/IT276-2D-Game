@@ -46,6 +46,9 @@
     <Filter Include="Resource Files\Actors\enemies">
       <UniqueIdentifier>{9779c04b-5fe6-440d-945d-b84464654bbe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Projectiles">
+      <UniqueIdentifier>{d1bb5b53-30a4-4aa6-b78a-b51a2e54a4c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\game.c">
@@ -348,6 +351,9 @@
     </None>
     <None Include="..\actors\enemies\super.actor">
       <Filter>Resource Files\Actors\enemies</Filter>
+    </None>
+    <None Include="..\actors\projectiles\stingerbolt.actor">
+      <Filter>Resource Files\Projectiles</Filter>
     </None>
   </ItemGroup>
 </Project>
