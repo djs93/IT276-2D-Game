@@ -127,18 +127,17 @@ void bucket_check_remove(Entity* entity, List* entList) {
 }
 
 void bucket_update(Entity* entity, void* context) {
-	int r, c, i;
+	int r, c;
 	Bucket* currBucket;
-	List* list;
-	list = get_loaded_level()->optimalBuckets;
-	for (i = 0; i < list->count; i++)
-	{
-		currBucket = gfc_list_get_nth(list, i);
-		//do collision between rect of bucket and circle of ent
-		if (CircleRectangle(entity->boundingBox, currBucket->shape.s.r)) {
-			//and if colliding, add entity to that bucket's list
-			if (gfc_list_in_list(currBucket->entities, entity) < 0) {
-				currBucket->entities = gfc_list_append(currBucket->entities, entity);
+	for (r = 0; r < bucket_manager.rows; r++) {
+		for (c = 0; c < bucket_manager.columns; c++) {
+			currBucket = &bucket_manager.bucket_array[r][c];
+			//do collision between rect of bucket and circle of ent
+			if (CircleRectangle(entity->boundingBox, currBucket->shape.s.r)) {
+				//and if colliding, add entity to that bucket's list
+				if (gfc_list_in_list(currBucket->entities, entity) < 0) {
+					currBucket->entities = gfc_list_append(currBucket->entities, entity);
+				}
 			}
 		}
 	}
