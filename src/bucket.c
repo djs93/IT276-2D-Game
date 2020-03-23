@@ -174,6 +174,7 @@ void setAllyBuckets(Entity* self) {
 		for (c = 0; c < bucket_manager.columns; c++) {
 			currBucket = &bucket_manager.bucket_array[r][c];
 			if (CircleRectangle(self->boundingBox, currBucket->shape.s.r)) {
+				currBucket->entities = gfc_list_append(currBucket->entities, self);
 				if (gfc_list_in_list(allyBuckets, currBucket) < 0) {
 					get_loaded_level()->allyBuckets = gfc_list_append(allyBuckets, currBucket);
 				}
