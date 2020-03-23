@@ -124,8 +124,8 @@ void stinger_think(Entity* self){
 		//if fire, reset cooldown to fireRate
 		if (target) {
 			gf2d_actor_set_action(&self->actor, "fire");
-			stingerBolt_spawn(self);
 			gf2d_entity_look_at(self, target);
+			stingerBolt_spawn(self);
 			self->cooldown = self->fireRate;
 		}
 	}
@@ -328,7 +328,7 @@ Entity* findClosest(Entity* self) {
 		}
 		for (j = 0; j < bucket->entities->count; j++) { //I think the problem is we're clearing buckets before thinking and not recalcing until after.
 			currEnemy = gfc_list_get_nth(bucket->entities, j);
-			if (!currEnemy) { continue; }
+			if (!currEnemy || currEnemy->_inuse!=1) { continue; }
 			if (currEnemy->type == Type_Enemy) {
 				if (CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
 					testDist = LengthSqLine2D(line2d(self->shootRadius.position, currEnemy->boundingBox.position));
