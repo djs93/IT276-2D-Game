@@ -18,7 +18,7 @@ Entity* stingerBolt_spawn(Entity* parent)
 	bolt->boundingBox.radius = 20.0f;
 	bolt->position = parent->position;
 	bolt->move = boltMove;
-	bolt->distanceLeft = 10000.0f;
+	bolt->distanceLeft = 1500.0f;
 	bolt->think = boltThink;
 	bolt->type = Type_Projectile;
 	bolt->touch = boltTouch;
@@ -37,7 +37,7 @@ void boltMove(Entity* self) {
 }
 
 void boltThink(Entity* self) {
-	if (self->position.x < 0 || self->position.x>1200 || self->position.y < 0 || self->position.y>720 || self->health<=0) {
+	if (self->position.x < 0 || self->position.x>1200 || self->position.y < 0 || self->position.y>720 || self->health<=0 || self->distanceLeft<=0.0f) {
 		self->die(self);
 	}
 }
