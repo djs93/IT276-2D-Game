@@ -11,8 +11,9 @@ Entity* stingerBolt_spawn(Entity* parent)
 	bolt->rotation.y = bolt->actor.sprite->frame_h / 2;
 	bolt->rotation.z = parent->rotation.z+180;
 	vector3d_set_angle_by_radians(&direction, (bolt->rotation.z)*GFC_DEGTORAD);
-	bolt->velocity.x = direction.x * 3.0f;
-	bolt->velocity.y = direction.y * 3.0f;
+	bolt->speed = 5.0f;
+	bolt->velocity.x = direction.x * bolt->speed;
+	bolt->velocity.y = direction.y * bolt->speed;
 	bolt->boundingBox.position = parent->position;
 	bolt->boundingBox.radius = 20.0f;
 	bolt->position = parent->position;
