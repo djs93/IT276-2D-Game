@@ -506,6 +506,7 @@ Bool allyCollision(Entity* self) {
 		bucket = gfc_list_get_nth(allyBuckets, i);
 		for (j = 0; j < bucket->entities->count; j++) {
 			currOther = gfc_list_get_nth(bucket->entities, j);
+			if (currOther->_inuse != 1 || currOther->type != Type_Tower) { continue; }
 			if (CircleCircle(self->boundingBox, currOther->boundingBox)) {
 				return true;
 			}
