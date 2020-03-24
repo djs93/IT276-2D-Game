@@ -250,6 +250,7 @@
     <None Include="..\actors\music.actor" />
     <None Include="..\actors\projectiles\laserlaser.actor" />
     <None Include="..\actors\projectiles\slingerpellet.actor" />
+    <None Include="..\actors\projectiles\snowwave.actor" />
     <None Include="..\actors\projectiles\stingerbolt.actor" />
     <None Include="..\actors\projectiles\waterwave.actor" />
     <None Include="..\actors\slingshot.actor" />

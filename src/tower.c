@@ -98,12 +98,15 @@ Entity* placement_spawn(TowerTypes type) {
 		break;
 	case TT_Techno:
 		gf2d_actor_load(&self->actor, "actors/techno.actor");
+		self->shootRadius.radius = 0.0f;
 		break;
 	case TT_Snowglobe:
 		gf2d_actor_load(&self->actor, "actors/snowglobe.actor");
+		self->shootRadius.radius = 100.0f;
 		break;
 	case TT_Music:
 		gf2d_actor_load(&self->actor, "actors/music.actor");
+		self->shootRadius.radius = 125.0f;
 		break;
 	default:
 		gf2d_actor_load(&self->actor, "actors/stinger.actor");
@@ -275,7 +278,34 @@ void techno_think(Entity* self){
 }
 
 void snowglobe_think(Entity* self){
-
+	List* targets;
+	Entity* target;
+	int i;
+	if (self->cooldown < 0.0000001f) {
+		//try to fire
+		targets = inRange(self);
+		//if fire, reset cooldown to fireRate
+		if (targets && targets->count > 0) {
+			gf2d_actor_set_action(&self->actor, "fire");
+			for (i = 0; i < targets->count; i++) {
+				target = gfc_list_get_nth(targets, i);
+				techno_damage(self, target);
+				vector2d_normalize(&target->velocity);
+				target->speed = target->maxSpeed/2.0f;
+				target->velocity.x *= target->speed;
+				target->velocity.y *= target->speed;
+				target->cooldown = 2.0f;
+			}
+			snowwave_spawn(self);
+			self->cooldown = self->fireRate;
+		}
+		else {
+			gf2d_actor_set_action(&self->actor, "idle");
+		}
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
 }
 
 void music_think(Entity* self){
@@ -314,28 +344,24 @@ void placement_detach(Entity* ent) {
 	case TT_Stinger:
 		ent->think = stinger_think;
 		ent->name = "stinger";
-		ent->shootRadius.radius = 150.0f;
 		ent->fireRate = 0.5f;
 		setSeekBuckets(ent);
 		break;
 	case TT_Slingshot:
 		ent->think = slingshot_think;
 		ent->name = "slingshot";
-		ent->shootRadius.radius = 225.0f;
 		ent->fireRate = 0.25f;
 		setSeekBuckets(ent);
 		break;
 	case TT_Laser:
 		ent->think = laser_think;
 		ent->name = "laser";
-		ent->shootRadius.radius = 200.0f;
 		ent->fireRate = 0.5f;
 		setSeekBuckets(ent);
 		break;
 	case TT_Water:
 		ent->think = water_think;
 		ent->name = "water";
-		ent->shootRadius.radius = 90.0f;
 		ent->fireRate = 0.75f;
 		ent->damage = 1;
 		setSeekBuckets(ent);
@@ -343,28 +369,24 @@ void placement_detach(Entity* ent) {
 	case TT_Techno:
 		ent->think = techno_think;
 		ent->name = "techno";
-		ent->shootRadius.radius = 0.0f;
 		ent->fireRate = 1.0f;
 		ent->damage = 2;
 		break;
 	case TT_Snowglobe:
 		ent->think = snowglobe_think;
 		ent->name = "snowglobe";
-		ent->shootRadius.radius = 150.0f;
 		ent->fireRate = 0.5f;
 		setSeekBuckets(ent);
 		break;
 	case TT_Music:
 		ent->think = music_think;
 		ent->name = "music";
-		ent->shootRadius.radius = 150.0f;
 		ent->fireRate = 0.5f;
 		setSeekBuckets(ent);
 		break;
 	default:
 		ent->think = stinger_think;
 		ent->name = "stinger";
-		ent->shootRadius.radius = 150.0f;
 		ent->fireRate = 0.5f;
 		setSeekBuckets(ent);
 		slog("Invalid detach tower type! Defaulting...");

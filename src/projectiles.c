@@ -196,3 +196,21 @@ void waveThink(Entity* self) {
 		self->die(self);
 	}
 }
+
+Entity* snowwave_spawn(Entity* parent)
+{
+	Entity* wave;
+	Vector3D direction;
+	wave = gf2d_entity_new();
+	gf2d_actor_load(&wave->actor, "actors/projectiles/snowwave.actor");
+	wave->position = parent->position;
+	wave->move = waveMove;
+	wave->distanceLeft = parent->shootRadius.radius;
+	wave->think = waveThink;
+	wave->type = Type_Projectile;
+	wave->touch = NULL;
+	wave->die = boltDie;
+
+	wave->fireRate = parent->fireRate * gf2d_graphics_get_frames_per_second();
+	return wave;
+}

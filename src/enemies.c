@@ -1,6 +1,7 @@
 #include "enemies.h"
 #include "level.h"
 #include "bucket.h"
+#include "gf2d_graphics.h"
 
 Entity* commonSpawn(Entity* parent);
 
@@ -42,6 +43,7 @@ Entity* redSpawn(Entity* parent)
 	ent = commonSpawn(parent);
 	gf2d_actor_load(&ent->actor, "actors/enemies/red.actor");
 	ent->speed = 0.8f;
+	ent->maxSpeed = 0.8f;
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
@@ -57,6 +59,7 @@ Entity* blueSpawn(Entity* parent)
 	ent = commonSpawn(parent);
 	gf2d_actor_load(&ent->actor, "actors/enemies/blue.actor");
 	ent->speed = 1.2f;
+	ent->maxSpeed = 1.2f;
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
@@ -72,6 +75,7 @@ Entity* greenSpawn(Entity* parent)
 	ent = commonSpawn(parent);
 	gf2d_actor_load(&ent->actor, "actors/enemies/green.actor");
 	ent->speed = 1.4f;
+	ent->maxSpeed = 1.4f;
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
@@ -87,6 +91,7 @@ Entity* yellowSpawn(Entity* parent)
 	ent = commonSpawn(parent);
 	gf2d_actor_load(&ent->actor, "actors/enemies/yellow.actor");
 	ent->speed = 1.8f;
+	ent->maxSpeed = 1.8f;
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->move = flowerMove;
@@ -102,6 +107,7 @@ Entity* superSpawn(Entity* parent)
 	ent = commonSpawn(parent);
 	gf2d_actor_load(&ent->actor, "actors/enemies/super.actor");
 	ent->speed = 0.3f;
+	ent->maxSpeed = 0.3f;
 	ent->velocity.x *= ent->speed;
 	ent->velocity.y *= ent->speed;
 	ent->health = 50;
@@ -118,12 +124,30 @@ void redThink(Entity* self)
 	if (self->health <= 0) {
 		self->die(self);
 	}
+	if (self->cooldown <= 0.0f && self->speed != self->maxSpeed) {
+		vector2d_normalize(&self->velocity);
+		self->speed = self->maxSpeed;
+		self->velocity.x *= self->speed;
+		self->velocity.y *= self->speed;
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
 }
 
 void blueThink(Entity* self)
 {
 	if (self->health <= 0) {
 		self->die(self);
+	}
+	if (self->cooldown <= 0.0f) {
+		vector2d_normalize(&self->velocity);
+		self->speed = self->maxSpeed;
+		self->velocity.x *= self->speed;
+		self->velocity.y *= self->speed;
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
 	}
 }
 
@@ -132,6 +156,15 @@ void greenThink(Entity* self)
 	if (self->health <= 0) {
 		self->die(self);
 	}
+	if (self->cooldown <= 0.0f) {
+		vector2d_normalize(&self->velocity);
+		self->speed = self->maxSpeed;
+		self->velocity.x *= self->speed;
+		self->velocity.y *= self->speed;
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
 }
 
 void yellowThink(Entity* self)
@@ -139,12 +172,30 @@ void yellowThink(Entity* self)
 	if (self->health <= 0) {
 		self->die(self);
 	}
+	if (self->cooldown <= 0.0f) {
+		vector2d_normalize(&self->velocity);
+		self->speed = self->maxSpeed;
+		self->velocity.x *= self->speed;
+		self->velocity.y *= self->speed;
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
 }
 
 void superThink(Entity* self)
 {
 	if (self->health <= 0) {
 		self->die(self);
+	}
+	if (self->cooldown <= 0.0f) {
+		vector2d_normalize(&self->velocity);
+		self->speed = self->maxSpeed;
+		self->velocity.x *= self->speed;
+		self->velocity.y *= self->speed;
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
 	}
 }
 
