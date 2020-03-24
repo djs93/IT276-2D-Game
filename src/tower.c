@@ -12,6 +12,7 @@ Entity* findClosest(Entity* self);
 void setSeekBuckets(Entity* self);
 Bool allyCollision(Entity* self);
 void techno_damage(Entity* self, Entity* target);
+List* inRange(Entity* self);
 
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
@@ -89,9 +90,11 @@ Entity* placement_spawn(TowerTypes type) {
 		break;
 	case TT_Laser:
 		gf2d_actor_load(&self->actor, "actors/laser.actor");
+		self->shootRadius.radius = 200.0f;
 		break;
 	case TT_Water:
 		gf2d_actor_load(&self->actor, "actors/water.actor");
+		self->shootRadius.radius = 90.0f;
 		break;
 	case TT_Techno:
 		gf2d_actor_load(&self->actor, "actors/techno.actor");
@@ -212,7 +215,29 @@ void laser_think(Entity* self){
 }
 
 void water_think(Entity* self){
-
+	List* targets;
+	Entity* target;
+	int i;
+	if (self->cooldown < 0.0000001f) {
+		//try to fire
+		targets = inRange(self);
+		//if fire, reset cooldown to fireRate
+		if (targets && targets->count>0) {
+			gf2d_actor_set_action(&self->actor, "fire");
+			for (i = 0; i < targets->count; i++) {
+				target = gfc_list_get_nth(targets, i);
+				techno_damage(self, target);
+			}
+			waterwave_spawn(self);
+			self->cooldown = self->fireRate;
+		}
+		else {
+			gf2d_actor_set_action(&self->actor, "idle");
+		}
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
 }
 
 void techno_think(Entity* self){
@@ -307,8 +332,9 @@ void placement_detach(Entity* ent) {
 	case TT_Water:
 		ent->think = water_think;
 		ent->name = "water";
-		ent->shootRadius.radius = 150.0f;
-		ent->fireRate = 0.5f;
+		ent->shootRadius.radius = 90.0f;
+		ent->fireRate = 0.75f;
+		ent->damage = 1;
 		setSeekBuckets(ent);
 		break;
 	case TT_Techno:
@@ -488,10 +514,36 @@ Bool allyCollision(Entity* self) {
 	return false;
 }
 
+List* inRange(Entity* self) {
+	int i, j;
+	Entity* currOther;
+	Bucket* bucket;
+	List* seekBuckets;
+	List* res;
+	seekBuckets = self->seekBuckets;
+	if (!seekBuckets) {
+		return NULL;
+	}
+	res = gfc_list_new();
+	for (i = 0; i < seekBuckets->count; i++)
+	{
+		bucket = gfc_list_get_nth(seekBuckets, i);
+		for (j = 0; j < bucket->entities->count; j++) {
+			currOther = gfc_list_get_nth(bucket->entities, j);
+			if (currOther->type != Type_Enemy || currOther->_inuse!=1) { continue; }
+			if (CircleCircle(self->shootRadius, currOther->boundingBox)) {
+				res = gfc_list_append(res, currOther);
+			}
+		}
+	}
+	return res;
+}
+
 void techno_damage(Entity* self, Entity* target) {
 	int damageLeft;
 	damageLeft = self->damage;
 	Entity* child = NULL;
+	if (target->_inuse != 1) { return; }
 	target->health -= damageLeft;
 	if (target->health <= 0) {
 		damageLeft = abs(target->health);
@@ -514,5 +566,4 @@ void techno_damage(Entity* self, Entity* target) {
 			}
 		}
 	}
-	
 }

@@ -361,5 +361,8 @@
     <None Include="..\actors\projectiles\laserlaser.actor">
       <Filter>Resource Files\Actors\Projectiles</Filter>
     </None>
+    <None Include="..\actors\projectiles\waterwave.actor">
+      <Filter>Resource Files\Actors\Projectiles</Filter>
+    </None>
   </ItemGroup>
 </Project>

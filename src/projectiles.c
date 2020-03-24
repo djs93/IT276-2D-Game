@@ -1,5 +1,6 @@
 #include "projectiles.h"
 #include "bucket.h"
+#include "gf2d_graphics.h"
 
 Entity* stingerBolt_spawn(Entity* parent)
 {
@@ -139,7 +140,7 @@ Entity* laserlaser_spawn(Entity* parent)
 	bolt->rotation.y = bolt->actor.sprite->frame_h / 2;
 	bolt->rotation.z = parent->rotation.z + 180;
 	vector3d_set_angle_by_radians(&direction, (bolt->rotation.z) * GFC_DEGTORAD);
-	bolt->speed = 6.0f;
+	bolt->speed = 7.0f;
 	bolt->velocity.x = direction.x * bolt->speed;
 	bolt->velocity.y = direction.y * bolt->speed;
 	bolt->boundingBox.position = parent->position;
@@ -156,4 +157,42 @@ Entity* laserlaser_spawn(Entity* parent)
 	bolt->health = 4;
 	bolt->die = boltDie;
 	return bolt;
+}
+
+Entity* waterwave_spawn(Entity* parent)
+{
+	Entity* wave;
+	Vector3D direction;
+	wave = gf2d_entity_new();
+	gf2d_actor_load(&wave->actor, "actors/projectiles/waterwave.actor");
+	wave->position = parent->position;
+	wave->move = waveMove;
+	wave->distanceLeft = parent->shootRadius.radius;
+	wave->think = waveThink;
+	wave->type = Type_Projectile;
+	wave->touch = NULL;
+	wave->die = boltDie;
+
+	wave->fireRate = parent->fireRate * gf2d_graphics_get_frames_per_second();
+	return wave;
+}
+
+void waveMove(Entity* self) {
+	return; //waves don't move
+}
+
+void waveThink(Entity* self) {
+	float radius;
+	float ratio;
+	radius = (self->actor.sprite->frame_w / 2) * (self->actor.al->scale.x);
+	if (radius < self->distanceLeft) {
+		radius += self->distanceLeft / self->fireRate;
+		self->actor.al->scale.x = radius/ (self->actor.sprite->frame_w / 2);
+		self->actor.al->scale.y = radius/ (self->actor.sprite->frame_w / 2);
+	}
+	else {
+		self->actor.al->scale.x = 1.0f;
+		self->actor.al->scale.y = 1.0f;
+		self->die(self);
+	}
 }

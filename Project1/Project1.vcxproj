@@ -251,6 +251,7 @@
     <None Include="..\actors\projectiles\laserlaser.actor" />
     <None Include="..\actors\projectiles\slingerpellet.actor" />
     <None Include="..\actors\projectiles\stingerbolt.actor" />
+    <None Include="..\actors\projectiles\waterwave.actor" />
     <None Include="..\actors\slingshot.actor" />
     <None Include="..\actors\snowglobe.actor" />
     <None Include="..\actors\stinger.actor" />

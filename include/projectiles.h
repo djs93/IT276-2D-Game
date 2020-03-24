@@ -9,7 +9,11 @@ void boltThink(Entity* self);
 void boltTouch(Entity* self, Entity* other);
 void boltDie(Entity* self);
 
+void waveMove(Entity* self);
+void waveThink(Entity* self);
+
 Entity* slingerPellet_spawn(Entity* parent);
 Entity* laserlaser_spawn(Entity* parent);
+Entity* waterwave_spawn(Entity* parent);
 
 #endif
