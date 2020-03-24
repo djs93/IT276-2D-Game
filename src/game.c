@@ -106,7 +106,7 @@ int main(int argc, char * argv[])
     gf2d_mouse_load("actors/mouse.actor");
     level_load("Levels/test.json");
 
-    gfc_input_set_callbacks("test", redSpawn, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("test", superSpawn, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyStinger", placement_spawn, NULL, NULL, NULL, TT_Stinger);
     gfc_input_set_callbacks("buySlingshot", placement_spawn, NULL, NULL, NULL, TT_Slingshot);
     gfc_input_set_callbacks("buyLaser", placement_spawn, NULL, NULL, NULL, TT_Laser);

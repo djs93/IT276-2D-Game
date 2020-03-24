@@ -99,3 +99,32 @@ void boltTouch(Entity* self, Entity* other) {
 void boltDie(Entity* self) {
 	gf2d_entity_free(self);
 }
+
+Entity* slingerPellet_spawn(Entity* parent)
+{
+	Entity* bolt;
+	Vector3D direction;
+	bolt = gf2d_entity_new();
+	gf2d_actor_load(&bolt->actor, "actors/projectiles/slingerpellet.actor");
+	bolt->rotation.x = bolt->actor.sprite->frame_w / 2;
+	bolt->rotation.y = bolt->actor.sprite->frame_h / 2;
+	bolt->rotation.z = parent->rotation.z + 180;
+	vector3d_set_angle_by_radians(&direction, (bolt->rotation.z) * GFC_DEGTORAD);
+	bolt->speed = 8.0f;
+	bolt->velocity.x = direction.x * bolt->speed;
+	bolt->velocity.y = direction.y * bolt->speed;
+	bolt->boundingBox.position = parent->position;
+	bolt->boundingBox.radius = 10.0f;
+	bolt->position = parent->position;
+	bolt->move = boltMove;
+	bolt->distanceLeft = 1500.0f;
+	bolt->think = boltThink;
+	bolt->type = Type_Projectile;
+	bolt->touch = boltTouch;
+	bucket_update(bolt, NULL);
+	bolt->noTouch = gfc_list_new();
+	bolt->damage = 1;
+	bolt->health = 1;
+	bolt->die = boltDie;
+	return bolt;
+}

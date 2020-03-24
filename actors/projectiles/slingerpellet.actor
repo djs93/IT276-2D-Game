@@ -1,0 +1,13 @@
+sprite: images/projectiles/slingerpellet.png
+frameWidth: 28
+frameHeight: 28
+framesPerLine: 1
+scale: 0.7,0.7
+color: 255,255,255,255
+colorSpecial: 255,255,255,255
+
+action: idle
+startFrame: 0
+endFrame: 0
+frameRate: 0.1
+type:   loop

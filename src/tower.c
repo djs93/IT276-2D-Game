@@ -159,7 +159,7 @@ void slingshot_think(Entity* self){
 		if (target) {
 			gf2d_actor_set_action(&self->actor, "fire");
 			gf2d_entity_look_at(self, target);
-			stingerBolt_spawn(self);
+			slingerPellet_spawn(self);
 			self->rotation.z += 180;
 			if (self->rotation.z >= 360.0f) {
 				self->rotation.z = fmodf(self->rotation.z, 360.0f);
@@ -234,41 +234,56 @@ void placement_detach(Entity* ent) {
 		ent->think = stinger_think;
 		ent->name = "stinger";
 		ent->shootRadius.radius = 150.0f;
+		ent->fireRate = 0.5f;
+		setSeekBuckets(ent);
 		break;
 	case TT_Slingshot:
 		ent->think = slingshot_think;
 		ent->name = "slingshot";
 		ent->shootRadius.radius = 225.0f;
+		ent->fireRate = 0.25f;
+		setSeekBuckets(ent);
 		break;
 	case TT_Laser:
 		ent->think = laser_think;
 		ent->name = "laser";
 		ent->shootRadius.radius = 150.0f;
+		ent->fireRate = 0.5f;
+		setSeekBuckets(ent);
 		break;
 	case TT_Water:
 		ent->think = water_think;
 		ent->name = "water";
 		ent->shootRadius.radius = 150.0f;
+		ent->fireRate = 0.5f;
+		setSeekBuckets(ent);
 		break;
 	case TT_Techno:
 		ent->think = techno_think;
 		ent->name = "techno";
 		ent->shootRadius.radius = 150.0f;
+		ent->fireRate = 0.5f;
 		break;
 	case TT_Snowglobe:
 		ent->think = snowglobe_think;
 		ent->name = "snowglobe";
 		ent->shootRadius.radius = 150.0f;
+		ent->fireRate = 0.5f;
+		setSeekBuckets(ent);
 		break;
 	case TT_Music:
 		ent->think = music_think;
 		ent->name = "music";
 		ent->shootRadius.radius = 150.0f;
+		ent->fireRate = 0.5f;
+		setSeekBuckets(ent);
 		break;
 	default:
 		ent->think = stinger_think;
 		ent->name = "stinger";
 		ent->shootRadius.radius = 150.0f;
+		ent->fireRate = 0.5f;
+		setSeekBuckets(ent);
 		slog("Invalid detach tower type! Defaulting...");
 		break;
 	}
@@ -277,8 +292,6 @@ void placement_detach(Entity* ent) {
 	ent->type = Type_Tower;
 	ent->rotation.x = ent->actor.sprite->frame_w/2;
 	ent->rotation.y = ent->actor.sprite->frame_h/2;
-	ent->fireRate = 0.5f;
-	setSeekBuckets(ent);
 	setAllyBuckets(ent);
 }
 #pragma endregion
