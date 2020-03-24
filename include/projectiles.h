@@ -10,5 +10,6 @@ void boltTouch(Entity* self, Entity* other);
 void boltDie(Entity* self);
 
 Entity* slingerPellet_spawn(Entity* parent);
+Entity* laserlaser_spawn(Entity* parent);
 
 #endif

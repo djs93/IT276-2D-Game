@@ -141,12 +141,12 @@ void stinger_think(Entity* self){
 			}
 			self->cooldown = self->fireRate;
 		}
+		else {
+			gf2d_actor_set_action(&self->actor, "idle");
+		}
 	}
 	else {
 		self->cooldown -= gf2d_graphics_get_milli_delta();
-	}
-	if (gf2d_actor_get_frames_remaining(&self->actor)) {
-		//gf2d_actor_set_action(&self->actor, "idle");
 	}
 }
 
@@ -172,17 +172,44 @@ void slingshot_think(Entity* self){
 			}
 			self->cooldown = self->fireRate;
 		}
+		else {
+			gf2d_actor_set_action(&self->actor, "idle");
+		}
 	}
 	else {
 		self->cooldown -= gf2d_graphics_get_milli_delta();
 	}
-	if (gf2d_actor_get_frames_remaining(&self->actor)) {
-		//gf2d_actor_set_action(&self->actor, "idle");
-	}
 }
 
 void laser_think(Entity* self){
-
+	Entity* target;
+	if (self->cooldown < 0.0000001f) {
+		//try to fire
+		target = findClosest(self);
+		//if fire, reset cooldown to fireRate
+		if (target) {
+			gf2d_actor_set_action(&self->actor, "fire");
+			gf2d_entity_look_at(self, target);
+			laserlaser_spawn(self);
+			self->rotation.z += 180;
+			if (self->rotation.z >= 360.0f) {
+				self->rotation.z = fmodf(self->rotation.z, 360.0f);
+			}
+			if (self->rotation.z >= 90.0f && self->rotation.z <= 270.0f) {
+				self->flip = vector2d(0, 1);
+			}
+			else {
+				self->flip = vector2d(0, 0);
+			}
+			self->cooldown = self->fireRate;
+		}
+		else {
+			gf2d_actor_set_action(&self->actor, "idle");
+		}
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
 }
 
 void water_think(Entity* self){
@@ -247,7 +274,7 @@ void placement_detach(Entity* ent) {
 	case TT_Laser:
 		ent->think = laser_think;
 		ent->name = "laser";
-		ent->shootRadius.radius = 150.0f;
+		ent->shootRadius.radius = 200.0f;
 		ent->fireRate = 0.5f;
 		setSeekBuckets(ent);
 		break;
