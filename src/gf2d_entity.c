@@ -7,6 +7,8 @@
 #include "gf2d_entity.h"
 #include "local.h"
 
+#include "gf2d_mouse.h"
+
 void gf2d_entity_manager_close()
 {
     if(entity_list != NULL)
@@ -60,6 +62,7 @@ void gf2d_entity_free(Entity *self)
         return;
     }
     self->_inuse = 0;
+	self->name = NULL;
 	gf2d_actor_free(&self->actor);
     if (self->data != NULL)
     {
@@ -558,6 +561,9 @@ void gf2d_entity_update_all()
 		if (currEnt->prethink) {
 			currEnt->prethink(currEnt);
 		}
+		if (currEnt->type == Type_Tower && gf2d_mouse_button_pressed(0) && PointInCircle(gf2d_mouse_get_position(), currEnt->boundingBox)) {
+			gf2d_entity_set_selected(currEnt);
+		}
 	}
 	do_collisions();
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
@@ -610,5 +616,13 @@ void gf2d_entity_look_at(Entity* self, Entity* lookAt)
 	}
 
 	self->rotation.z = degree*GFC_RADTODEG;
+}
+
+Entity* gf2d_entity_get_selected() {
+	return selectedEntity;
+}
+
+void gf2d_entity_set_selected(Entity* entity) {
+	selectedEntity = entity;
 }
 /*eol@eof*/

@@ -24,6 +24,7 @@ void draw_normal_entities();
 void draw_level();
 Vector2D vector2d_zero;
 int mx, my;
+Entity* selectedEntity;
 
 
 int main(int argc, char * argv[])
@@ -137,10 +138,10 @@ int main(int argc, char * argv[])
             //gf2d_sprite_draw(mouse, vector2d(mx,my), NULL, NULL, NULL, NULL, &mouseColor, (int)mf);
         draw_level();
         gf2d_entity_update_all();		
-		draw_buckets();
-        draw_buckets_optimal();
+		//draw_buckets();
+        //draw_buckets_optimal();
         draw_normal_entities();
-        draw_buckets_ally();
+        //draw_buckets_ally();
 		drawPaths();
         gf2d_windows_draw_all();
         gf2d_mouse_draw();
@@ -178,6 +179,7 @@ void draw_normal_entities() {
 			i++;
 			continue;
 		}
+        /*
         if (ent->seekBuckets) {
             SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 0, 0, 255, 255);
             for (j = 0; j < ent->seekBuckets->count; j++) {
@@ -192,9 +194,11 @@ void draw_normal_entities() {
             }
             SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
         }
+        
         if (ent->shootRadius.radius > 0.1f) {
             gf2d_draw_circle(ent->shootRadius.position, ent->shootRadius.radius, vector4d(255.0f, 255.0f, 0.0f, 255.0f));
         }
+        */
 		if (ent->actor.sprite) {
 			//if (!ent->name || strcmp(ent->name, "axes_attach") != 0) { //These are checks just in case there are specific things we don't want to draw
             vector2d_copy(newPos, ent->position);
@@ -203,11 +207,19 @@ void draw_normal_entities() {
 			gf2d_sprite_draw(ent->actor.sprite, newPos, &ent->actor.al->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);
 			//}
 		}
+        /*
         if (ent->boundingBox.radius > 0.1f) {
             gf2d_draw_circle(ent->boundingBox.position, ent->boundingBox.radius, vector4d(0.0f, 255.0f, 0.0f, 255.0f));
         }
+        */
 		i++;
 	}
+    ent = gf2d_entity_get_selected();
+    if (ent !=NULL) {
+        if(ent->shootRadius.radius > 0.1f){ gf2d_draw_circle(ent->shootRadius.position, ent->shootRadius.radius, vector4d(0.0f, 255.0f, 0.0f, 255.0f)); }
+        else{ gf2d_draw_circle(ent->boundingBox.position, ent->boundingBox.radius, vector4d(0.0f, 255.0f, 0.0f, 255.0f)); }
+        
+    }
 }
 
 void draw_level() {

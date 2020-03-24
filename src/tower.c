@@ -7,6 +7,7 @@
 #include "gf2d_graphics.h"
 #include "bucket.h"
 #include "projectiles.h"
+#include "gf2d_draw.h"
 
 Entity* findClosest(Entity* self);
 void setSeekBuckets(Entity* self);
@@ -118,7 +119,7 @@ Entity* placement_spawn(TowerTypes type) {
 	self->position.y = my;
 	self->name = "placement";
 	self->data = (int)type;
-	self->boundingBox.radius = 15.0f * self->actor.al->scale.x;
+	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
 	self->boundingBox.position = self->position;
 	return self;
 }
@@ -380,6 +381,13 @@ void placement_think(Entity* self) {
 	}
 	if (!(self->flags & FL_PLACEABLE)&&gf2d_mouse_button_released(0)) {
 		self->flags = self->flags | FL_PLACEABLE;
+	}
+
+	if (self->boundingBox.radius > 0.1f) {
+		gf2d_draw_circle(self->boundingBox.position, self->boundingBox.radius, vector4d(0.0f, 255.0f, 0.0f, 255.0f));
+	}
+	if (self->shootRadius.radius > 0.1f) {
+		gf2d_draw_circle(self->shootRadius.position, self->shootRadius.radius, vector4d(255.0f, 255.0f, 0.0f, 255.0f));
 	}
 }
 #pragma endregion

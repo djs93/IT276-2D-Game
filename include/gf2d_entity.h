@@ -79,10 +79,10 @@ typedef struct
 	Entity* entity_list;
 	Uint32  entity_max;
 	Uint32	num_ents;
-	Entity* selected_entity;
 }EntityManager;
 
 static EntityManager gf2d_entity_manager = { 0, 300 };
+extern Entity* selectedEntity;
 /**
  * @brief initializes the entity subsystem
  * @param entity_max maximum number of simultaneous entities you wish to support
@@ -184,4 +184,16 @@ void gf2d_entity_update(Entity* self);
 * @param lookAt the entity to look at
 */
 void gf2d_entity_look_at(Entity* self, Entity* lookAt);
+
+/**
+* @brief Get the currently selected entity
+* @return the currently selected entity
+*/
+Entity* gf2d_entity_get_selected();
+
+/**
+* @brief Set the currently selected entity
+* @param entity the entity to set as currently selected
+*/
+void gf2d_entity_set_selected(Entity* entity);
 #endif
