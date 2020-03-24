@@ -147,9 +147,15 @@ int main(int argc, char * argv[])
         //gf2d_sprite_draw(mouseEnt->actor.sprite, mouseEnt->position, &mouseEnt->scale, &mouseEnt->scaleCenter, &mouseEnt->rotation, &mouseEnt->flip, &mouseEnt->colorShift, (Uint32)mouseEnt->actor.frame);
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 		
-        if (gfc_input_command_down("no"))
+        if (gfc_input_command_pressed("no"))
         {
-            done = 1; // exit condition
+            backgroundEnt = find_entity("placement");
+            if (backgroundEnt) {
+                gf2d_entity_free(backgroundEnt);
+            }
+            else {
+                done = 1; // exit condition
+            }
         }
         //if (keys[SDL_SCANCODE_ESCAPE])done = 1; 
         sprintf(windowTitle, "gf2d - %f fps", gf2d_graphics_get_frames_per_second());
