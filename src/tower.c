@@ -250,6 +250,9 @@ void techno_think(Entity* self){
 			gf2d_actor_set_action(&self->actor, "fire");
 			gf2d_entity_look_at(self, target);
 			techno_damage(self, target);
+			SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 20, 20, 255);
+			SDL_RenderDrawLineF(gf2d_graphics_get_renderer(), self->position.x, self->position.y, target->position.x, target->position.y);
+			SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
 			self->rotation.z += 180;
 			if (self->rotation.z >= 360.0f) {
 				self->rotation.z = fmodf(self->rotation.z, 360.0f);
