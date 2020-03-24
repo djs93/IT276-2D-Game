@@ -75,3 +75,10 @@ makefile.dep
 /Makefile
 /IT276_2D_Game.cbp
 /cmake_install.cmake
+/html
+/include/html
+/include/latex
+/include/Doxyfile
+/latex
+/src/html
+/src/latex

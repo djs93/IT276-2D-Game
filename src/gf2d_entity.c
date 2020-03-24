@@ -545,7 +545,7 @@ void gf2d_entity_update_all()
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++) //everything moves before everything else
 	{
 		currEnt = &entity_list[i];
-		if (currEnt->_inuse == 0)continue;
+		if (currEnt->_inuse != 1)continue;
 		if (currEnt->move) {
 			currEnt->move(currEnt);
 		}
@@ -554,7 +554,7 @@ void gf2d_entity_update_all()
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
 	{
 		currEnt = &entity_list[i];
-		if (currEnt->_inuse == 0)continue;
+		if (currEnt->_inuse != 1)continue;
 		if (currEnt->prethink) {
 			currEnt->prethink(currEnt);
 		}
@@ -563,6 +563,7 @@ void gf2d_entity_update_all()
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
 	{
 		currEnt = &entity_list[i];
+		if (currEnt->_inuse != 1)continue;
 		if (currEnt->update) {
 			currEnt->update(currEnt);
 		}
