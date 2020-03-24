@@ -11,6 +11,7 @@
 Entity* findClosest(Entity* self);
 void setSeekBuckets(Entity* self);
 Bool allyCollision(Entity* self);
+void techno_damage(Entity* self, Entity* target);
 
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
@@ -113,8 +114,6 @@ Entity* placement_spawn(TowerTypes type) {
 	self->data = (int)type;
 	self->boundingBox.radius = 15.0f * self->actor.al->scale.x;
 	self->boundingBox.position = self->position;
-	self->rotation.z = 270.0f;
-	slog("Rot: %f", self->rotation.z);
 	return self;
 }
 #pragma endregion
@@ -217,7 +216,34 @@ void water_think(Entity* self){
 }
 
 void techno_think(Entity* self){
-
+	Entity* target;
+	if (self->cooldown < 0.0000001f) {
+		//try to fire
+		target = findClosest(self);
+		//if fire, reset cooldown to fireRate
+		if (target) {
+			gf2d_actor_set_action(&self->actor, "fire");
+			gf2d_entity_look_at(self, target);
+			techno_damage(self, target);
+			self->rotation.z += 180;
+			if (self->rotation.z >= 360.0f) {
+				self->rotation.z = fmodf(self->rotation.z, 360.0f);
+			}
+			if (self->rotation.z >= 90.0f && self->rotation.z <= 270.0f) {
+				self->flip = vector2d(0, 1);
+			}
+			else {
+				self->flip = vector2d(0, 0);
+			}
+			self->cooldown = self->fireRate;
+		}
+		else {
+			gf2d_actor_set_action(&self->actor, "idle");
+		}
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
 }
 
 void snowglobe_think(Entity* self){
@@ -288,8 +314,9 @@ void placement_detach(Entity* ent) {
 	case TT_Techno:
 		ent->think = techno_think;
 		ent->name = "techno";
-		ent->shootRadius.radius = 150.0f;
-		ent->fireRate = 0.5f;
+		ent->shootRadius.radius = 0.0f;
+		ent->fireRate = 1.0f;
+		ent->damage = 2;
 		break;
 	case TT_Snowglobe:
 		ent->think = snowglobe_think;
@@ -411,7 +438,7 @@ Entity* findClosest(Entity* self) {
 			currEnemy = gfc_list_get_nth(bucket->entities, j);
 			if (!currEnemy || currEnemy->_inuse!=1) { continue; }
 			if (currEnemy->type == Type_Enemy) {
-				if (CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
+				if (self->shootRadius.radius == 0.0f || CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
 					testDist = LengthSqLine2D(line2d(self->shootRadius.position, currEnemy->boundingBox.position));
 					if (currClosestDist < 0.0f) {
 						targetEnemy = currEnemy;
@@ -459,4 +486,33 @@ Bool allyCollision(Entity* self) {
 		}
 	}
 	return false;
+}
+
+void techno_damage(Entity* self, Entity* target) {
+	int damageLeft;
+	damageLeft = self->damage;
+	Entity* child = NULL;
+	target->health -= damageLeft;
+	if (target->health <= 0) {
+		damageLeft = abs(target->health);
+		while (damageLeft > 0) {
+			child = target->die(target);
+			if (!child) {
+				break;
+			}
+			child->health -= damageLeft;
+			if (child->health < 0) {
+				damageLeft = abs(child->health);
+			}
+			else if (child->health == 0) {
+				damageLeft = 0;
+				child = child->die(child);
+			}
+			else {
+				damageLeft = 0;
+				child = NULL;
+			}
+		}
+	}
+	
 }
