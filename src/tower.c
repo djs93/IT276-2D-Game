@@ -176,6 +176,7 @@ void slingshot_think(Entity* self){
 				self->flip = vector2d(0, 0);
 			}
 			self->cooldown = self->fireRate;
+			slog("Firerate: %f", self->fireRate);
 		}
 		else {
 			gf2d_actor_set_action(&self->actor, "idle");
@@ -309,7 +310,57 @@ void snowglobe_think(Entity* self){
 }
 
 void music_think(Entity* self){
-
+	int i,j;
+	Entity* currAlly;
+	Bucket* currBucket;
+	List* allyBuckets;
+	List* alreadyBuffed;
+	Entity* target;
+	allyBuckets = get_loaded_level()->allyBuckets;
+	alreadyBuffed = self->noTouch;
+	if (!alreadyBuffed) {
+		self->noTouch = gfc_list_new();
+		alreadyBuffed = (List*)self->noTouch;
+	}
+	for (i = 0; i < allyBuckets->count; i++) {
+		currBucket = gfc_list_get_nth(allyBuckets, i);
+		for (j = 0; j < currBucket->entities->count; j++) {
+			currAlly = gfc_list_get_nth(currBucket->entities, j);
+			if (currAlly->type != Type_Tower || currAlly->_inuse != 1 || currAlly == self || gfc_list_in_list(alreadyBuffed, currAlly)>=0 || !CircleCircle(self->shootRadius, currAlly->boundingBox)) {
+				continue;
+			}
+			currAlly->fireRate *= 0.85f;
+			self->noTouch = gfc_list_append(alreadyBuffed, currAlly);
+			alreadyBuffed = self->noTouch;
+		}
+	}
+	if (self->cooldown < 0.0000001f) {
+		//try to fire
+		target = findClosest(self);
+		//if fire, reset cooldown to fireRate
+		if (target) {
+			gf2d_actor_set_action(&self->actor, "fire");
+			gf2d_entity_look_at(self, target);
+			musicnote_spawn(self);
+			self->rotation.z += 180;
+			if (self->rotation.z >= 360.0f) {
+				self->rotation.z = fmodf(self->rotation.z, 360.0f);
+			}
+			if (self->rotation.z >= 90.0f && self->rotation.z <= 270.0f) {
+				self->flip = vector2d(0, 1);
+			}
+			else {
+				self->flip = vector2d(0, 0);
+			}
+			self->cooldown = self->fireRate;
+		}
+		else {
+			gf2d_actor_set_action(&self->actor, "idle");
+		}
+	}
+	else {
+		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
 }
 
 void placement_think(Entity* self) {

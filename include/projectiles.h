@@ -16,5 +16,6 @@ Entity* slingerPellet_spawn(Entity* parent);
 Entity* laserlaser_spawn(Entity* parent);
 Entity* waterwave_spawn(Entity* parent);
 Entity* snowwave_spawn(Entity* parent);
+Entity* musicnote_spawn(Entity* parent);
 
 #endif

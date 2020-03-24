@@ -214,3 +214,41 @@ Entity* snowwave_spawn(Entity* parent)
 	wave->fireRate = parent->fireRate * gf2d_graphics_get_frames_per_second();
 	return wave;
 }
+
+Entity* musicnote_spawn(Entity* parent)
+{
+	Entity* bolt;
+	Vector3D direction;
+	bolt = gf2d_entity_new();
+	gf2d_actor_load(&bolt->actor, "actors/projectiles/musicnote.actor");
+	bolt->rotation.x = bolt->actor.sprite->frame_w / 2;
+	bolt->rotation.y = bolt->actor.sprite->frame_h / 2;
+	bolt->rotation.z = parent->rotation.z + 180;
+	vector3d_set_angle_by_radians(&direction, (bolt->rotation.z) * GFC_DEGTORAD);
+	bolt->speed = 4.0f;
+	bolt->velocity.x = direction.x * bolt->speed;
+	bolt->velocity.y = direction.y * bolt->speed;
+	bolt->boundingBox.position = parent->position;
+	bolt->boundingBox.radius = 20.0f;
+	bolt->position = parent->position;
+	bolt->move = boltMove;
+	bolt->distanceLeft = 1400.0f;
+	bolt->think = boltThink;
+	bolt->type = Type_Projectile;
+	bolt->touch = boltTouch;
+	bucket_update(bolt, NULL);
+	bolt->noTouch = gfc_list_new();
+	bolt->damage = 1;
+	bolt->health = 1;
+	bolt->die = boltDie;
+	if (bolt->rotation.z >= 360.0f) {
+		bolt->rotation.z = fmodf(bolt->rotation.z, 360.0f);
+	}
+	if (bolt->rotation.z >= 90.0f && bolt->rotation.z <= 270.0f) {
+		bolt->flip = vector2d(1, 1);
+	}
+	else {
+		bolt->flip = vector2d(0, 0);
+	}
+	return bolt;
+}

@@ -1,8 +1,8 @@
-sprite: images/music.png
+sprite: images/projectiles/musicnote.png
 frameWidth: 28
 frameHeight: 28
-framesPerLine: 2
-scale: 2,2
+framesPerLine: 1
+scale: 1.3,1.3
 color: 255,255,255,255
 colorSpecial: 255,255,255,255
 
@@ -11,9 +11,3 @@ startFrame: 0
 endFrame: 0
 frameRate: 0.1
 type:   loop
-
-action: fire
-startFrame: 0
-endFrame: 1
-frameRate: 0.1
-type:   pass
