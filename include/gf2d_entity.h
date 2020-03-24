@@ -79,6 +79,7 @@ typedef struct
 	Entity* entity_list;
 	Uint32  entity_max;
 	Uint32	num_ents;
+	Entity* selected_entity;
 }EntityManager;
 
 static EntityManager gf2d_entity_manager = { 0, 300 };
