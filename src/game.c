@@ -108,13 +108,13 @@ int main(int argc, char * argv[])
     level_load("Levels/test.json");
 
     gfc_input_set_callbacks("test", superSpawn, NULL, NULL, NULL, NULL);
-    gfc_input_set_callbacks("buyStinger", placement_spawn, NULL, NULL, NULL, TT_Stinger);
-    gfc_input_set_callbacks("buySlingshot", placement_spawn, NULL, NULL, NULL, TT_Slingshot);
-    gfc_input_set_callbacks("buyLaser", placement_spawn, NULL, NULL, NULL, TT_Laser);
-    gfc_input_set_callbacks("buyWater", placement_spawn, NULL, NULL, NULL, TT_Water);
-    gfc_input_set_callbacks("buyTechno", placement_spawn, NULL, NULL, NULL, TT_Techno);
-    gfc_input_set_callbacks("buySnowglobe", placement_spawn, NULL, NULL, NULL, TT_Snowglobe);
-    gfc_input_set_callbacks("buyMusic", placement_spawn, NULL, NULL, NULL, TT_Music);
+    gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("buyLaser", laser_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("buyWater", water_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("buyTechno", techno_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("buySnowglobe", snowglobe_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("buyMusic", music_buy, NULL, NULL, NULL, NULL);
     /*main game loop*/
     while(!done)
     {

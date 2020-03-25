@@ -25,6 +25,14 @@ Entity* techno_spawn(Vector2D position);
 Entity* snowglobe_spawn(Vector2D position);
 Entity* music_spawn(Vector2D position);
 
+void stinger_buy();
+void slingshot_buy();
+void laser_buy();
+void water_buy();
+void techno_buy();
+void snowglobe_buy();
+void music_buy();
+
 Entity* placement_spawn(TowerTypes type);
 
 void stinger_think(Entity* self);

@@ -125,6 +125,57 @@ Entity* placement_spawn(TowerTypes type) {
 }
 #pragma endregion
 
+#pragma region Buys
+void stinger_buy() {
+	if (get_loaded_level()->playerCash >= getPrice(TT_Stinger)) {
+		level_addCash(-(float)getPrice(TT_Stinger));
+		placement_spawn(TT_Stinger);
+	}
+}
+
+void slingshot_buy() {
+	if (get_loaded_level()->playerCash >= getPrice(TT_Slingshot)) {
+		level_addCash(-(float)getPrice(TT_Slingshot));
+		placement_spawn(TT_Slingshot);
+	}
+}
+
+void laser_buy() {
+	if (get_loaded_level()->playerCash >= getPrice(TT_Laser)) {
+		level_addCash(-(float)getPrice(TT_Laser));
+		placement_spawn(TT_Laser);
+	}
+}
+
+void water_buy() {
+	if (get_loaded_level()->playerCash >= getPrice(TT_Water)) {
+		level_addCash(-(float)getPrice(TT_Water));
+		placement_spawn(TT_Water);
+	}
+}
+
+void techno_buy() {
+	if (get_loaded_level()->playerCash >= getPrice(TT_Techno)) {
+		level_addCash(-(float)getPrice(TT_Techno));
+		placement_spawn(TT_Techno);
+	}
+}
+
+void snowglobe_buy() {
+	if (get_loaded_level()->playerCash >= getPrice(TT_Snowglobe)) {
+		level_addCash(-(float)getPrice(TT_Snowglobe));
+		placement_spawn(TT_Snowglobe);
+	}
+}
+
+void music_buy() {
+	if (get_loaded_level()->playerCash >= getPrice(TT_Music)) {
+		level_addCash(-(float)getPrice(TT_Music));
+		placement_spawn(TT_Music);
+	}
+}
+#pragma endregion
+
 #pragma region Thinks
 void stinger_think(Entity* self){
 	Entity* target;
