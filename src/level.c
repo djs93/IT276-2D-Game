@@ -134,6 +134,8 @@ Level* level_load(char* levelFile)
 
 	level->currPath = 0;
 
+	level->playerCash = 100.0f;
+
 	//sj_free(levelJson);
 	//sj_free(background);
 	//sj_free(paths);
