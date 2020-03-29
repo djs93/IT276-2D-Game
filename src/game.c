@@ -25,6 +25,7 @@ void draw_level();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
+Window* cashUI;
 
 
 int main(int argc, char * argv[])
@@ -93,6 +94,8 @@ int main(int argc, char * argv[])
 
     ui = gf2d_window_load("config/yes_no_window2.json");
     setPrices(ui);
+    cashUI = gf2d_window_load("config/cash_UI.json");
+    cashUI->no_draw_generic = 1;
 
 	/*
 	List* testLines = gfc_list_new();
@@ -226,5 +229,7 @@ void draw_level() {
     gf2d_sprite_draw(get_loaded_level()->background, vector2d_zero, NULL, NULL, NULL, NULL, NULL, 0);
 }
 
-
+Window* getCashWindow() {
+    return cashUI;
+}
 /*eol@eof*/

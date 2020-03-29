@@ -1,0 +1,21 @@
+{
+  "window": {
+    "color": [ 255, 255, 255, 255 ],
+    "dimensions": [ 0, 0, 350, 140 ],
+    "justify": "left",
+    "align": "bottom",
+    "elements": [
+      {
+        "type": "label",
+        "name": "cashLabel",
+        "id": 0,
+        "bounds": [ 0, 0, 120, 64 ],
+        "color": [ 255, 255, 255, 255 ],
+        "text": "cashLabel",
+        "justify": "center",
+        "align": "top",
+        "style": "H4"
+      }
+    ]
+  }
+}

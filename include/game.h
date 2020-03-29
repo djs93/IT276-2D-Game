@@ -4,6 +4,8 @@
 #define ENTITY_MAX 60
 #define UI_MAX 15
 
+#include "gf2d_windows.h"
+
 typedef enum
 {
 	GS_MainMenu = 0,
@@ -17,5 +19,7 @@ void mainMenuToLevelOne();
 void mainMenuToContentEditor();
 int loadLevel(char* levelFile);
 void toMainMenu();
+
+Window* getCashWindow();
 
 #endif
