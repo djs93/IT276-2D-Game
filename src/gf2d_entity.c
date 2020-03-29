@@ -544,6 +544,7 @@ void gf2d_entity_update_all()
 {
 	int i = 0;
 	Entity* currEnt;
+	Bool somethingSelected = false;
 	bucket_precalc();
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++) //everything moves before everything else
 	{
@@ -563,7 +564,11 @@ void gf2d_entity_update_all()
 		}
 		if (currEnt->type == Type_Tower && gf2d_mouse_button_pressed(0) && PointInCircle(gf2d_mouse_get_position(), currEnt->boundingBox)) {
 			gf2d_entity_set_selected(currEnt);
+			somethingSelected = true;
 		}
+	}
+	if (gf2d_mouse_button_pressed(0) && somethingSelected == false) {
+		gf2d_entity_set_selected(NULL);
 	}
 	do_collisions();
 	for (i = 0; i < gf2d_entity_manager.entity_max; i++)
