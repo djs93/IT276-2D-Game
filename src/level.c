@@ -4,6 +4,10 @@
 #include "simple_logger.h"
 #include "Geometry2D.h"
 #include "bucket.h"
+#include "gf2d_windows.h"
+#include "game.h"
+#include "gf2d_element_button.h"
+#include "gf2d_elements.h"
 
 static Level* LOADED_LEVEL;
 
@@ -134,14 +138,14 @@ Level* level_load(char* levelFile)
 
 	level->currPath = 0;
 
-	level->playerCash = 100.0f;
-
 	//sj_free(levelJson);
 	//sj_free(background);
 	//sj_free(paths);
 	//sj_free(currPath);
 
 	LOADED_LEVEL = level;
+
+	level_addCash(100.0f);
 	return level;
 }
 
@@ -268,7 +272,12 @@ void do_collisions() {
 
 void level_addCash(float amount)
 {
+	Element* list;
+	Element* currLabel;
+	TextLine str;
 	LOADED_LEVEL->playerCash += amount;
 	slog("Cash: $%f", LOADED_LEVEL->playerCash);
-	//update UI
+	currLabel = gf2d_window_get_element_by_id(getCashWindow(), 0);
+	sprintf(str, "$%i", (int)LOADED_LEVEL->playerCash);
+	gf2d_element_label_set_text(currLabel, str);
 }
