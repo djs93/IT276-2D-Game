@@ -215,7 +215,7 @@ void gf2d_window_update(Window *win)
     List *updateList = NULL;
     List *updated = NULL;
     Element *e;
-    if (!win)return;
+    if (!win||win->hide)return;
     updateList = gfc_list_new();
     offset.x = win->dimensions.x + win->canvas.x;
     offset.y = win->dimensions.y + win->canvas.y;
@@ -274,6 +274,7 @@ void gf2d_windows_draw_all()
     {
         win = (Window*)gfc_list_get_nth(window_manager.window_deque,i);
         if (!win)continue;
+        if (win->hide)continue;
         if (win->draw)
         {
             if (!win->draw(win))

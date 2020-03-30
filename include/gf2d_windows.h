@@ -35,6 +35,7 @@ typedef struct Window_S
     int (*update)(struct Window_S *win,List *updateList);
     int (*draw)(struct Window_S *win);
     int (*free_data)(struct Window_S *win);
+    int hide;               /**<0 to show the window, 1 to hide it*/
     void *data;             /**<custom data*/
 }Window;
 
