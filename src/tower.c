@@ -704,3 +704,127 @@ void techno_damage(Entity* self, Entity* target) {
 		}
 	}
 }
+
+char* getUpgradeOneDesc(Entity* tower)
+{
+	switch ((TowerTypes)tower->data)
+	{
+	case TT_Stinger:
+		return "Stinger One";
+		break;
+	case TT_Laser:
+		return "Laser One";
+		break;
+	case TT_Music:
+		return "Music One";
+		break;
+	case TT_Slingshot:
+		return "Slingshot One";
+		break;
+	case TT_Snowglobe:
+		return "Snow One";
+		break;
+	case TT_Techno:
+		return "Techno One";
+		break;
+	case TT_Water:
+		return "Water One";
+		break;
+	default:
+		return "Invalid Tower";
+		break;
+	}
+}
+
+char* getUpgradeTwoDesc(Entity* tower)
+{
+	switch ((TowerTypes)tower->data)
+	{
+	case TT_Stinger:
+		return "Stinger Two";
+		break;
+	case TT_Laser:
+		return "Laser Two";
+		break;
+	case TT_Music:
+		return "Music Two";
+		break;
+	case TT_Slingshot:
+		return "Slingshot Two";
+		break;
+	case TT_Snowglobe:
+		return "Snow Two";
+		break;
+	case TT_Techno:
+		return "Techno Two";
+		break;
+	case TT_Water:
+		return "Water Two";
+		break;
+	default:
+		return "Invalid Tower";
+		break;
+	}
+}
+
+int getUpgradeTwoPrice(Entity* tower)
+{
+	switch ((TowerTypes)tower->data)
+	{
+	case TT_Stinger:
+		return 100;
+		break;
+	case TT_Laser:
+		return 110;
+		break;
+	case TT_Music:
+		return 120;
+		break;
+	case TT_Slingshot:
+		return 130;
+		break;
+	case TT_Snowglobe:
+		return 140;
+		break;
+	case TT_Techno:
+		return 150;
+		break;
+	case TT_Water:
+		return 160;
+		break;
+	default:
+		return 170;
+		break;
+	}
+}
+
+int getUpgradeOnePrice(Entity* tower)
+{
+	switch ((TowerTypes)tower->data)
+	{
+	case TT_Stinger:
+		return 200;
+		break;
+	case TT_Laser:
+		return 210;
+		break;
+	case TT_Music:
+		return 220;
+		break;
+	case TT_Slingshot:
+		return 210;
+		break;
+	case TT_Snowglobe:
+		return 240;
+		break;
+	case TT_Techno:
+		return 250;
+		break;
+	case TT_Water:
+		return 260;
+		break;
+	default:
+		return 270;
+		break;
+	}
+}

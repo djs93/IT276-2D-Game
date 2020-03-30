@@ -49,4 +49,9 @@ void placement_detach(Entity* ent);
 void setPrices(Window* window);
 int getPrice(TowerTypes type);
 
+char* getUpgradeOneDesc(Entity* tower);
+char* getUpgradeTwoDesc(Entity* tower);
+int getUpgradeOnePrice(Entity* tower);
+int getUpgradeTwoPrice(Entity* tower);
+
 #endif
