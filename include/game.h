@@ -21,5 +21,6 @@ int loadLevel(char* levelFile);
 void toMainMenu();
 
 Window* getCashWindow();
+Window* getUpgradeWindow();
 
 #endif

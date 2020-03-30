@@ -26,6 +26,7 @@ Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
 Window* cashUI;
+Window* upgradeUI;
 
 
 int main(int argc, char * argv[])
@@ -97,6 +98,9 @@ int main(int argc, char * argv[])
     cashUI = gf2d_window_load("config/cash_UI.json");
     cashUI->no_draw_generic = 1;
 
+    upgradeUI = gf2d_window_load("config/yes_no_window.json");
+    upgradeUI->hide = 1;
+
 	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
@@ -109,8 +113,8 @@ int main(int argc, char * argv[])
 	*/
     gf2d_mouse_load("actors/mouse.actor");
     level_load("Levels/test.json");
-
-    gfc_input_set_callbacks("test", superSpawn, NULL, NULL, NULL, NULL);
+    level_addCash(10000.0f);
+    gfc_input_set_callbacks("test", redSpawn, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyLaser", laser_buy, NULL, NULL, NULL, NULL);
@@ -231,5 +235,8 @@ void draw_level() {
 
 Window* getCashWindow() {
     return cashUI;
+}
+Window* getUpgradeWindow() {
+    return upgradeUI;
 }
 /*eol@eof*/
