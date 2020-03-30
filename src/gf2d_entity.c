@@ -6,8 +6,14 @@
 
 #include "gf2d_entity.h"
 #include "local.h"
+#include "game.h"
 
 #include "gf2d_mouse.h"
+#include "gf2d_windows.h"
+#include "gf2d_element_list.h"
+#include "gf2d_element_label.h"
+#include <gf2d_element_button.h>
+#include "tower.h"
 
 void gf2d_entity_manager_close()
 {
@@ -628,6 +634,40 @@ Entity* gf2d_entity_get_selected() {
 }
 
 void gf2d_entity_set_selected(Entity* entity) {
+	Element* list;
+	Element* currButton;
+	Element* currLabel;
+	TextLine str;
+	Window* upgradeWindow = getUpgradeWindow(); 
 	selectedEntity = entity;
+	if (selectedEntity == NULL) {
+		upgradeWindow->hide = 1;
+	}
+	else {
+		upgradeWindow->hide = 0;
+		list = gf2d_window_get_element_by_id(upgradeWindow, 0);
+		list = gf2d_element_list_get_item_by_id(list, 10);
+		currLabel = gf2d_element_list_get_item_by_id(list, 11);
+		sprintf(str, getUpgradeOneDesc(selectedEntity));
+		gf2d_element_label_set_text(currLabel, str);
+
+		currLabel = gf2d_element_list_get_item_by_id(list, 12);
+		sprintf(str, getUpgradeTwoDesc(selectedEntity));
+		gf2d_element_label_set_text(currLabel, str);
+
+		list = gf2d_window_get_element_by_id(upgradeWindow, 0);
+		list = gf2d_element_list_get_item_by_id(list, 50);
+		currButton = gf2d_element_list_get_item_by_id(list, 51);
+		currLabel = ((ButtonElement*)currButton->data)->label;
+		sprintf(str, "$%i", getUpgradeOnePrice(selectedEntity));
+		gf2d_element_label_set_text(currLabel, str);
+
+		list = gf2d_window_get_element_by_id(upgradeWindow, 0);
+		list = gf2d_element_list_get_item_by_id(list, 50);
+		currButton = gf2d_element_list_get_item_by_id(list, 52);
+		currLabel = ((ButtonElement*)currButton->data)->label;
+		sprintf(str, "$%i", getUpgradeTwoPrice(selectedEntity));
+		gf2d_element_label_set_text(currLabel, str);
+	}
 }
 /*eol@eof*/
