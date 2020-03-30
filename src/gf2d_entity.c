@@ -573,7 +573,7 @@ void gf2d_entity_update_all()
 			somethingSelected = true;
 		}
 	}
-	if (gf2d_mouse_button_pressed(0) && somethingSelected == false) {
+	if (getWindowPressed()==false && gf2d_mouse_button_pressed(0) && somethingSelected == false) {
 		gf2d_entity_set_selected(NULL);
 	}
 	do_collisions();

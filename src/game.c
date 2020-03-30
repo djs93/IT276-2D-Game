@@ -27,7 +27,7 @@ int mx, my;
 Entity* selectedEntity;
 Window* cashUI;
 Window* upgradeUI;
-
+Bool windowPress;
 
 int main(int argc, char * argv[])
 {
@@ -135,6 +135,12 @@ int main(int argc, char * argv[])
 		//mouseEnt->position.y = my;
         gf2d_mouse_update();
         gf2d_windows_update_all();
+        if(gf2d_mouse_button_state(0) && gf2d_mouse_in_rect(upgradeUI->dimensions)){
+            windowPress = true;
+        }
+        else {
+            windowPress = false;
+        }
         //slog("%i %i", mx, my);
         gf2d_graphics_clear_screen();// clears drawing buffers
         // all drawing should happen betweem clear_screen and next_frame
@@ -239,4 +245,11 @@ Window* getCashWindow() {
 Window* getUpgradeWindow() {
     return upgradeUI;
 }
+void setWindowPressed(Bool state) {
+    windowPress = state;
+}
+Bool getWindowPressed() {
+    return windowPress;
+}
+
 /*eol@eof*/

@@ -22,5 +22,7 @@ void toMainMenu();
 
 Window* getCashWindow();
 Window* getUpgradeWindow();
+void setWindowPressed(Bool state);
+Bool getWindowPressed();
 
 #endif
