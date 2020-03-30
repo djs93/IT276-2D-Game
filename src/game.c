@@ -122,6 +122,8 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("buyTechno", techno_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySnowglobe", snowglobe_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyMusic", music_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("upgradeOne", upgradeOne_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("upgradeTwo", upgradeTwo_buy, NULL, NULL, NULL, NULL);
     /*main game loop*/
     while(!done)
     {

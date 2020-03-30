@@ -54,4 +54,7 @@ char* getUpgradeTwoDesc(Entity* tower);
 int getUpgradeOnePrice(Entity* tower);
 int getUpgradeTwoPrice(Entity* tower);
 
+void upgradeOne_buy();
+void upgradeTwo_buy();
+
 #endif

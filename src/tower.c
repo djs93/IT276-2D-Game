@@ -29,6 +29,14 @@ int getTechnoUpgradeCost(Entity* tower, int upgradeNum);
 char* getWaterUpgradeDesc(Entity* tower, int upgradeNum);
 int getWaterUpgradeCost(Entity* tower, int upgradeNum);
 
+void applyStingerUpgrade(Entity* tower, int upgradeNum);
+void applyLaserUpgrade(Entity* tower, int upgradeNum);
+void applyMusicUpgrade(Entity* tower, int upgradeNum);
+void applySlingshotUpgrade(Entity* tower, int upgradeNum);
+void applySnowUpgrade(Entity* tower, int upgradeNum);
+void applyTechnoUpgrade(Entity* tower, int upgradeNum);
+void applyWaterUpgrade(Entity* tower, int upgradeNum);
+
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
 	Entity* self;
@@ -200,7 +208,17 @@ void stinger_think(Entity* self){
 		if (target) {
 			gf2d_actor_set_action(&self->actor, "fire");
 			gf2d_entity_look_at(self, target);
-			stingerBolt_spawn(self);
+			if (self->upgradeID == 5) {
+				self->rotation.z -= 15.0f;
+				stingerBolt_spawn(self);
+				self->rotation.z += 30.0f;
+				stingerBolt_spawn(self);
+				self->rotation.z -= 15.0f;
+				stingerBolt_spawn(self);
+			}
+			else {
+				stingerBolt_spawn(self);
+			}
 			if (self->rotation.z >= 360.0f) {
 				self->rotation.z = fmodf(self->rotation.z, 360.0f);
 			}
@@ -640,6 +658,9 @@ void setSeekBuckets(Entity* self) {
 	}
 	for (i = 0; i < optiBuckets->count; i++) {
 		currBucket = gfc_list_get_nth(optiBuckets, i);
+		if (gfc_list_in_list(self->seekBuckets, currBucket)>0) {
+			continue;
+		}
 		if (CircleRectangle(self->shootRadius, currBucket->shape.s.r)) {
 			self->seekBuckets = gfc_list_append(self->seekBuckets, currBucket);
 		}
@@ -789,25 +810,25 @@ int getUpgradeTwoPrice(Entity* tower)
 		return getStingerUpgradeCost(tower, 1);
 		break;
 	case TT_Laser:
-		return 110;
+		return getLaserUpgradeCost(tower, 1);
 		break;
 	case TT_Music:
-		return 120;
+		return getMusicUpgradeCost(tower, 1);
 		break;
 	case TT_Slingshot:
-		return 130;
+		return getSlingshotUpgradeCost(tower, 1);
 		break;
 	case TT_Snowglobe:
-		return 140;
+		return getSnowUpgradeCost(tower, 1);
 		break;
 	case TT_Techno:
-		return 150;
+		return getTechnoUpgradeCost(tower, 1);
 		break;
 	case TT_Water:
-		return 160;
+		return getWaterUpgradeCost(tower, 1);
 		break;
 	default:
-		return 170;
+		return -1;
 		break;
 	}
 }
@@ -820,25 +841,25 @@ int getUpgradeOnePrice(Entity* tower)
 		return getStingerUpgradeCost(tower, 0);
 		break;
 	case TT_Laser:
-		return 210;
+		return getLaserUpgradeCost(tower, 0);
 		break;
 	case TT_Music:
-		return 220;
+		return getMusicUpgradeCost(tower, 0);
 		break;
 	case TT_Slingshot:
-		return 210;
+		return getSlingshotUpgradeCost(tower, 0);
 		break;
 	case TT_Snowglobe:
-		return 240;
+		return getSnowUpgradeCost(tower, 0);
 		break;
 	case TT_Techno:
-		return 250;
+		return getTechnoUpgradeCost(tower, 0);
 		break;
 	case TT_Water:
-		return 260;
+		return getWaterUpgradeCost(tower, 0);
 		break;
 	default:
-		return 270;
+		return -1;
 		break;
 	}
 }
@@ -921,6 +942,49 @@ int getStingerUpgradeCost(Entity* tower, int upgradeNum) {
 		return -1;
 	}
 }
+
+void applyStingerUpgrade(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+		slog("Invalid stinger passed to applyStingerUpgrade");
+		return;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in applyStingerUpgrade", upgradeNum);
+		return;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 1;
+			tower->fireRate *= 0.85f;
+		}
+		else {
+			tower->upgradeID = 2;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 3;
+			tower->fireRate *= 0.75f;
+		}
+		else {
+			tower->upgradeID = 4;
+		}
+	}
+	else if (tower->upgradeID == 2) {//speed path
+		if (upgradeNum == 0) {//travel upgrade desc
+			tower->upgradeID = 5;
+		}
+		else {
+			tower->upgradeID = 6;
+			tower->shootRadius.radius *= 1.15f;
+			setSeekBuckets(tower);
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
 #pragma endregion
 
 #pragma region LaserUpgradeMethods
@@ -999,6 +1063,49 @@ int getLaserUpgradeCost(Entity* tower, int upgradeNum) {
 	}
 	else {
 		return -1;
+	}
+}
+
+void applyLaserUpgrade(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+		slog("Invalid stinger passed to applyStingerUpgrade");
+		return;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in applyStingerUpgrade", upgradeNum);
+		return;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 1;
+			tower->fireRate *= 0.85f;
+		}
+		else {
+			tower->upgradeID = 2;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 3;
+			tower->fireRate *= 0.75f;
+		}
+		else {
+			tower->upgradeID = 4;
+		}
+	}
+	else if (tower->upgradeID == 2) {//speed path
+		if (upgradeNum == 0) {//travel upgrade desc
+			tower->upgradeID = 5;
+		}
+		else {
+			tower->upgradeID = 6;
+			tower->shootRadius.radius *= 1.15f;
+			setSeekBuckets(tower);
+		}
+	}
+	else {
+		return "Fully Upgraded!";
 	}
 }
 #pragma endregion
@@ -1081,6 +1188,49 @@ int getMusicUpgradeCost(Entity* tower, int upgradeNum) {
 		return -1;
 	}
 }
+
+void applyMusicUpgrade(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+		slog("Invalid stinger passed to applyStingerUpgrade");
+		return;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in applyStingerUpgrade", upgradeNum);
+		return;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 1;
+			tower->fireRate *= 0.85f;
+		}
+		else {
+			tower->upgradeID = 2;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 3;
+			tower->fireRate *= 0.75f;
+		}
+		else {
+			tower->upgradeID = 4;
+		}
+	}
+	else if (tower->upgradeID == 2) {//speed path
+		if (upgradeNum == 0) {//travel upgrade desc
+			tower->upgradeID = 5;
+		}
+		else {
+			tower->upgradeID = 6;
+			tower->shootRadius.radius *= 1.15f;
+			setSeekBuckets(tower);
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
 #pragma endregion
 
 #pragma region SlingshotUpgradeMethods
@@ -1159,6 +1309,49 @@ int getSlingshotUpgradeCost(Entity* tower, int upgradeNum) {
 	}
 	else {
 		return -1;
+	}
+}
+
+void applySlingshotUpgrade(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+		slog("Invalid stinger passed to applyStingerUpgrade");
+		return;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in applyStingerUpgrade", upgradeNum);
+		return;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 1;
+			tower->fireRate *= 0.85f;
+		}
+		else {
+			tower->upgradeID = 2;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 3;
+			tower->fireRate *= 0.75f;
+		}
+		else {
+			tower->upgradeID = 4;
+		}
+	}
+	else if (tower->upgradeID == 2) {//speed path
+		if (upgradeNum == 0) {//travel upgrade desc
+			tower->upgradeID = 5;
+		}
+		else {
+			tower->upgradeID = 6;
+			tower->shootRadius.radius *= 1.15f;
+			setSeekBuckets(tower);
+		}
+	}
+	else {
+		return "Fully Upgraded!";
 	}
 }
 #pragma endregion
@@ -1241,6 +1434,49 @@ int getSnowUpgradeCost(Entity* tower, int upgradeNum) {
 		return -1;
 	}
 }
+
+void applySnowUpgrade(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+		slog("Invalid stinger passed to applyStingerUpgrade");
+		return;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in applyStingerUpgrade", upgradeNum);
+		return;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 1;
+			tower->fireRate *= 0.85f;
+		}
+		else {
+			tower->upgradeID = 2;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 3;
+			tower->fireRate *= 0.75f;
+		}
+		else {
+			tower->upgradeID = 4;
+		}
+	}
+	else if (tower->upgradeID == 2) {//speed path
+		if (upgradeNum == 0) {//travel upgrade desc
+			tower->upgradeID = 5;
+		}
+		else {
+			tower->upgradeID = 6;
+			tower->shootRadius.radius *= 1.15f;
+			setSeekBuckets(tower);
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
 #pragma endregion
 
 #pragma region TechnoUpgradeMethods
@@ -1319,6 +1555,49 @@ int getTechnoUpgradeCost(Entity* tower, int upgradeNum) {
 	}
 	else {
 		return -1;
+	}
+}
+
+void applyTechnoUpgrade(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+		slog("Invalid stinger passed to applyStingerUpgrade");
+		return;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in applyStingerUpgrade", upgradeNum);
+		return;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 1;
+			tower->fireRate *= 0.85f;
+		}
+		else {
+			tower->upgradeID = 2;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 3;
+			tower->fireRate *= 0.75f;
+		}
+		else {
+			tower->upgradeID = 4;
+		}
+	}
+	else if (tower->upgradeID == 2) {//speed path
+		if (upgradeNum == 0) {//travel upgrade desc
+			tower->upgradeID = 5;
+		}
+		else {
+			tower->upgradeID = 6;
+			tower->shootRadius.radius *= 1.15f;
+			setSeekBuckets(tower);
+		}
+	}
+	else {
+		return "Fully Upgraded!";
 	}
 }
 #pragma endregion
@@ -1401,4 +1680,147 @@ int getWaterUpgradeCost(Entity* tower, int upgradeNum) {
 		return -1;
 	}
 }
+
+void applyWaterUpgrade(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+		slog("Invalid stinger passed to applyStingerUpgrade");
+		return;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in applyStingerUpgrade", upgradeNum);
+		return;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 1;
+			tower->fireRate *= 0.85f;
+		}
+		else {
+			tower->upgradeID = 2;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 3;
+			tower->fireRate *= 0.75f;
+		}
+		else {
+			tower->upgradeID = 4;
+		}
+	}
+	else if (tower->upgradeID == 2) {//speed path
+		if (upgradeNum == 0) {//travel upgrade desc
+			tower->upgradeID = 5;
+		}
+		else {
+			tower->upgradeID = 6;
+			tower->shootRadius.radius *= 1.15f;
+			setSeekBuckets(tower);
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
 #pragma endregion
+
+void upgradeOne_buy() {
+	Entity* selected;
+	int price;
+	selected = gf2d_entity_get_selected();
+	if (!selected) {
+		slog("No selected entity!");
+		return;
+	}
+	if (selected->type != Type_Tower) {
+		slog("Selected entity is not a tower!");
+		return;
+	}
+	price = getUpgradeOnePrice(selected);
+	if (get_loaded_level()->playerCash - price < 0.0f) {
+		return;
+	}
+	else {
+		level_addCash(-price);
+	}
+
+	switch ((TowerTypes)selected->data)
+	{
+	case TT_Stinger:
+		applyStingerUpgrade(selected, 0);
+		break;
+	case TT_Laser:
+		applyLaserUpgrade(selected, 0);
+		break;
+	case TT_Music:
+		applyMusicUpgrade(selected, 0);
+		break;
+	case TT_Slingshot:
+		applySlingshotUpgrade(selected, 0);
+		break;
+	case TT_Snowglobe:
+		applySnowUpgrade(selected, 0);
+		break;
+	case TT_Techno:
+		applyTechnoUpgrade(selected, 0);
+		break;
+	case TT_Water:
+		applyWaterUpgrade(selected, 0);
+		break;
+	default:
+		break;
+	}
+
+	gf2d_entity_set_selected(gf2d_entity_get_selected());//update upgrade window
+}
+
+void upgradeTwo_buy() {
+	Entity* selected;
+	int price;
+	selected = gf2d_entity_get_selected();
+	if (!selected) {
+		slog("No selected entity!");
+		return;
+	}
+	if (selected->type != Type_Tower) {
+		slog("Selected entity is not a tower!");
+		return;
+	}
+	price = getUpgradeTwoPrice(selected);
+	if (get_loaded_level()->playerCash - price < 0.0f) {
+		return;
+	}
+	else {
+		level_addCash(-price);
+	}
+
+	switch ((TowerTypes)selected->data)
+	{
+	case TT_Stinger:
+		applyStingerUpgrade(selected, 1);
+		break;
+	case TT_Laser:
+		applyLaserUpgrade(selected, 1);
+		break;
+	case TT_Music:
+		applyMusicUpgrade(selected, 1);
+		break;
+	case TT_Slingshot:
+		applySlingshotUpgrade(selected, 1);
+		break;
+	case TT_Snowglobe:
+		applySnowUpgrade(selected, 1);
+		break;
+	case TT_Techno:
+		applyTechnoUpgrade(selected, 1);
+		break;
+	case TT_Water:
+		applyWaterUpgrade(selected, 1);
+		break;
+	default:
+		break;
+	}
+
+	gf2d_entity_set_selected(gf2d_entity_get_selected());//update upgrade window
+}

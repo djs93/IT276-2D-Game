@@ -20,6 +20,10 @@ Entity* stingerBolt_spawn(Entity* parent)
 	bolt->position = parent->position;
 	bolt->move = boltMove;
 	bolt->distanceLeft = 1500.0f;
+	if (parent->upgradeID == 2 || parent->upgradeID == 5 || parent->upgradeID == 6) {
+		bolt->distanceLeft *= 1.2f;
+		bolt->distanceLeft *= 1.2f;
+	}
 	bolt->think = boltThink;
 	bolt->type = Type_Projectile;
 	bolt->touch = boltTouch;
@@ -27,6 +31,9 @@ Entity* stingerBolt_spawn(Entity* parent)
 	bolt->noTouch = gfc_list_new();
 	bolt->damage = 2;
 	bolt->health = 2;
+	if (parent->upgradeID == 4) {
+		bolt->health += 3;
+	}
 	bolt->die = boltDie;
 	return bolt;
 }
