@@ -17,6 +17,11 @@ typedef enum
 	TT_Music
 }TowerTypes;
 
+
+List* inRange(Entity* self);
+void techno_damage(Entity* self, Entity* target);
+void setSeekBuckets(Entity* self);
+
 Entity* stinger_spawn(Vector2D position);
 Entity* slingshot_spawn(Vector2D position);
 Entity* laser_spawn(Vector2D position);

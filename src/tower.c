@@ -10,10 +10,7 @@
 #include "gf2d_draw.h"
 
 Entity* findClosest(Entity* self);
-void setSeekBuckets(Entity* self);
 Bool allyCollision(Entity* self);
-void techno_damage(Entity* self, Entity* target);
-List* inRange(Entity* self);
 char* getStingerUpgradeDesc(Entity* tower, int upgradeNum);
 int getStingerUpgradeCost(Entity* tower, int upgradeNum);
 char* getLaserUpgradeDesc(Entity* tower, int upgradeNum);
@@ -1067,12 +1064,12 @@ int getLaserUpgradeCost(Entity* tower, int upgradeNum) {
 }
 
 void applyLaserUpgrade(Entity* tower, int upgradeNum) {
-	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
-		slog("Invalid stinger passed to applyStingerUpgrade");
+	if (!tower || (TowerTypes)tower->data != TT_Laser) {
+		slog("Invalid laser passed to applyLaserUpgrade");
 		return;
 	}
 	else if (upgradeNum > 1 || upgradeNum < 0) {
-		slog("Invalid upgradeNum %i in applyStingerUpgrade", upgradeNum);
+		slog("Invalid upgradeNum %i in applyLaserUpgrade", upgradeNum);
 		return;
 	}
 
@@ -1088,7 +1085,6 @@ void applyLaserUpgrade(Entity* tower, int upgradeNum) {
 	else if (tower->upgradeID == 1) {//speed path
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 3;
-			tower->fireRate *= 0.75f;
 		}
 		else {
 			tower->upgradeID = 4;
@@ -1100,8 +1096,6 @@ void applyLaserUpgrade(Entity* tower, int upgradeNum) {
 		}
 		else {
 			tower->upgradeID = 6;
-			tower->shootRadius.radius *= 1.15f;
-			setSeekBuckets(tower);
 		}
 	}
 	else {
