@@ -639,7 +639,8 @@ void gf2d_entity_set_selected(Entity* entity) {
 	Element* currButton;
 	Element* currLabel;
 	TextLine str;
-	Window* upgradeWindow = getUpgradeWindow(); 
+	Window* upgradeWindow = getUpgradeWindow();
+	int testCost;
 	selectedEntity = entity;
 	if (selectedEntity == NULL) {
 		upgradeWindow->hide = 1;
@@ -660,14 +661,26 @@ void gf2d_entity_set_selected(Entity* entity) {
 		list = gf2d_element_list_get_item_by_id(list, 50);
 		currButton = gf2d_element_list_get_item_by_id(list, 51);
 		currLabel = ((ButtonElement*)currButton->data)->label;
-		sprintf(str, "$%i", getUpgradeOnePrice(selectedEntity));
+		testCost = getUpgradeOnePrice(selectedEntity);
+		if(testCost>-1){
+			sprintf(str, "$%i", testCost);
+		}
+		else {
+			sprintf(str, " ");
+		}
 		gf2d_element_label_set_text(currLabel, str);
 
 		list = gf2d_window_get_element_by_id(upgradeWindow, 0);
 		list = gf2d_element_list_get_item_by_id(list, 50);
 		currButton = gf2d_element_list_get_item_by_id(list, 52);
 		currLabel = ((ButtonElement*)currButton->data)->label;
-		sprintf(str, "$%i", getUpgradeTwoPrice(selectedEntity));
+		testCost = getUpgradeTwoPrice(selectedEntity);
+		if (testCost > -1) {
+			sprintf(str, "$%i", testCost);
+		}
+		else {
+			sprintf(str, " ");
+		}
 		gf2d_element_label_set_text(currLabel, str);
 	}
 }
