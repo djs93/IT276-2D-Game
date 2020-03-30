@@ -14,6 +14,20 @@ void setSeekBuckets(Entity* self);
 Bool allyCollision(Entity* self);
 void techno_damage(Entity* self, Entity* target);
 List* inRange(Entity* self);
+char* getStingerUpgradeDesc(Entity* tower, int upgradeNum);
+int getStingerUpgradeCost(Entity* tower, int upgradeNum);
+char* getLaserUpgradeDesc(Entity* tower, int upgradeNum);
+int getLaserUpgradeCost(Entity* tower, int upgradeNum);
+char* getMusicUpgradeDesc(Entity* tower, int upgradeNum);
+int getMusicUpgradeCost(Entity* tower, int upgradeNum);
+char* getSlingshotUpgradeDesc(Entity* tower, int upgradeNum);
+int getSlingshotUpgradeCost(Entity* tower, int upgradeNum);
+char* getSnowUpgradeDesc(Entity* tower, int upgradeNum);
+int getSnowUpgradeCost(Entity* tower, int upgradeNum);
+char* getTechnoUpgradeDesc(Entity* tower, int upgradeNum);
+int getTechnoUpgradeCost(Entity* tower, int upgradeNum);
+char* getWaterUpgradeDesc(Entity* tower, int upgradeNum);
+int getWaterUpgradeCost(Entity* tower, int upgradeNum);
 
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
@@ -710,25 +724,25 @@ char* getUpgradeOneDesc(Entity* tower)
 	switch ((TowerTypes)tower->data)
 	{
 	case TT_Stinger:
-		return "Stinger One";
+		return getStingerUpgradeDesc(tower, 0);
 		break;
 	case TT_Laser:
-		return "Laser One";
+		return getLaserUpgradeDesc(tower, 0);
 		break;
 	case TT_Music:
-		return "Music One";
+		return getMusicUpgradeDesc(tower, 0);
 		break;
 	case TT_Slingshot:
-		return "Slingshot One";
+		return getSlingshotUpgradeDesc(tower, 0);
 		break;
 	case TT_Snowglobe:
-		return "Snow One";
+		return getSnowUpgradeDesc(tower, 0);
 		break;
 	case TT_Techno:
-		return "Techno One";
+		return getTechnoUpgradeDesc(tower, 0);
 		break;
 	case TT_Water:
-		return "Water One";
+		return getWaterUpgradeDesc(tower, 0);
 		break;
 	default:
 		return "Invalid Tower";
@@ -741,25 +755,25 @@ char* getUpgradeTwoDesc(Entity* tower)
 	switch ((TowerTypes)tower->data)
 	{
 	case TT_Stinger:
-		return "Stinger Two";
+		return getStingerUpgradeDesc(tower, 1);
 		break;
 	case TT_Laser:
-		return "Laser Two";
+		return getLaserUpgradeDesc(tower, 1);
 		break;
 	case TT_Music:
-		return "Music Two";
+		return getMusicUpgradeDesc(tower, 1);
 		break;
 	case TT_Slingshot:
-		return "Slingshot Two";
+		return getSlingshotUpgradeDesc(tower, 1);
 		break;
 	case TT_Snowglobe:
-		return "Snow Two";
+		return getSnowUpgradeDesc(tower, 1);
 		break;
 	case TT_Techno:
-		return "Techno Two";
+		return getTechnoUpgradeDesc(tower, 1);
 		break;
 	case TT_Water:
-		return "Water Two";
+		return getWaterUpgradeDesc(tower, 1);
 		break;
 	default:
 		return "Invalid Tower";
@@ -772,7 +786,7 @@ int getUpgradeTwoPrice(Entity* tower)
 	switch ((TowerTypes)tower->data)
 	{
 	case TT_Stinger:
-		return 100;
+		return getStingerUpgradeCost(tower, 1);
 		break;
 	case TT_Laser:
 		return 110;
@@ -803,7 +817,7 @@ int getUpgradeOnePrice(Entity* tower)
 	switch ((TowerTypes)tower->data)
 	{
 	case TT_Stinger:
-		return 200;
+		return getStingerUpgradeCost(tower, 0);
 		break;
 	case TT_Laser:
 		return 210;
@@ -828,3 +842,563 @@ int getUpgradeOnePrice(Entity* tower)
 		break;
 	}
 }
+
+#pragma region StingerUpgradeMethods
+char* getStingerUpgradeDesc(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+		slog("Invalid stinger passed to getStingerUpgradeDesc");
+		return "InvStngEnt";
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getStingerUpgradeDesc", upgradeNum);
+		return "InvStngNum";
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Speed +15%%";
+		}
+		else {
+			return "Travel +20%%";
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Speed +25%%";
+		}
+		else {
+			return "Pierce +3";
+		}
+	}
+	else if (tower->upgradeID == 2) {//speed path
+		if (upgradeNum == 0) {//travel upgrade desc
+			return "+2 shots";
+		}
+		else {
+			return "Range +15%%";
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
+
+int getStingerUpgradeCost(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+		slog("Invalid stinger passed to getStingerUpgradeCost");
+		return -1;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getStingerUpgradeCost", upgradeNum);
+		return -1;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return 90;
+		}
+		else {
+			return 75;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			return 125;
+		}
+		else {
+			return 175;
+		}
+	}
+	else if (tower->upgradeID == 2) {//speed path
+		if (upgradeNum == 0) {//travel upgrade desc
+			return 175;
+		}
+		else {
+			return 100;
+		}
+	}
+	else {
+		return -1;
+	}
+}
+#pragma endregion
+
+#pragma region LaserUpgradeMethods
+char* getLaserUpgradeDesc(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Laser) {
+		slog("Invalid laser passed to getLaserUpgradeDesc");
+		return "InvStngEnt";
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getLaserUpgradeDesc", upgradeNum);
+		return "InvStngNum";
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Speed +15%%";
+		}
+		else {
+			return "Pierce +1";
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Explodo-shot";
+		}
+		else {
+			return "Damage +2";
+		}
+	}
+	else if (tower->upgradeID == 2) {//pierce path
+		if (upgradeNum == 0) {
+			return "Pierce +2";
+		}
+		else {
+			return "Damage +2";
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
+
+int getLaserUpgradeCost(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Laser) {
+		slog("Invalid laser passed to getLaserUpgradeCost");
+		return -1;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getLaserUpgradeCost", upgradeNum);
+		return -1;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return 90;
+		}
+		else {
+			return 75;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			return 200;
+		}
+		else {
+			return 120;
+		}
+	}
+	else if (tower->upgradeID == 2) {//pierce path
+		if (upgradeNum == 0) {
+			return 130;
+		}
+		else {
+			return 150;
+		}
+	}
+	else {
+		return -1;
+	}
+}
+#pragma endregion
+
+#pragma region MusicUpgradeMethods
+char* getMusicUpgradeDesc(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Music) {
+		slog("Invalid laser passed to getMusicUpgradeDesc");
+		return "InvStngEnt";
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getMusicUpgradeDesc", upgradeNum);
+		return "InvStngNum";
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Speed Buff +10%%";
+		}
+		else {
+			return "Damage Buff +1";
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed buff path
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Range Buff +15%%";
+		}
+		else {
+			return "Travel Buff +20%%";
+		}
+	}
+	else if (tower->upgradeID == 2) {//damage bugg path
+		if (upgradeNum == 0) {
+			return "Damage Buff +1";
+		}
+		else {
+			return "Drum Traps";
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
+
+int getMusicUpgradeCost(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Music) {
+		slog("Invalid laser passed to getMusicUpgradeCost");
+		return -1;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getMusicUpgradeCost", upgradeNum);
+		return -1;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return 200;
+		}
+		else {
+			return 250;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			return 300;
+		}
+		else {
+			return 250;
+		}
+	}
+	else if (tower->upgradeID == 2) {//damage path
+		if (upgradeNum == 0) {
+			return 300;
+		}
+		else {
+			return 400;
+		}
+	}
+	else {
+		return -1;
+	}
+}
+#pragma endregion
+
+#pragma region SlingshotUpgradeMethods
+char* getSlingshotUpgradeDesc(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Slingshot) {
+		slog("Invalid laser passed to getSlingshotUpgradeDesc");
+		return "InvStngEnt";
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getSlingshotUpgradeDesc", upgradeNum);
+		return "InvStngNum";
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Speed +10%%";
+		}
+		else {
+			return "Homing shots";
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed buff path
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Range +15%%";
+		}
+		else {
+			return "Speed +20%%";
+		}
+	}
+	else if (tower->upgradeID == 2) {//damage bugg path
+		if (upgradeNum == 0) {
+			return "Damage +1";
+		}
+		else {
+			return "Pierce +2";
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
+
+int getSlingshotUpgradeCost(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Slingshot) {
+		slog("Invalid laser passed to getSlingshotUpgradeCost");
+		return -1;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getSlingshotUpgradeCost", upgradeNum);
+		return -1;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return 95;
+		}
+		else {
+			return 180;
+		}
+	}
+	else if (tower->upgradeID == 1) {//speed path
+		if (upgradeNum == 0) {//first upgrade desc
+			return 160;
+		}
+		else {
+			return 145;
+		}
+	}
+	else if (tower->upgradeID == 2) {//homing path
+		if (upgradeNum == 0) {
+			return 180;
+		}
+		else {
+			return 240;
+		}
+	}
+	else {
+		return -1;
+	}
+}
+#pragma endregion
+
+#pragma region SnowUpgradeMethods
+char* getSnowUpgradeDesc(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Snowglobe) {
+		slog("Invalid laser passed to getSnowUpgradeDesc");
+		return "InvStngEnt";
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getSnowUpgradeDesc", upgradeNum);
+		return "InvStngNum";
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Range +15%%";
+		}
+		else {
+			return "Slow +15%%";
+		}
+	}
+	else if (tower->upgradeID == 1) {
+		if (upgradeNum == 0) {
+			return "Ice Cannon";
+		}
+		else {
+			return "Range +20%%";
+		}
+	}
+	else if (tower->upgradeID == 2) {
+		if (upgradeNum == 0) {
+			return "Slow +30%%";
+		}
+		else {
+			return "Flash Freeze";
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
+
+int getSnowUpgradeCost(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Snowglobe) {
+		slog("Invalid laser passed to getSnowUpgradeCost");
+		return -1;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getSnowUpgradeCost", upgradeNum);
+		return -1;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return 130;
+		}
+		else {
+			return 165;
+		}
+	}
+	else if (tower->upgradeID == 1) {
+		if (upgradeNum == 0) {//first upgrade desc
+			return 350;
+		}
+		else {
+			return 400;
+		}
+	}
+	else if (tower->upgradeID == 2) {
+		if (upgradeNum == 0) {
+			return 250;
+		}
+		else {
+			return 400;
+		}
+	}
+	else {
+		return -1;
+	}
+}
+#pragma endregion
+
+#pragma region TechnoUpgradeMethods
+char* getTechnoUpgradeDesc(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Techno) {
+		slog("Invalid laser passed to getTechnoUpgradeDesc");
+		return "InvStngEnt";
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getTechnoUpgradeDesc", upgradeNum);
+		return "InvStngNum";
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Speed +25%%";
+		}
+		else {
+			return "Damage +2";
+		}
+	}
+	else if (tower->upgradeID == 1) {
+		if (upgradeNum == 0) {
+			return "Speed +25%%";
+		}
+		else {
+			return "Recovery Bots";
+		}
+	}
+	else if (tower->upgradeID == 2) {
+		if (upgradeNum == 0) {
+			return "Damage +2";
+		}
+		else {
+			return "Dual-Shot";
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
+
+int getTechnoUpgradeCost(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Techno) {
+		slog("Invalid laser passed to getTechnoUpgradeCost");
+		return -1;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getTechnoUpgradeCost", upgradeNum);
+		return -1;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return 230;
+		}
+		else {
+			return 250;
+		}
+	}
+	else if (tower->upgradeID == 1) {
+		if (upgradeNum == 0) {//first upgrade desc
+			return 350;
+		}
+		else {
+			return 400;
+		}
+	}
+	else if (tower->upgradeID == 2) {
+		if (upgradeNum == 0) {
+			return 400;
+		}
+		else {
+			return 500;
+		}
+	}
+	else {
+		return -1;
+	}
+}
+#pragma endregion
+
+#pragma region WaterUpgradeMethods
+char* getWaterUpgradeDesc(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Water) {
+		slog("Invalid laser passed to getWaterUpgradeDesc");
+		return "InvStngEnt";
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getWaterUpgradeDesc", upgradeNum);
+		return "InvStngNum";
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return "Range +15%%";
+		}
+		else {
+			return "Damage +1";
+		}
+	}
+	else if (tower->upgradeID == 1) {
+		if (upgradeNum == 0) {
+			return "Healing Wave";
+		}
+		else {
+			return "Speed +20%%";
+		}
+	}
+	else if (tower->upgradeID == 2) {
+		if (upgradeNum == 0) {
+			return "Slowing wave";
+		}
+		else {
+			return "Speed +15%%";
+		}
+	}
+	else {
+		return "Fully Upgraded!";
+	}
+}
+
+int getWaterUpgradeCost(Entity* tower, int upgradeNum) {
+	if (!tower || (TowerTypes)tower->data != TT_Water) {
+		slog("Invalid laser passed to getWaterUpgradeCost");
+		return -1;
+	}
+	else if (upgradeNum > 1 || upgradeNum < 0) {
+		slog("Invalid upgradeNum %i in getWaterUpgradeCost", upgradeNum);
+		return -1;
+	}
+
+	if (tower->upgradeID == 0) {//base tower state, no upgrades
+		if (upgradeNum == 0) {//first upgrade desc
+			return 100;
+		}
+		else {
+			return 135;
+		}
+	}
+	else if (tower->upgradeID == 1) {
+		if (upgradeNum == 0) {//first upgrade desc
+			return 350;
+		}
+		else {
+			return 275;
+		}
+	}
+	else if (tower->upgradeID == 2) {
+		if (upgradeNum == 0) {
+			return 260;
+		}
+		else {
+			return 320;
+		}
+	}
+	else {
+		return -1;
+	}
+}
+#pragma endregion
