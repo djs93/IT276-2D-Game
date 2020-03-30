@@ -58,6 +58,7 @@ typedef struct Entity_S
 	Vector3D origin;
 	Vector3D old_origin;
 	int flags;
+	int upgradeID;					/**<ID of the current uprgade stage, used to check later upgrades*/
 	Circle boundingBox;
 	Circle shootRadius;
 	float fireRate;					/**<How long, in seconds, in between tower shots*/

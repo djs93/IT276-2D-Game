@@ -54,6 +54,7 @@ Entity *gf2d_entity_new()
 		ent->cooldown = 0.0f;
 		ent->seekBuckets = NULL;
 		ent->noTouch = NULL;
+		ent->upgradeID = 0;
         return &entity_list[i];
     }
     slog("request for entity failed: all full up");
