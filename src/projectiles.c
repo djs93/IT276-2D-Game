@@ -1,6 +1,7 @@
 #include "projectiles.h"
 #include "bucket.h"
 #include "gf2d_graphics.h"
+#include "tower.h"
 
 Entity* stingerBolt_spawn(Entity* parent)
 {
@@ -161,9 +162,42 @@ Entity* laserlaser_spawn(Entity* parent)
 	bucket_update(bolt, NULL);
 	bolt->noTouch = gfc_list_new();
 	bolt->damage = 3;
+	if (parent->upgradeID == 4 || parent->upgradeID == 6) {
+		bolt->damage += 2;
+	}
 	bolt->health = 4;
-	bolt->die = boltDie;
+	if (parent->upgradeID == 2 || parent->upgradeID == 5 || parent->upgradeID == 6) {
+		bolt->health += 1;
+	}
+	if (parent->upgradeID == 5) {
+		bolt->health += 2;
+	}
+	if (parent->upgradeID == 3) {
+		bolt->die = laserExplosionDie;
+	}
+	else {
+		bolt->die = boltDie;
+	}
 	return bolt;
+}
+
+void laserExplosionDie(Entity* self) {
+	List* targets;
+	Entity* target;
+	int i;
+	self->shootRadius.position = self->position;
+	self->shootRadius.radius = 75.0f;
+	setSeekBuckets(self);
+	targets = inRange(self);
+	self->damage = 1;
+	if (targets && targets->count > 0) {
+		for (i = 0; i < targets->count; i++) {
+			target = gfc_list_get_nth(targets, i);
+			techno_damage(self, target);
+		}
+	}
+	explosion_spawn(self);
+	gf2d_entity_free(self);
 }
 
 Entity* waterwave_spawn(Entity* parent)
@@ -181,6 +215,23 @@ Entity* waterwave_spawn(Entity* parent)
 	wave->die = boltDie;
 
 	wave->fireRate = parent->fireRate * gf2d_graphics_get_frames_per_second();
+	return wave;
+}
+
+Entity* explosion_spawn(Entity* parent)
+{
+	Entity* wave;
+	wave = gf2d_entity_new();
+	gf2d_actor_load(&wave->actor, "actors/projectiles/explosion.actor");
+	wave->position = parent->position;
+	wave->move = waveMove;
+	wave->distanceLeft = parent->shootRadius.radius;
+	wave->think = waveThink;
+	wave->type = Type_Projectile;
+	wave->touch = NULL;
+	wave->die = boltDie;
+
+	wave->fireRate = 0.5f * gf2d_graphics_get_frames_per_second();
 	return wave;
 }
 

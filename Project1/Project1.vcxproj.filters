@@ -373,5 +373,8 @@
     <None Include="..\config\cash_UI.json">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\actors\projectiles\explosion.actor">
+      <Filter>Resource Files\Actors\Projectiles</Filter>
+    </None>
   </ItemGroup>
 </Project>

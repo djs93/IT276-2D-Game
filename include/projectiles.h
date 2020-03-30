@@ -9,6 +9,8 @@ void boltThink(Entity* self);
 void boltTouch(Entity* self, Entity* other);
 void boltDie(Entity* self);
 
+void laserExplosionDie(Entity* self);
+
 void waveMove(Entity* self);
 void waveThink(Entity* self);
 
@@ -17,5 +19,7 @@ Entity* laserlaser_spawn(Entity* parent);
 Entity* waterwave_spawn(Entity* parent);
 Entity* snowwave_spawn(Entity* parent);
 Entity* musicnote_spawn(Entity* parent);
+Entity* explosion_spawn(Entity* parent);
+
 
 #endif

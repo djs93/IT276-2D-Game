@@ -248,6 +248,7 @@
     <None Include="..\actors\laser.actor" />
     <None Include="..\actors\mouse.actor" />
     <None Include="..\actors\music.actor" />
+    <None Include="..\actors\projectiles\explosion.actor" />
     <None Include="..\actors\projectiles\laserlaser.actor" />
     <None Include="..\actors\projectiles\musicnote.actor" />
     <None Include="..\actors\projectiles\slingerpellet.actor" />
