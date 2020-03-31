@@ -362,6 +362,10 @@ void snowglobe_think(Entity* self){
 	List* targets;
 	Entity* target;
 	int i;
+	int j;
+	float speedMod;
+	Bucket* bucket;
+	List* slowed;
 	if (self->cooldown < 0.0000001f) {
 		//try to fire
 		targets = inRange(self);
@@ -372,7 +376,14 @@ void snowglobe_think(Entity* self){
 				target = gfc_list_get_nth(targets, i);
 				techno_damage(self, target);
 				vector2d_normalize(&target->velocity);
-				target->speed = target->maxSpeed/2.0f;
+				speedMod = 2.0f;
+				if (self->upgradeID == 2 || self->upgradeID == 5 || self->upgradeID == 6) {
+					speedMod *= 1.15f;
+				}
+				if (self->upgradeID == 5) {
+					speedMod *= 1.35f;
+				}
+				target->speed = target->maxSpeed/ speedMod;
 				target->velocity.x *= target->speed;
 				target->velocity.y *= target->speed;
 				target->cooldown = 2.0f;
@@ -383,9 +394,57 @@ void snowglobe_think(Entity* self){
 		else {
 			gf2d_actor_set_action(&self->actor, "idle");
 		}
+		if (self->upgradeID == 3) {
+			target = findClosest(self);
+			//if fire, reset cooldown to fireRate
+			if (target) {
+				gf2d_actor_set_action(&self->actor, "fire");
+				gf2d_entity_look_at(self, target);
+				snowCannon_spawn(self);
+				self->rotation.z += 180;
+				if (self->rotation.z >= 360.0f) {
+					self->rotation.z = fmodf(self->rotation.z, 360.0f);
+				}
+				if (self->rotation.z >= 90.0f && self->rotation.z <= 270.0f) {
+					self->flip = vector2d(0, 1);
+				}
+				else {
+					self->flip = vector2d(0, 0);
+				}
+				self->cooldown = self->fireRate;
+			}
+			else {
+				gf2d_actor_set_action(&self->actor, "idle");
+			}
+		}
 	}
 	else {
 		self->cooldown -= gf2d_graphics_get_milli_delta();
+	}
+	if (self->upgradeID == 6) {
+		if (self->abilityCooldown < 0.0000001f) {
+			//try to fire
+			slowed = gfc_list_new();
+			for (i = 0; i < get_loaded_level()->optimalBuckets->count; i++) {
+				bucket = gfc_list_get_nth(get_loaded_level()->optimalBuckets, i);
+				if (bucket->entities->count <= 0) { continue; }
+				for (j = 0; j < bucket->entities->count; j++) {
+					target = gfc_list_get_nth(bucket->entities, j);
+					if (target->_inuse != 1 || target->type != Type_Enemy || gfc_list_in_list(slowed, target) >= 0) { continue; }
+					vector2d_normalize(&target->velocity);
+					target->speed = target->maxSpeed / 5.0f;
+					target->velocity.x *= target->speed;
+					target->velocity.y *= target->speed;
+					target->cooldown = 3.0f;
+					slowed = gfc_list_append(slowed, target);
+				}
+			}
+			gfc_list_delete(slowed);
+			self->abilityCooldown = self->abilityRate;
+		}
+		else {
+			self->abilityCooldown -= gf2d_graphics_get_milli_delta();
+		}
 	}
 }
 
@@ -545,7 +604,10 @@ void placement_detach(Entity* ent) {
 	case TT_Snowglobe:
 		ent->think = snowglobe_think;
 		ent->name = "snowglobe";
-		ent->fireRate = 0.5f;
+		ent->fireRate = 1.45f;
+		ent->damage = 1;
+		ent->health = 10;
+		ent->distanceLeft = 3400.0f;
 		setSeekBuckets(ent);
 		break;
 	case TT_Music:
@@ -1453,7 +1515,7 @@ char* getSnowUpgradeDesc(Entity* tower, int upgradeNum) {
 	}
 	else if (tower->upgradeID == 2) {
 		if (upgradeNum == 0) {
-			return "Slow +30%%";
+			return "Slow +35%%";
 		}
 		else {
 			return "Flash Freeze";
@@ -1504,7 +1566,7 @@ int getSnowUpgradeCost(Entity* tower, int upgradeNum) {
 }
 
 void applySnowUpgrade(Entity* tower, int upgradeNum) {
-	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+	if (!tower || (TowerTypes)tower->data != TT_Snowglobe) {
 		slog("Invalid stinger passed to applyStingerUpgrade");
 		return;
 	}
@@ -1516,7 +1578,8 @@ void applySnowUpgrade(Entity* tower, int upgradeNum) {
 	if (tower->upgradeID == 0) {//base tower state, no upgrades
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 1;
-			tower->fireRate *= 0.85f;
+			tower->shootRadius.radius *= 1.15f;
+			setSeekBuckets(tower);
 		}
 		else {
 			tower->upgradeID = 2;
@@ -1525,10 +1588,12 @@ void applySnowUpgrade(Entity* tower, int upgradeNum) {
 	else if (tower->upgradeID == 1) {//speed path
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 3;
-			tower->fireRate *= 0.75f;
+			tower->fireRate *= 0.8f;
 		}
 		else {
 			tower->upgradeID = 4;
+			tower->shootRadius.radius *= 1.35f;
+			setSeekBuckets(tower);
 		}
 	}
 	else if (tower->upgradeID == 2) {//speed path
@@ -1537,8 +1602,8 @@ void applySnowUpgrade(Entity* tower, int upgradeNum) {
 		}
 		else {
 			tower->upgradeID = 6;
-			tower->shootRadius.radius *= 1.15f;
-			setSeekBuckets(tower);
+			tower->abilityRate = 7.0f;
+			tower->abilityCooldown = 4.0f;
 		}
 	}
 	else {

@@ -69,12 +69,16 @@ void boltTouch(Entity* self, Entity* other) {
 	}
 	other->health -= damageLeft;
 	self->health -= 1;
-	if (other->health <= 0){
+	if (other->health < 0){
 		damageLeft = abs(other->health);
 	}
-	else {
+	else if (other->health > 0) {
 		self->noTouch = gfc_list_append(self->noTouch, other);
 		damageLeft = 0;
+	}
+	else {
+		damageLeft = 0;
+		child = other->die(other);
 	}
 	while (damageLeft>0) {
 		child = other->die(other);
@@ -328,4 +332,33 @@ void homingThink(Entity* self) {
 	self->velocity.x = direction.x * self->speed;
 	self->velocity.y = direction.y * self->speed;
 	boltThink(self);
+}
+
+Entity* snowCannon_spawn(Entity* parent)
+{
+	Entity* bolt;
+	Vector3D direction;
+	bolt = gf2d_entity_new();
+	gf2d_actor_load(&bolt->actor, "actors/projectiles/snowCannonBolt.actor");
+	bolt->rotation.x = bolt->actor.sprite->frame_w / 2;
+	bolt->rotation.y = bolt->actor.sprite->frame_h / 2;
+	bolt->rotation.z = parent->rotation.z + 180;
+	vector3d_set_angle_by_radians(&direction, (bolt->rotation.z) * GFC_DEGTORAD);
+	bolt->speed = 6.0f;
+	bolt->velocity.x = direction.x * bolt->speed;
+	bolt->velocity.y = direction.y * bolt->speed;
+	bolt->boundingBox.position = parent->position;
+	bolt->boundingBox.radius = 10.0f;
+	bolt->position = parent->position;
+	bolt->move = boltMove;
+	bolt->distanceLeft = parent->distanceLeft;
+	bolt->think = homingThink;
+	bolt->type = Type_Projectile;
+	bolt->touch = boltTouch;
+	bucket_update(bolt, NULL);
+	bolt->noTouch = gfc_list_new();
+	bolt->damage = parent->damage;
+	bolt->health = parent->health;
+	bolt->die = boltDie;
+	return bolt;
 }

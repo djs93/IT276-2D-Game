@@ -25,6 +25,7 @@ Entity* waterwave_spawn(Entity* parent);
 Entity* snowwave_spawn(Entity* parent);
 Entity* musicnote_spawn(Entity* parent);
 Entity* explosion_spawn(Entity* parent);
+Entity* snowCannon_spawn(Entity* parent);
 
 
 #endif

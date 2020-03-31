@@ -252,6 +252,7 @@
     <None Include="..\actors\projectiles\laserlaser.actor" />
     <None Include="..\actors\projectiles\musicnote.actor" />
     <None Include="..\actors\projectiles\slingerpellet.actor" />
+    <None Include="..\actors\projectiles\snowCannonBolt.actor" />
     <None Include="..\actors\projectiles\snowwave.actor" />
     <None Include="..\actors\projectiles\stingerbolt.actor" />
     <None Include="..\actors\projectiles\waterwave.actor" />
