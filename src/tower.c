@@ -410,7 +410,12 @@ void music_think(Entity* self){
 			if (currAlly->type != Type_Tower || currAlly->_inuse != 1 || currAlly == self || gfc_list_in_list(alreadyBuffed, currAlly)>=0 || !CircleCircle(self->shootRadius, currAlly->boundingBox)) {
 				continue;
 			}
-			currAlly->fireRate *= 0.85f;
+			if (self->upgradeID == 1 || self->upgradeID == 3 || self->upgradeID == 4) {
+				currAlly->fireRate *= 0.75f;
+			}
+			else {
+				currAlly->fireRate *= 0.85f;
+			}
 			self->noTouch = gfc_list_append(alreadyBuffed, currAlly);
 			alreadyBuffed = self->noTouch;
 		}
@@ -1184,22 +1189,34 @@ int getMusicUpgradeCost(Entity* tower, int upgradeNum) {
 }
 
 void applyMusicUpgrade(Entity* tower, int upgradeNum) {
-	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
-		slog("Invalid stinger passed to applyStingerUpgrade");
+	List* alreadyBuffed = tower->noTouch;
+	Entity* currAlly;
+	int i;
+	if (!tower || (TowerTypes)tower->data != TT_Music) {
+		slog("Invalid music bee passed to applyMusicUpgrade");
 		return;
 	}
 	else if (upgradeNum > 1 || upgradeNum < 0) {
-		slog("Invalid upgradeNum %i in applyStingerUpgrade", upgradeNum);
+		slog("Invalid upgradeNum %i in applyMusicUpgrade", upgradeNum);
 		return;
 	}
 
 	if (tower->upgradeID == 0) {//base tower state, no upgrades
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 1;
-			tower->fireRate *= 0.85f;
+			for (i = 0; i < alreadyBuffed->count; i++) {
+				currAlly = gfc_list_get_nth(alreadyBuffed, i);
+				currAlly->fireRate *= 20.0f / 17.0f;
+				currAlly->fireRate *= 0.75f; // this is to undo original 15% boost and properly apply new 25% boost
+			}
 		}
 		else {
 			tower->upgradeID = 2;
+			for (i = 0; i < alreadyBuffed->count; i++) {
+				currAlly = gfc_list_get_nth(alreadyBuffed, i);
+				currAlly->fireRate *= 20.0f / 17.0f;
+				currAlly->fireRate *= 0.75f; // this is to undo original 15% boost and properly apply new 25% boost
+			}
 		}
 	}
 	else if (tower->upgradeID == 1) {//speed path
