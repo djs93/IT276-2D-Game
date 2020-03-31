@@ -50,6 +50,7 @@ Entity* redSpawn(Entity* parent)
 	ent->name = "red";
 	ent->die = redDie;
 	ent->think = redThink;
+	ent->flags = ET_RED;
 	return ent;
 }
 
@@ -66,6 +67,7 @@ Entity* blueSpawn(Entity* parent)
 	ent->name = "blue";
 	ent->die = blueDie;
 	ent->think = blueThink;
+	ent->flags = ET_BLUE;
 	return ent;
 }
 
@@ -82,6 +84,7 @@ Entity* greenSpawn(Entity* parent)
 	ent->name = "green";
 	ent->die = greenDie;
 	ent->think = greenThink;
+	ent->flags = ET_GREEN;
 	return ent;
 }
 
@@ -98,6 +101,7 @@ Entity* yellowSpawn(Entity* parent)
 	ent->name = "yellow";
 	ent->die = yellowDie;
 	ent->think = yellowThink;
+	ent->flags = ET_YELLOW;
 	return ent;
 }
 
@@ -116,6 +120,7 @@ Entity* superSpawn(Entity* parent)
 	ent->name = "super";
 	ent->die = superDie;
 	ent->think = superThink;
+	ent->flags = ET_SUPER;
 	return ent;
 }
 
@@ -218,6 +223,26 @@ void flowerMove(Entity* self)
 			index += 1;
 			if (index >= gfc_list_get_count(self->path->lines)) {
 				//reached end of path, do damage
+				switch ((EnemyTypes)self->flags)
+				{
+				case ET_RED:
+					level_addLife(-1);
+					break;
+				case ET_BLUE:
+					level_addLife(-2);
+					break;
+				case ET_GREEN:
+					level_addLife(-3);
+					break;
+				case ET_YELLOW:
+					level_addLife(-4);
+					break;
+				case ET_SUPER:
+					level_addLife(-50);
+					break;
+				default:
+					break;
+				}
 				gf2d_entity_free(self);
 				return;
 			}

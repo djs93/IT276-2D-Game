@@ -153,8 +153,9 @@ Level* level_load(char* levelFile)
 	level->roundOver = true;
 	level->round = -1;
 	LOADED_LEVEL = level;
-
+	level->playerHealth = 0;
 	level_addCash(100.0f);
+	level_addLife(100);
 	return level;
 }
 
@@ -291,10 +292,30 @@ void level_addCash(float amount)
 	gf2d_element_label_set_text(currLabel, str);
 }
 
+void level_addLife(int amount)
+{
+	Element* list;
+	Element* currLabel;
+	TextLine str;
+	LOADED_LEVEL->playerHealth += amount;
+	if (LOADED_LEVEL->playerHealth < 0) {
+		LOADED_LEVEL->playerHealth = 0;
+	}
+	slog("Life: %i", LOADED_LEVEL->playerHealth);
+	currLabel = gf2d_window_get_element_by_id(getLifeWindow(), 0);
+	sprintf(str, "Life: %i", LOADED_LEVEL->playerHealth);
+	gf2d_element_label_set_text(currLabel, str);
+}
+
 void level_update()
 {
 	if (LOADED_LEVEL->roundOver == true) { return; }
 	//if no more enemies and no more to spawn, 
+	if (LOADED_LEVEL->playerHealth <= 0) {
+		//show game over screen
+		slog("U ded");
+		LOADED_LEVEL->roundOver = true;
+	}
 	if (LOADED_LEVEL->currentEnemy >= LOADED_LEVEL->roundEnemies->count) {
 		//check no more in play
 		if (enemiesExist()) {

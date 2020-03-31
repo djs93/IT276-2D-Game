@@ -45,6 +45,12 @@ void do_collisions();
 void level_addCash(float amount);
 
 /**
+* @brief Modifies player life and sets UI accordingly
+* @param amount The amount of life to add or subtract from the player
+*/
+void level_addLife(int amount);
+
+/**
 * @brief Updates the level, spawns new enemies
 */
 void level_update();

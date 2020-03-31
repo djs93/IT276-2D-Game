@@ -21,6 +21,7 @@ int loadLevel(char* levelFile);
 void toMainMenu();
 
 Window* getCashWindow();
+Window* getLifeWindow();
 Window* getUpgradeWindow();
 void setWindowPressed(Bool state);
 Bool getWindowPressed();

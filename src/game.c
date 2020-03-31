@@ -103,6 +103,9 @@ int main(int argc, char * argv[])
     upgradeUI = gf2d_window_load("config/yes_no_window.json");
     upgradeUI->hide = 1;
 
+    lifeUI = gf2d_window_load("config/life_UI.json");
+    lifeUI->no_draw_generic = 1;
+
 	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
@@ -249,6 +252,9 @@ Window* getCashWindow() {
 }
 Window* getUpgradeWindow() {
     return upgradeUI;
+}
+Window* getLifeWindow() {
+    return lifeUI;
 }
 void setWindowPressed(Bool state) {
     windowPress = state;
