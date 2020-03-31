@@ -310,7 +310,15 @@ void water_think(Entity* self){
 			gf2d_actor_set_action(&self->actor, "fire");
 			for (i = 0; i < targets->count; i++) {
 				target = gfc_list_get_nth(targets, i);
-				techno_damage(self, target);
+				target = techno_damage(self, target);
+				if (self->upgradeID == 5) {
+					if (!target) { continue; }
+					vector2d_normalize(&target->velocity);
+					target->speed = target->maxSpeed / 3.0f;
+					target->velocity.x *= target->speed;
+					target->velocity.y *= target->speed;
+					target->cooldown = self->fireRate;
+				}
 			}
 			waterwave_spawn(self);
 			self->cooldown = self->fireRate;
@@ -1803,7 +1811,7 @@ char* getWaterUpgradeDesc(Entity* tower, int upgradeNum) {
 			return "Healing Wave";
 		}
 		else {
-			return "Speed +20%%";
+			return "Speed +30%%";
 		}
 	}
 	else if (tower->upgradeID == 2) {
@@ -1859,7 +1867,7 @@ int getWaterUpgradeCost(Entity* tower, int upgradeNum) {
 }
 
 void applyWaterUpgrade(Entity* tower, int upgradeNum) {
-	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+	if (!tower || (TowerTypes)tower->data != TT_Water) {
 		slog("Invalid stinger passed to applyStingerUpgrade");
 		return;
 	}
@@ -1871,19 +1879,23 @@ void applyWaterUpgrade(Entity* tower, int upgradeNum) {
 	if (tower->upgradeID == 0) {//base tower state, no upgrades
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 1;
-			tower->fireRate *= 0.85f;
+			tower->shootRadius.radius *= 1.15f;
+			setSeekBuckets(tower);
 		}
 		else {
 			tower->upgradeID = 2;
+			tower->damage += 1;
 		}
 	}
 	else if (tower->upgradeID == 1) {//speed path
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 3;
-			tower->fireRate *= 0.75f;
+			slog("Add regen!");
+			//level_addRegen(1);
 		}
 		else {
 			tower->upgradeID = 4;
+			tower->fireRate *= 0.70f;
 		}
 	}
 	else if (tower->upgradeID == 2) {//speed path
@@ -1892,8 +1904,7 @@ void applyWaterUpgrade(Entity* tower, int upgradeNum) {
 		}
 		else {
 			tower->upgradeID = 6;
-			tower->shootRadius.radius *= 1.15f;
-			setSeekBuckets(tower);
+			tower->fireRate *= 0.20f;
 		}
 	}
 	else {
