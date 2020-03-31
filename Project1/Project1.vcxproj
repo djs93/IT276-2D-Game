@@ -245,6 +245,7 @@
     <None Include="..\actors\enemies\red.actor" />
     <None Include="..\actors\enemies\super.actor" />
     <None Include="..\actors\enemies\yellow.actor" />
+    <None Include="..\actors\goButton.actor" />
     <None Include="..\actors\laser.actor" />
     <None Include="..\actors\mouse.actor" />
     <None Include="..\actors\music.actor" />
@@ -263,6 +264,7 @@
     <None Include="..\actors\water.actor" />
     <None Include="..\config\cash_UI.json" />
     <None Include="..\config\exit_window.json" />
+    <None Include="..\config\go_button_window.json" />
     <None Include="..\config\life_UI.json" />
     <None Include="..\config\yes_no_window.json" />
     <None Include="..\config\yes_no_window2.json" />

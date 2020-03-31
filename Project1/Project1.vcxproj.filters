@@ -49,6 +49,9 @@
     <Filter Include="Resource Files\Actors\Projectiles">
       <UniqueIdentifier>{d1bb5b53-30a4-4aa6-b78a-b51a2e54a4c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\windows">
+      <UniqueIdentifier>{b10e8d30-e7d4-414c-908d-bd100f0aca51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\game.c">
@@ -331,12 +334,6 @@
     <None Include="..\actors\water.actor">
       <Filter>Resource Files\Actors</Filter>
     </None>
-    <None Include="..\config\yes_no_window.json">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\config\yes_no_window2.json">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="..\actors\enemies\red.actor">
       <Filter>Resource Files\Actors\enemies</Filter>
     </None>
@@ -370,20 +367,32 @@
     <None Include="..\actors\projectiles\musicnote.actor">
       <Filter>Resource Files\Actors\Projectiles</Filter>
     </None>
-    <None Include="..\config\cash_UI.json">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="..\actors\projectiles\explosion.actor">
       <Filter>Resource Files\Actors\Projectiles</Filter>
     </None>
     <None Include="..\actors\projectiles\snowCannonBolt.actor">
       <Filter>Resource Files\Actors\Projectiles</Filter>
     </None>
-    <None Include="..\config\life_UI.json">
-      <Filter>Resource Files</Filter>
+    <None Include="..\config\cash_UI.json">
+      <Filter>Resource Files\windows</Filter>
     </None>
     <None Include="..\config\exit_window.json">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\go_button_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\life_UI.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\yes_no_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\yes_no_window2.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\actors\goButton.actor">
+      <Filter>Resource Files\Actors</Filter>
     </None>
   </ItemGroup>
 </Project>

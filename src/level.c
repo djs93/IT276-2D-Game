@@ -347,6 +347,7 @@ void endRound() {
 	//do regen at round end
 	level_addLife(LOADED_LEVEL->regenPerRound);
 	//show go button
+	showGoButton();
 	LOADED_LEVEL->roundOver = true;
 	//if it's the last round, bring up the rewards screen
 }
@@ -360,6 +361,7 @@ void level_start_round() {
 		LOADED_LEVEL->currentEnemy = 0;
 		LOADED_LEVEL->spawnCooldown = 0.0f;
 	}
+	hideGoButton();
 }
 
 Bool enemiesExist() {

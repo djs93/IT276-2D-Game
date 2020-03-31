@@ -113,6 +113,8 @@ int main(int argc, char * argv[])
     exitWindow = gf2d_window_load("config/exit_window.json");
     exitWindow->hide = 1;
 
+    goButtonUI = gf2d_window_load("config/go_button_window.json");
+    goButtonUI->no_draw_generic = 1;
 	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
@@ -138,6 +140,7 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("upgradeTwo", upgradeTwo_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("no", esc_press, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("exit", exit_press, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("startRound", level_start_round, NULL, NULL, NULL, NULL);
     /*main game loop*/
     while(!done)
     {
@@ -282,6 +285,14 @@ void esc_press() {
 void exit_press() {
     done = 1; // exit condition
     //save stuff
+}
+
+void hideGoButton() {
+    goButtonUI->hide = 1;
+}
+
+void showGoButton() {
+    goButtonUI->hide = 0;
 }
 
 /*eol@eof*/

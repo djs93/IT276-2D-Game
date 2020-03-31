@@ -20,6 +20,9 @@ void mainMenuToContentEditor();
 int loadLevel(char* levelFile);
 void toMainMenu();
 
+void hideGoButton();
+void showGoButton();
+
 Window* getCashWindow();
 Window* getLifeWindow();
 Window* getUpgradeWindow();
