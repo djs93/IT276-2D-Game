@@ -382,5 +382,8 @@
     <None Include="..\config\life_UI.json">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\config\exit_window.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

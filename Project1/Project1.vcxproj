@@ -262,6 +262,7 @@
     <None Include="..\actors\techno.actor" />
     <None Include="..\actors\water.actor" />
     <None Include="..\config\cash_UI.json" />
+    <None Include="..\config\exit_window.json" />
     <None Include="..\config\life_UI.json" />
     <None Include="..\config\yes_no_window.json" />
     <None Include="..\config\yes_no_window2.json" />

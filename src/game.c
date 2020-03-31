@@ -22,6 +22,8 @@
 Entity* entity_list;
 void draw_normal_entities();
 void draw_level();
+void esc_press();
+void exit_press();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
@@ -30,11 +32,13 @@ Window* upgradeUI;
 Window* lifeUI;
 Window* goButtonUI;
 Bool windowPress;
+Window* exitWindow;
+int done;
 
 int main(int argc, char * argv[])
 {
     /*variable declarations*/
-    int done = 0;
+    done = 0;
     const Uint8 * keys;
     Sprite *sprite;
     Window* ui;
@@ -106,6 +110,9 @@ int main(int argc, char * argv[])
     lifeUI = gf2d_window_load("config/life_UI.json");
     lifeUI->no_draw_generic = 1;
 
+    exitWindow = gf2d_window_load("config/exit_window.json");
+    exitWindow->hide = 1;
+
 	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
@@ -129,6 +136,8 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("buyMusic", music_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("upgradeOne", upgradeOne_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("upgradeTwo", upgradeTwo_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("no", esc_press, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("exit", exit_press, NULL, NULL, NULL, NULL);
     /*main game loop*/
     while(!done)
     {
@@ -169,16 +178,7 @@ int main(int argc, char * argv[])
         //gf2d_sprite_draw(mouseEnt->actor.sprite, mouseEnt->position, &mouseEnt->scale, &mouseEnt->scaleCenter, &mouseEnt->rotation, &mouseEnt->flip, &mouseEnt->colorShift, (Uint32)mouseEnt->actor.frame);
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 		
-        if (gfc_input_command_pressed("no"))
-        {
-            backgroundEnt = find_entity("placement");
-            if (backgroundEnt) {
-                gf2d_entity_free(backgroundEnt);
-            }
-            else {
-                done = 1; // exit condition
-            }
-        }
+        
         //if (keys[SDL_SCANCODE_ESCAPE])done = 1; 
         sprintf(windowTitle, "gf2d - %f fps", gf2d_graphics_get_frames_per_second());
         gf2d_graphics_set_title(windowTitle);
@@ -261,6 +261,27 @@ void setWindowPressed(Bool state) {
 }
 Bool getWindowPressed() {
     return windowPress;
+}
+
+void esc_press() {
+    Entity* placeEnt;
+    placeEnt = find_entity("placement");
+    if (placeEnt) {
+        gf2d_entity_free(placeEnt);
+    }
+    else {
+        if (exitWindow->hide) {
+            exitWindow->hide = 0;
+        }
+        else {
+            exitWindow->hide = 1;
+        }
+    }
+}
+
+void exit_press() {
+    done = 1; // exit condition
+    //save stuff
 }
 
 /*eol@eof*/
