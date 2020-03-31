@@ -20,21 +20,14 @@ Entity* stingerBolt_spawn(Entity* parent)
 	bolt->boundingBox.radius = 20.0f;
 	bolt->position = parent->position;
 	bolt->move = boltMove;
-	bolt->distanceLeft = 1500.0f;
-	if (parent->upgradeID == 2 || parent->upgradeID == 5 || parent->upgradeID == 6) {
-		bolt->distanceLeft *= 1.2f;
-		bolt->distanceLeft *= 1.2f;
-	}
+	bolt->distanceLeft = parent->distanceLeft;
 	bolt->think = boltThink;
 	bolt->type = Type_Projectile;
 	bolt->touch = boltTouch;
 	bucket_update(bolt, NULL);
 	bolt->noTouch = gfc_list_new();
-	bolt->damage = 2;
-	bolt->health = 2;
-	if (parent->upgradeID == 4) {
-		bolt->health += 3;
-	}
+	bolt->damage = parent->damage;
+	bolt->health = parent->health;
 	bolt->die = boltDie;
 	return bolt;
 }
@@ -42,6 +35,7 @@ Entity* stingerBolt_spawn(Entity* parent)
 void boltMove(Entity* self) {
 	vector2d_add(self->position, self->position, self->velocity);
 	vector2d_copy(self->boundingBox.position, self->position);
+	vector2d_copy(self->shootRadius.position, self->position);
 	self->distanceLeft -= vector2d_magnitude_squared(self->velocity);
 }
 
@@ -126,14 +120,19 @@ Entity* slingerPellet_spawn(Entity* parent)
 	bolt->boundingBox.radius = 10.0f;
 	bolt->position = parent->position;
 	bolt->move = boltMove;
-	bolt->distanceLeft = 2000.0f;
-	bolt->think = boltThink;
+	bolt->distanceLeft = parent->distanceLeft;
+	if (parent->upgradeID == 2 || parent->upgradeID == 5 || parent->upgradeID == 6) {
+		bolt->think = homingThink;
+	}
+	else {
+		bolt->think = boltThink;
+	}
 	bolt->type = Type_Projectile;
 	bolt->touch = boltTouch;
 	bucket_update(bolt, NULL);
 	bolt->noTouch = gfc_list_new();
-	bolt->damage = 1;
-	bolt->health = 1;
+	bolt->damage = parent->damage;
+	bolt->health = parent->health;
 	bolt->die = boltDie;
 	return bolt;
 }
@@ -155,23 +154,14 @@ Entity* laserlaser_spawn(Entity* parent)
 	bolt->boundingBox.radius = 20.0f;
 	bolt->position = parent->position;
 	bolt->move = boltMove;
-	bolt->distanceLeft = 2000.0f;
+	bolt->distanceLeft = parent->distanceLeft;
 	bolt->think = boltThink;
 	bolt->type = Type_Projectile;
 	bolt->touch = boltTouch;
 	bucket_update(bolt, NULL);
 	bolt->noTouch = gfc_list_new();
-	bolt->damage = 3;
-	if (parent->upgradeID == 4 || parent->upgradeID == 6) {
-		bolt->damage += 2;
-	}
-	bolt->health = 4;
-	if (parent->upgradeID == 2 || parent->upgradeID == 5 || parent->upgradeID == 6) {
-		bolt->health += 1;
-	}
-	if (parent->upgradeID == 5) {
-		bolt->health += 2;
-	}
+	bolt->damage = parent->damage;
+	bolt->health = parent->health;
 	if (parent->upgradeID == 3) {
 		bolt->die = laserExplosionDie;
 	}
@@ -290,14 +280,14 @@ Entity* musicnote_spawn(Entity* parent)
 	bolt->boundingBox.radius = 20.0f;
 	bolt->position = parent->position;
 	bolt->move = boltMove;
-	bolt->distanceLeft = 1400.0f;
+	bolt->distanceLeft = parent->distanceLeft;
 	bolt->think = boltThink;
 	bolt->type = Type_Projectile;
 	bolt->touch = boltTouch;
 	bucket_update(bolt, NULL);
 	bolt->noTouch = gfc_list_new();
-	bolt->damage = 1;
-	bolt->health = 1;
+	bolt->damage = parent->damage;
+	bolt->health = parent->health;
 	bolt->die = boltDie;
 	if (bolt->rotation.z >= 360.0f) {
 		bolt->rotation.z = fmodf(bolt->rotation.z, 360.0f);
@@ -309,4 +299,33 @@ Entity* musicnote_spawn(Entity* parent)
 		bolt->flip = vector2d(0, 0);
 	}
 	return bolt;
+}
+/*
+Entity* musicTrap_spawn(Entity* parent) {
+	Path2D* path;
+	//calculate lines in area
+
+	path = gfc_list_get_nth(get_loaded_level()->paths, get_loaded_level()->currPath);
+	//set initial direction, velocity, and distance left
+	//set think to trap think and move to bolt move
+}
+
+void musicTrap_think(Entity* self) {
+	//initial think checks to see if we're at point yet
+	//if not, do nothing
+	//if so, set touch to bolt touch
+	//if so, set think to bolt think
+	//if so, set velocity to zero
+}
+*/
+void homingThink(Entity* self) {
+	Entity* target;
+	Vector3D direction;
+	target = findClosest(self);
+	if (!target) { return; }
+	gf2d_entity_look_at(self, target);
+	vector3d_set_angle_by_radians(&direction, (self->rotation.z+180) * GFC_DEGTORAD);
+	self->velocity.x = direction.x * self->speed;
+	self->velocity.y = direction.y * self->speed;
+	boltThink(self);
 }

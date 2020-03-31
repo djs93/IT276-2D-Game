@@ -9,7 +9,6 @@
 #include "projectiles.h"
 #include "gf2d_draw.h"
 
-Entity* findClosest(Entity* self);
 Bool allyCollision(Entity* self);
 char* getStingerUpgradeDesc(Entity* tower, int upgradeNum);
 int getStingerUpgradeCost(Entity* tower, int upgradeNum);
@@ -416,6 +415,24 @@ void music_think(Entity* self){
 			else {
 				currAlly->fireRate *= 0.85f;
 			}
+			if (self->upgradeID == 2 || self->upgradeID == 5) {
+				currAlly->damage += 1;
+			}
+			if (self->upgradeID == 5) {
+				currAlly->damage += 1;
+			}
+			if (self->upgradeID == 3) {
+				currAlly->shootRadius.radius *= 1.15f;
+				currAlly->distanceLeft *= 1.10f;
+				setSeekBuckets(currAlly);
+			}
+			if (self->upgradeID == 4) {
+				currAlly->distanceLeft *= 1.20f;
+				currAlly->distanceLeft *= 1.20f;
+			}
+			if (self->upgradeID == 6) {
+				currAlly->health += 2;
+			}
 			self->noTouch = gfc_list_append(alreadyBuffed, currAlly);
 			alreadyBuffed = self->noTouch;
 		}
@@ -489,18 +506,27 @@ void placement_detach(Entity* ent) {
 		ent->think = stinger_think;
 		ent->name = "stinger";
 		ent->fireRate = 0.5f;
+		ent->distanceLeft = 1500.0f;
+		ent->health = 2;
+		ent->damage = 2;
 		setSeekBuckets(ent);
 		break;
 	case TT_Slingshot:
 		ent->think = slingshot_think;
 		ent->name = "slingshot";
 		ent->fireRate = 0.25f;
+		ent->distanceLeft = 2000.0f;
+		ent->health = 1;
+		ent->damage = 1;
 		setSeekBuckets(ent);
 		break;
 	case TT_Laser:
 		ent->think = laser_think;
 		ent->name = "laser";
 		ent->fireRate = 0.5f;
+		ent->distanceLeft = 2000.0f;
+		ent->health = 4;
+		ent->damage = 3;
 		setSeekBuckets(ent);
 		break;
 	case TT_Water:
@@ -526,6 +552,9 @@ void placement_detach(Entity* ent) {
 		ent->think = music_think;
 		ent->name = "music";
 		ent->fireRate = 0.5f;
+		ent->distanceLeft = 1400.0f;
+		ent->health = 1;
+		ent->damage = 1;
 		setSeekBuckets(ent);
 		break;
 	default:
@@ -633,6 +662,9 @@ Entity* findClosest(Entity* self) {
 		for (j = 0; j < bucket->entities->count; j++) { //I think the problem is we're clearing buckets before thinking and not recalcing until after.
 			currEnemy = gfc_list_get_nth(bucket->entities, j);
 			if (!currEnemy || currEnemy->_inuse!=1) { continue; }
+			if (self->noTouch && gfc_list_in_list(self->noTouch, currEnemy) >= 0) {
+				continue;
+			}
 			if (currEnemy->type == Type_Enemy) {
 				if (self->shootRadius.radius == 0.0f || CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
 					testDist = LengthSqLine2D(line2d(self->shootRadius.position, currEnemy->boundingBox.position));
@@ -961,7 +993,9 @@ void applyStingerUpgrade(Entity* tower, int upgradeNum) {
 			tower->fireRate *= 0.85f;
 		}
 		else {
-			tower->upgradeID = 2;
+			tower->upgradeID = 2; 
+			tower->distanceLeft *= 1.2f;
+			tower->distanceLeft *= 1.2f;
 		}
 	}
 	else if (tower->upgradeID == 1) {//speed path
@@ -971,6 +1005,7 @@ void applyStingerUpgrade(Entity* tower, int upgradeNum) {
 		}
 		else {
 			tower->upgradeID = 4;
+			tower->health += 3;
 		}
 	}
 	else if (tower->upgradeID == 2) {//speed path
@@ -1085,6 +1120,7 @@ void applyLaserUpgrade(Entity* tower, int upgradeNum) {
 		}
 		else {
 			tower->upgradeID = 2;
+			tower->health += 1;
 		}
 	}
 	else if (tower->upgradeID == 1) {//speed path
@@ -1093,14 +1129,17 @@ void applyLaserUpgrade(Entity* tower, int upgradeNum) {
 		}
 		else {
 			tower->upgradeID = 4;
+			tower->damage += 2;
 		}
 	}
 	else if (tower->upgradeID == 2) {//speed path
 		if (upgradeNum == 0) {//travel upgrade desc
 			tower->upgradeID = 5;
+			tower->health += 2;
 		}
 		else {
 			tower->upgradeID = 6;
+			tower->damage += 2;
 		}
 	}
 	else {
@@ -1141,7 +1180,7 @@ char* getMusicUpgradeDesc(Entity* tower, int upgradeNum) {
 			return "Damage Buff +1";
 		}
 		else {
-			return "Drum Traps";
+			return "Pierce Buff +2";
 		}
 	}
 	else {
@@ -1214,28 +1253,43 @@ void applyMusicUpgrade(Entity* tower, int upgradeNum) {
 			tower->upgradeID = 2;
 			for (i = 0; i < alreadyBuffed->count; i++) {
 				currAlly = gfc_list_get_nth(alreadyBuffed, i);
-				currAlly->fireRate *= 20.0f / 17.0f;
-				currAlly->fireRate *= 0.75f; // this is to undo original 15% boost and properly apply new 25% boost
+				currAlly->damage += 1;
 			}
 		}
 	}
 	else if (tower->upgradeID == 1) {//speed path
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 3;
-			tower->fireRate *= 0.75f;
+			for (i = 0; i < alreadyBuffed->count; i++) {
+				currAlly = gfc_list_get_nth(alreadyBuffed, i);
+				currAlly->shootRadius.radius *= 1.15f;
+				currAlly->distanceLeft *= 1.10f;
+				setSeekBuckets(currAlly);
+			}
 		}
 		else {
 			tower->upgradeID = 4;
+			for (i = 0; i < alreadyBuffed->count; i++) {
+				currAlly = gfc_list_get_nth(alreadyBuffed, i);
+				currAlly->distanceLeft *= 1.20f;
+				currAlly->distanceLeft *= 1.20f;
+			}
 		}
 	}
 	else if (tower->upgradeID == 2) {//speed path
 		if (upgradeNum == 0) {//travel upgrade desc
 			tower->upgradeID = 5;
+			for (i = 0; i < alreadyBuffed->count; i++) {
+				currAlly = gfc_list_get_nth(alreadyBuffed, i);
+				currAlly->damage += 1;
+			}
 		}
 		else {
 			tower->upgradeID = 6;
-			tower->shootRadius.radius *= 1.15f;
-			setSeekBuckets(tower);
+			for (i = 0; i < alreadyBuffed->count; i++) {
+				currAlly = gfc_list_get_nth(alreadyBuffed, i);
+				currAlly->health += 2;
+			}
 		}
 	}
 	else {
@@ -1324,41 +1378,44 @@ int getSlingshotUpgradeCost(Entity* tower, int upgradeNum) {
 }
 
 void applySlingshotUpgrade(Entity* tower, int upgradeNum) {
-	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
-		slog("Invalid stinger passed to applyStingerUpgrade");
+	if (!tower || (TowerTypes)tower->data != TT_Slingshot) {
+		slog("Invalid slingshot passed to applySlingshotUpgrade");
 		return;
 	}
 	else if (upgradeNum > 1 || upgradeNum < 0) {
-		slog("Invalid upgradeNum %i in applyStingerUpgrade", upgradeNum);
+		slog("Invalid upgradeNum %i in applySlingshotUpgrade", upgradeNum);
 		return;
 	}
 
 	if (tower->upgradeID == 0) {//base tower state, no upgrades
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 1;
-			tower->fireRate *= 0.85f;
+			tower->fireRate *= 0.90f;
 		}
 		else {
 			tower->upgradeID = 2;
+			tower->distanceLeft *= 1.75f;
 		}
 	}
 	else if (tower->upgradeID == 1) {//speed path
 		if (upgradeNum == 0) {//first upgrade desc
-			tower->upgradeID = 3;
-			tower->fireRate *= 0.75f;
+			tower->shootRadius.radius *= 1.15f;
+			tower->distanceLeft *= 1.15f;
+			setSeekBuckets(tower);
 		}
 		else {
 			tower->upgradeID = 4;
+			tower->fireRate *= 0.80f;
 		}
 	}
 	else if (tower->upgradeID == 2) {//speed path
 		if (upgradeNum == 0) {//travel upgrade desc
 			tower->upgradeID = 5;
+			tower->damage += 1;
 		}
 		else {
 			tower->upgradeID = 6;
-			tower->shootRadius.radius *= 1.15f;
-			setSeekBuckets(tower);
+			tower->health += 2;
 		}
 	}
 	else {

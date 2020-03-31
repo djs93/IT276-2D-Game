@@ -13,7 +13,12 @@ void laserExplosionDie(Entity* self);
 
 void waveMove(Entity* self);
 void waveThink(Entity* self);
-
+/*
+void musicTrap_think(Entity* self);
+void musicTrap_move(Entity* self);
+Entity* musicTrap_spawn(Entity* parent);
+*/
+void homingThink(Entity* self);
 Entity* slingerPellet_spawn(Entity* parent);
 Entity* laserlaser_spawn(Entity* parent);
 Entity* waterwave_spawn(Entity* parent);
