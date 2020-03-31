@@ -8,6 +8,7 @@
 #include "bucket.h"
 #include "projectiles.h"
 #include "gf2d_draw.h"
+#include <enemies.h>
 
 Bool allyCollision(Entity* self);
 char* getStingerUpgradeDesc(Entity* tower, int upgradeNum);
@@ -32,6 +33,9 @@ void applySlingshotUpgrade(Entity* tower, int upgradeNum);
 void applySnowUpgrade(Entity* tower, int upgradeNum);
 void applyTechnoUpgrade(Entity* tower, int upgradeNum);
 void applyWaterUpgrade(Entity* tower, int upgradeNum);
+
+void swarm_kill_all();
+void player_consume(TowerTypes type);
 
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
@@ -587,6 +591,15 @@ void music_think(Entity* self){
 void placement_think(Entity* self) {
 	Bool colliding;
 	self->position = gf2d_mouse_get_position();
+	if ((TowerTypes)self->data >= TT_Power_Bee_Swarm) {
+		if (gf2d_mouse_button_pressed(0) && (self->flags & FL_PLACEABLE)) {
+			placement_detach(self);
+		}
+		if (!(self->flags & FL_PLACEABLE) && gf2d_mouse_button_released(0)) {
+			self->flags = self->flags | FL_PLACEABLE;
+		}
+		return;
+	}
 	colliding = (pathCollision(self)||allyCollision(self));
 	if (colliding) {
 		self->colorShift = vector4d(255.0f, 0.0f, 0.0f, 255.0f);
@@ -680,7 +693,7 @@ void placement_detach(Entity* ent) {
 		break;
 	case TT_Power_Bee_Swarm:
 		//kill things on screen
-		swarm_kil_all();
+		swarm_kill_all();
 		//subtract from player's inventory
 		player_consume(TT_Power_Bee_Swarm);
 		gf2d_entity_free(ent);
@@ -696,7 +709,7 @@ void placement_detach(Entity* ent) {
 	case TT_Power_Speed_Totem:
 		//subtract from player's inventory
 		player_consume(TT_Power_Speed_Totem);
-		ent->think = speedTotem_think;
+		//ent->think = speedTotem_think;
 		ent->name = "speedTotem";
 		break;
 	case TT_Power_Time_Warp:
@@ -957,7 +970,7 @@ char* getUpgradeOneDesc(Entity* tower)
 		return getWaterUpgradeDesc(tower, 0);
 		break;
 	default:
-		return "Invalid Tower";
+		return "No Upgrades";
 		break;
 	}
 }
@@ -988,7 +1001,7 @@ char* getUpgradeTwoDesc(Entity* tower)
 		return getWaterUpgradeDesc(tower, 1);
 		break;
 	default:
-		return "Invalid Tower";
+		return "No Upgrades";
 		break;
 	}
 }
@@ -1052,6 +1065,44 @@ int getUpgradeOnePrice(Entity* tower)
 	default:
 		return -1;
 		break;
+	}
+}
+
+void swarm_kill_all() {
+	Entity* currEntity;
+	Bucket* currBucket;
+	List* optiBuckets;
+	int i, j;
+	optiBuckets = get_loaded_level()->optimalBuckets;
+	for (i = 0; i < optiBuckets->count; i++) {
+		currBucket = gfc_list_get_nth(optiBuckets, i);
+		for (j = 0; j < currBucket->entities->count; j++) {
+			currEntity = gfc_list_get_nth(currBucket->entities, j);
+			if (currEntity->_inuse != 1 || currEntity->type != Type_Enemy) {
+				continue;
+			}
+			switch ((EnemyTypes)currEntity->flags)
+			{
+			case ET_RED:
+				level_addCash(1.0f);
+				break;
+			case ET_BLUE:
+				level_addCash(2.0f);
+				break;
+			case ET_GREEN:
+				level_addCash(3.0f);
+				break;
+			case ET_YELLOW:
+				level_addCash(4.0f);
+				break;
+			case ET_SUPER:
+				level_addCash(50.0f);
+				break;
+			default:
+				break;
+			}
+			gf2d_entity_free(currEntity);
+		}
 	}
 }
 
@@ -2054,4 +2105,8 @@ void upgradeTwo_buy() {
 	}
 
 	gf2d_entity_set_selected(gf2d_entity_get_selected());//update upgrade window
+}
+
+void player_consume(TowerTypes type) {
+	slog("temporary");
 }
