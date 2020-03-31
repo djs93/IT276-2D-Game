@@ -591,7 +591,7 @@ void music_think(Entity* self){
 void placement_think(Entity* self) {
 	Bool colliding;
 	self->position = gf2d_mouse_get_position();
-	if ((TowerTypes)self->data >= TT_Power_Bee_Swarm) {
+	if ((TowerTypes)self->data >= TT_Power_Bee_Swarm && (TowerTypes)self->data != TT_Power_Speed_Totem) {
 		if (gf2d_mouse_button_pressed(0) && (self->flags & FL_PLACEABLE)) {
 			placement_detach(self);
 		}
@@ -621,6 +621,33 @@ void placement_think(Entity* self) {
 	}
 	if (self->shootRadius.radius > 0.1f) {
 		gf2d_draw_circle(self->shootRadius.position, self->shootRadius.radius, vector4d(255.0f, 255.0f, 0.0f, 255.0f));
+	}
+}
+
+void speedTotem_think(Entity* self) {
+	int i, j;
+	Entity* currAlly;
+	Bucket* currBucket;
+	List* allyBuckets;
+	List* alreadyBuffed;
+	Entity* target;
+	allyBuckets = get_loaded_level()->allyBuckets;
+	alreadyBuffed = self->noTouch;
+	if (!alreadyBuffed) {
+		self->noTouch = gfc_list_new();
+		alreadyBuffed = (List*)self->noTouch;
+	}
+	for (i = 0; i < allyBuckets->count; i++) {
+		currBucket = gfc_list_get_nth(allyBuckets, i);
+		for (j = 0; j < currBucket->entities->count; j++) {
+			currAlly = gfc_list_get_nth(currBucket->entities, j);
+			if (currAlly->type != Type_Tower || currAlly->_inuse != 1 || currAlly == self || gfc_list_in_list(alreadyBuffed, currAlly) >= 0 || !CircleCircle(self->shootRadius, currAlly->boundingBox)) {
+				continue;
+			}
+			currAlly->fireRate *= 0.75f;
+			self->noTouch = gfc_list_append(alreadyBuffed, currAlly);
+			alreadyBuffed = self->noTouch;
+		}
 	}
 }
 #pragma endregion
@@ -709,7 +736,7 @@ void placement_detach(Entity* ent) {
 	case TT_Power_Speed_Totem:
 		//subtract from player's inventory
 		player_consume(TT_Power_Speed_Totem);
-		//ent->think = speedTotem_think;
+		ent->think = speedTotem_think;
 		ent->name = "speedTotem";
 		break;
 	case TT_Power_Time_Warp:
