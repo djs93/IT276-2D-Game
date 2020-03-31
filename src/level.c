@@ -307,6 +307,10 @@ void level_addLife(int amount)
 	gf2d_element_label_set_text(currLabel, str);
 }
 
+void level_addRegen(int amountPerRound) {
+	LOADED_LEVEL->regenPerRound += amountPerRound;
+}
+
 void level_update()
 {
 	if (LOADED_LEVEL->roundOver == true) { return; }
@@ -341,6 +345,7 @@ void level_update()
 
 void endRound() {
 	//do regen at round end
+	level_addLife(LOADED_LEVEL->regenPerRound);
 	//show go button
 	LOADED_LEVEL->roundOver = true;
 	//if it's the last round, bring up the rewards screen

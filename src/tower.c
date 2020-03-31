@@ -1769,8 +1769,7 @@ void applyTechnoUpgrade(Entity* tower, int upgradeNum) {
 		}
 		else {
 			tower->upgradeID = 4;
-			slog("Add regen!");
-			//level_addRegen(1);
+			level_addRegen(1);
 		}
 	}
 	else if (tower->upgradeID == 2) {//speed path
@@ -1891,8 +1890,7 @@ void applyWaterUpgrade(Entity* tower, int upgradeNum) {
 	else if (tower->upgradeID == 1) {//speed path
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 3;
-			slog("Add regen!");
-			//level_addRegen(1);
+			level_addRegen(1);
 		}
 		else {
 			tower->upgradeID = 4;

@@ -23,6 +23,7 @@ typedef struct Level_S{
 	List* roundTimings; /**<How long after each enemy to spawn the next (in milliseconds) (List of ints)*/
 	List* roundEnemies; /**<What to spawn after the last enemy (List of EnemyTypes)*/
 	Bool roundOver; /**<If the current round is over or not*/
+	int regenPerRound; /**<How much life to regenerate each round*/
 }Level;
 
 Level* get_loaded_level();
@@ -59,5 +60,11 @@ void level_update();
 * @brief Starts the levels next round if the previous is over
 */
 void level_start_round();
+
+/**
+* @brief Modifies regen of life per round
+* @param amount The amount of life to additionally restore each round
+*/
+void level_addRegen(int amountPerRound);
 
 #endif
