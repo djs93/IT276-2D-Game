@@ -20,7 +20,8 @@ typedef enum
 
 List* inRange(Entity* self);
 void techno_damage(Entity* self, Entity* target);
-void setSeekBuckets(Entity* self);
+void setSeekBuckets(Entity* self); 
+Entity* findClosest(Entity* self);
 
 Entity* stinger_spawn(Vector2D position);
 Entity* slingshot_spawn(Vector2D position);
