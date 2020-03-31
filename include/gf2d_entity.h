@@ -62,7 +62,9 @@ typedef struct Entity_S
 	Circle boundingBox;
 	Circle shootRadius;
 	float fireRate;					/**<How long, in seconds, in between tower shots*/
+	float abilityRate;				/**<How long, in seconds, in between tower ability use*/
 	float cooldown;					/**<How long until next tower shot*/
+	float abilityCooldown;			/**<How long until the tower can use its ability again*/
 	Bool dead;						/**<when true, the entity system will delete the entity on the next update*/
 	List* seekBuckets;				/**<Buckets that a tower will check for enemies in. Null is every optimal bucket*/
 	List* noTouch;					/**<List of entities this entity won't see when touching*/
