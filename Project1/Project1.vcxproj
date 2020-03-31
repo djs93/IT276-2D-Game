@@ -240,6 +240,8 @@
     <ClInclude Include="..\include\tower.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\actors\beeSwarm.actor" />
+    <None Include="..\actors\cashDrop.actor" />
     <None Include="..\actors\enemies\blue.actor" />
     <None Include="..\actors\enemies\green.actor" />
     <None Include="..\actors\enemies\red.actor" />
@@ -259,8 +261,10 @@
     <None Include="..\actors\projectiles\waterwave.actor" />
     <None Include="..\actors\slingshot.actor" />
     <None Include="..\actors\snowglobe.actor" />
+    <None Include="..\actors\speedTotem.actor" />
     <None Include="..\actors\stinger.actor" />
     <None Include="..\actors\techno.actor" />
+    <None Include="..\actors\timeWarp.actor" />
     <None Include="..\actors\water.actor" />
     <None Include="..\config\cash_UI.json" />
     <None Include="..\config\exit_window.json" />

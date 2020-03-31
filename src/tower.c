@@ -127,6 +127,22 @@ Entity* placement_spawn(TowerTypes type) {
 		gf2d_actor_load(&self->actor, "actors/music.actor");
 		self->shootRadius.radius = 125.0f;
 		break;
+	case TT_Power_Bee_Swarm:
+		gf2d_actor_load(&self->actor, "actors/beeSwarm.actor");
+		self->shootRadius.radius = 0.0f;
+		break;
+	case TT_Power_Time_Warp:
+		gf2d_actor_load(&self->actor, "actors/timeWarp.actor");
+		self->shootRadius.radius = 0.0f;
+		break;
+	case TT_Power_Speed_Totem:
+		gf2d_actor_load(&self->actor, "actors/speedTotem.actor");
+		self->shootRadius.radius = 130.0f;
+		break;
+	case TT_Power_Cash_Drop:
+		gf2d_actor_load(&self->actor, "actors/cashDrop.actor");
+		self->shootRadius.radius = 0.0f;
+		break;
 	default:
 		gf2d_actor_load(&self->actor, "actors/stinger.actor");
 		slog("Invalid tower type! Defaulting...");
@@ -662,6 +678,34 @@ void placement_detach(Entity* ent) {
 		ent->damage = 1;
 		setSeekBuckets(ent);
 		break;
+	case TT_Power_Bee_Swarm:
+		//kill things on screen
+		swarm_kil_all();
+		//subtract from player's inventory
+		player_consume(TT_Power_Bee_Swarm);
+		gf2d_entity_free(ent);
+		return;
+		break;
+	case TT_Power_Cash_Drop:
+		level_addCash(250.0f);
+		//subtract from player's inventory
+		player_consume(TT_Power_Cash_Drop);
+		gf2d_entity_free(ent);
+		return;
+		break;
+	case TT_Power_Speed_Totem:
+		//subtract from player's inventory
+		player_consume(TT_Power_Speed_Totem);
+		ent->think = speedTotem_think;
+		ent->name = "speedTotem";
+		break;
+	case TT_Power_Time_Warp:
+		//slow things on screen
+		//subtract from player's inventory
+		player_consume(TT_Power_Time_Warp);
+		gf2d_entity_free(ent);
+		return;
+		break;
 	default:
 		ent->think = stinger_think;
 		ent->name = "stinger";
@@ -741,7 +785,7 @@ int getPrice(TowerTypes type)
 	case TT_Music:
 		return 200;
 	default:
-		return 100;
+		return 0;
 	}
 }
 

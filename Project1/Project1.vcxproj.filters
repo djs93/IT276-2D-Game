@@ -394,5 +394,17 @@
     <None Include="..\actors\goButton.actor">
       <Filter>Resource Files\Actors</Filter>
     </None>
+    <None Include="..\actors\beeSwarm.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\actors\cashDrop.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\actors\speedTotem.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\actors\timeWarp.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
   </ItemGroup>
 </Project>

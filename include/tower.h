@@ -14,7 +14,11 @@ typedef enum
 	TT_Water,
 	TT_Techno,
 	TT_Snowglobe,
-	TT_Music
+	TT_Music,
+	TT_Power_Bee_Swarm,
+	TT_Power_Time_Warp,
+	TT_Power_Speed_Totem,
+	TT_Power_Cash_Drop
 }TowerTypes;
 
 
