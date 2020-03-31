@@ -18,6 +18,7 @@
 #include "gf2d_mouse.h"
 #include "tower.h"
 #include "enemies.h"
+#include "player.h"
 
 Entity* entity_list;
 void draw_normal_entities();
@@ -34,6 +35,7 @@ Window* goButtonUI;
 Bool windowPress;
 Window* exitWindow;
 int done;
+Player* player;
 
 int main(int argc, char * argv[])
 {
@@ -91,7 +93,7 @@ int main(int argc, char * argv[])
 	//mouseEnt->scale = vector2d(1, 1);
 	//mouseEnt->colorShift = vector4d(255, 255, 255, 255);
 
-    
+    player = player_load("saves/player.json");
 
     gf2d_font_init("config/font.cfg");
     gfc_input_init("config/input.cfg");
@@ -128,7 +130,7 @@ int main(int argc, char * argv[])
     gf2d_mouse_load("actors/mouse.actor");
     level_load("Levels/test.json");
     level_addCash(10000.0f);
-    gfc_input_set_callbacks("test", level_start_round, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("test", placement_spawn, NULL, NULL, NULL, TT_Power_Time_Warp);
     gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyLaser", laser_buy, NULL, NULL, NULL, NULL);
@@ -295,4 +297,7 @@ void showGoButton() {
     goButtonUI->hide = 0;
 }
 
+Player* getPlayer() {
+    return player;
+}
 /*eol@eof*/

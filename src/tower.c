@@ -9,6 +9,7 @@
 #include "projectiles.h"
 #include "gf2d_draw.h"
 #include <enemies.h>
+#include "player.h"
 
 Bool allyCollision(Entity* self);
 char* getStingerUpgradeDesc(Entity* tower, int upgradeNum);
@@ -35,7 +36,6 @@ void applyTechnoUpgrade(Entity* tower, int upgradeNum);
 void applyWaterUpgrade(Entity* tower, int upgradeNum);
 
 void swarm_kill_all();
-void player_consume(TowerTypes type); 
 void timeWarp_slow_all();
 
 
@@ -2161,8 +2161,4 @@ void upgradeTwo_buy() {
 	}
 
 	gf2d_entity_set_selected(gf2d_entity_get_selected());//update upgrade window
-}
-
-void player_consume(TowerTypes type) {
-	slog("temporary");
 }

@@ -5,6 +5,7 @@
 #define UI_MAX 15
 
 #include "gf2d_windows.h"
+#include "player.h"
 
 typedef enum
 {
@@ -28,5 +29,7 @@ Window* getLifeWindow();
 Window* getUpgradeWindow();
 void setWindowPressed(Bool state);
 Bool getWindowPressed();
+
+Player* getPlayer();
 
 #endif

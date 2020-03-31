@@ -174,6 +174,9 @@
     <ClCompile Include="..\src\projectiles.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\player.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gfc\include\gfc_audio.h">
@@ -302,6 +305,9 @@
     <ClInclude Include="..\include\projectiles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\actors\mouse.actor">
@@ -405,6 +411,9 @@
     </None>
     <None Include="..\actors\timeWarp.actor">
       <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\saves\playerTest.json">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
 </Project>
