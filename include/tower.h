@@ -19,7 +19,7 @@ typedef enum
 
 
 List* inRange(Entity* self);
-void techno_damage(Entity* self, Entity* target);
+Entity* techno_damage(Entity* self, Entity* target);
 void setSeekBuckets(Entity* self); 
 Entity* findClosest(Entity* self);
 

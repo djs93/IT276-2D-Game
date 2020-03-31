@@ -326,6 +326,8 @@ void water_think(Entity* self){
 
 void techno_think(Entity* self){
 	Entity* target;
+	Entity* tempTarget;
+	Vector2D firePos;
 	if (self->cooldown < 0.0000001f) {
 		//try to fire
 		target = findClosest(self);
@@ -333,9 +335,10 @@ void techno_think(Entity* self){
 		if (target) {
 			gf2d_actor_set_action(&self->actor, "fire");
 			gf2d_entity_look_at(self, target);
-			techno_damage(self, target);
+			vector2d_copy(firePos, target->position);
+			tempTarget = techno_damage(self, target);
 			SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 20, 20, 255);
-			SDL_RenderDrawLineF(gf2d_graphics_get_renderer(), self->position.x, self->position.y, target->position.x, target->position.y);
+			SDL_RenderDrawLineF(gf2d_graphics_get_renderer(), self->position.x, self->position.y, firePos.x, firePos.y);
 			SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
 			self->rotation.z += 180;
 			if (self->rotation.z >= 360.0f) {
@@ -346,6 +349,37 @@ void techno_think(Entity* self){
 			}
 			else {
 				self->flip = vector2d(0, 0);
+			}
+			if (self->upgradeID == 6) {
+				self->noTouch = gfc_list_new();
+				if(tempTarget && tempTarget->_inuse == 1){
+					self->noTouch = gfc_list_append(self->noTouch, tempTarget);
+				}
+				target = findClosest(self);
+				if (target) {
+					vector2d_copy(firePos, target->position);
+					tempTarget = techno_damage(self, target);
+					SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 20, 20, 255);
+					SDL_RenderDrawLineF(gf2d_graphics_get_renderer(), self->position.x, self->position.y, firePos.x, firePos.y);
+					SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
+					if (tempTarget && tempTarget->_inuse == 1) {
+						self->noTouch = gfc_list_append(self->noTouch, tempTarget);
+					}
+
+					target = findClosest(self);
+					if (target) {
+						vector2d_copy(firePos, target->position);
+						tempTarget = techno_damage(self, target);
+						SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 20, 20, 255);
+						SDL_RenderDrawLineF(gf2d_graphics_get_renderer(), self->position.x, self->position.y, firePos.x, firePos.y);
+						SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
+						if (tempTarget && tempTarget->_inuse == 1) {
+							self->noTouch = gfc_list_append(self->noTouch, tempTarget);
+						}
+					}
+				}
+				gfc_list_delete(self->noTouch);
+				self->noTouch = NULL;
 			}
 			self->cooldown = self->fireRate;
 		}
@@ -807,22 +841,23 @@ List* inRange(Entity* self) {
 	return res;
 }
 
-void techno_damage(Entity* self, Entity* target) {
+Entity* techno_damage(Entity* self, Entity* target) {
 	int damageLeft;
 	damageLeft = self->damage;
 	Entity* child = NULL;
 	if (target->_inuse != 1) { return; }
 	target->health -= damageLeft;
-	if (target->health <= 0) {
+	if (target->health < 0) {
+		child = target->die(target);
 		damageLeft = abs(target->health);
 		while (damageLeft > 0) {
-			child = target->die(target);
 			if (!child) {
 				break;
 			}
 			child->health -= damageLeft;
 			if (child->health < 0) {
 				damageLeft = abs(child->health);
+				child = child->die(child);
 			}
 			else if (child->health == 0) {
 				damageLeft = 0;
@@ -833,6 +868,13 @@ void techno_damage(Entity* self, Entity* target) {
 				child = NULL;
 			}
 		}
+		return child;
+	}
+	else if (target->health > 0) {
+		return target;
+	}
+	else {
+		return target->die(target);
 	}
 }
 
@@ -1633,7 +1675,7 @@ char* getTechnoUpgradeDesc(Entity* tower, int upgradeNum) {
 	}
 	else if (tower->upgradeID == 1) {
 		if (upgradeNum == 0) {
-			return "Speed +25%%";
+			return "Speed +35%%";
 		}
 		else {
 			return "Recovery Bots";
@@ -1641,10 +1683,10 @@ char* getTechnoUpgradeDesc(Entity* tower, int upgradeNum) {
 	}
 	else if (tower->upgradeID == 2) {
 		if (upgradeNum == 0) {
-			return "Damage +2";
+			return "Damage +3";
 		}
 		else {
-			return "Dual-Shot";
+			return "Tri-Shot";
 		}
 	}
 	else {
@@ -1692,7 +1734,7 @@ int getTechnoUpgradeCost(Entity* tower, int upgradeNum) {
 }
 
 void applyTechnoUpgrade(Entity* tower, int upgradeNum) {
-	if (!tower || (TowerTypes)tower->data != TT_Stinger) {
+	if (!tower || (TowerTypes)tower->data != TT_Techno) {
 		slog("Invalid stinger passed to applyStingerUpgrade");
 		return;
 	}
@@ -1704,29 +1746,31 @@ void applyTechnoUpgrade(Entity* tower, int upgradeNum) {
 	if (tower->upgradeID == 0) {//base tower state, no upgrades
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 1;
-			tower->fireRate *= 0.85f;
+			tower->fireRate *= 0.75f;
 		}
 		else {
 			tower->upgradeID = 2;
+			tower->damage += 2;
 		}
 	}
 	else if (tower->upgradeID == 1) {//speed path
 		if (upgradeNum == 0) {//first upgrade desc
 			tower->upgradeID = 3;
-			tower->fireRate *= 0.75f;
+			tower->fireRate *= 0.65f;
 		}
 		else {
 			tower->upgradeID = 4;
+			slog("Add regen!");
+			//level_addRegen(1);
 		}
 	}
 	else if (tower->upgradeID == 2) {//speed path
 		if (upgradeNum == 0) {//travel upgrade desc
 			tower->upgradeID = 5;
+			tower->damage += 3;
 		}
 		else {
 			tower->upgradeID = 6;
-			tower->shootRadius.radius *= 1.15f;
-			setSeekBuckets(tower);
 		}
 	}
 	else {
