@@ -16,6 +16,13 @@ typedef struct Level_S{
 	List* needUpdating; /**<Entities needing to have their buckets updated. Made automatically*/
 	int playerHealth; /**<How much health the player has*/
 	float playerCash; /**<How much cash the player has*/
+	int round; /**<What round we're on*/
+	float spawnCooldown; /**<How long until spawning the next enemy*/
+	int currentEnemy; /**<Current enemy spawned (index)*/
+	int lives; /**<How many lives the player has*/
+	List* roundTimings; /**<How long after each enemy to spawn the next (in milliseconds) (List of ints)*/
+	List* roundEnemies; /**<What to spawn after the last enemy (List of EnemyTypes)*/
+	Bool roundOver; /**<If the current round is over or not*/
 }Level;
 
 Level* get_loaded_level();
@@ -36,5 +43,15 @@ void do_collisions();
 * @param amount The amount to add or subtract from the player
 */
 void level_addCash(float amount);
+
+/**
+* @brief Updates the level, spawns new enemies
+*/
+void level_update();
+
+/**
+* @brief Starts the levels next round if the previous is over
+*/
+void level_start_round();
 
 #endif

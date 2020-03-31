@@ -27,6 +27,8 @@ int mx, my;
 Entity* selectedEntity;
 Window* cashUI;
 Window* upgradeUI;
+Window* lifeUI;
+Window* goButtonUI;
 Bool windowPress;
 
 int main(int argc, char * argv[])
@@ -114,7 +116,7 @@ int main(int argc, char * argv[])
     gf2d_mouse_load("actors/mouse.actor");
     level_load("Levels/test.json");
     level_addCash(10000.0f);
-    gfc_input_set_callbacks("test", redSpawn, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("test", level_start_round, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyLaser", laser_buy, NULL, NULL, NULL, NULL);
@@ -152,6 +154,7 @@ int main(int argc, char * argv[])
             //UI elements last
             //gf2d_sprite_draw(mouse, vector2d(mx,my), NULL, NULL, NULL, NULL, &mouseColor, (int)mf);
         draw_level();
+        level_update();
         gf2d_entity_update_all();		
 		//draw_buckets();
         //draw_buckets_optimal();

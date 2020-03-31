@@ -8,13 +8,20 @@
 #include "game.h"
 #include "gf2d_element_button.h"
 #include "gf2d_elements.h"
+#include "gf2d_graphics.h"
+#include <enemies.h>
 
 static Level* LOADED_LEVEL;
 
 void paths_save(void* data, void* context);
 void calcPathBoundaries(void* data, void* context);
 void calcBoundaryLines(void* data, void* context);
-void calcOptimalBuckets(void* data, void* context);
+void calcOptimalBuckets(void* data, void* context); 
+List* getRoundEnemies(int round);
+List* getRoundTimings(int round);
+void endRound();
+Bool enemiesExist();
+void spawnNext();
 
 Level* get_loaded_level() {
 	return LOADED_LEVEL;
@@ -143,6 +150,8 @@ Level* level_load(char* levelFile)
 	//sj_free(paths);
 	//sj_free(currPath);
 
+	level->roundOver = true;
+	level->round = -1;
 	LOADED_LEVEL = level;
 
 	level_addCash(100.0f);
@@ -280,4 +289,1722 @@ void level_addCash(float amount)
 	currLabel = gf2d_window_get_element_by_id(getCashWindow(), 0);
 	sprintf(str, "$%i", (int)LOADED_LEVEL->playerCash);
 	gf2d_element_label_set_text(currLabel, str);
+}
+
+void level_update()
+{
+	if (LOADED_LEVEL->roundOver == true) { return; }
+	//if no more enemies and no more to spawn, 
+	if (LOADED_LEVEL->currentEnemy >= LOADED_LEVEL->roundEnemies->count) {
+		//check no more in play
+		if (enemiesExist()) {
+			return;
+		}
+		else {
+			endRound();
+		}
+		//else:
+	}
+	else {
+		if (LOADED_LEVEL->spawnCooldown < 0.0000001f) {
+			spawnNext();
+			LOADED_LEVEL->currentEnemy += 1;
+			if (LOADED_LEVEL->currentEnemy >= LOADED_LEVEL->roundEnemies->count) { return; }
+			LOADED_LEVEL->spawnCooldown = (int)gfc_list_get_nth(LOADED_LEVEL->roundTimings, LOADED_LEVEL->currentEnemy)/1000.0f;
+		}
+		else {
+			LOADED_LEVEL->spawnCooldown -= gf2d_graphics_get_milli_delta();
+		}
+	}
+}
+
+void endRound() {
+	//do regen at round end
+	//show go button
+	LOADED_LEVEL->roundOver = true;
+	//if it's the last round, bring up the rewards screen
+}
+
+void level_start_round() {
+	if (LOADED_LEVEL->roundOver) {
+		LOADED_LEVEL->roundOver = false;
+		LOADED_LEVEL->round += 1;
+		LOADED_LEVEL->roundEnemies = getRoundEnemies(LOADED_LEVEL->round);
+		LOADED_LEVEL->roundTimings = getRoundTimings(LOADED_LEVEL->round);
+		LOADED_LEVEL->currentEnemy = 0;
+		LOADED_LEVEL->spawnCooldown = 0.0f;
+	}
+}
+
+Bool enemiesExist() {
+	List* optiBuckets;
+	Bucket* bucket;
+	Entity* currEntity;
+	int i, j;
+	Bool result = false;
+	optiBuckets = LOADED_LEVEL->optimalBuckets;
+	for (i = 0; i < optiBuckets->count; i++) {
+		bucket = gfc_list_get_nth(optiBuckets, i);
+		for (j = 0; j < bucket->entities->count; j++) {
+			currEntity = gfc_list_get_nth(bucket->entities, j);
+			if (currEntity->_inuse != 1 || currEntity->type != Type_Enemy) {
+				continue;
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+void spawnNext() {
+	EnemyTypes type = (EnemyTypes)gfc_list_get_nth(LOADED_LEVEL->roundEnemies, LOADED_LEVEL->currentEnemy);
+	switch (type)
+	{
+	case ET_RED:
+		redSpawn(NULL);
+		break;
+	case ET_BLUE:
+		blueSpawn(NULL);
+		break;
+	case ET_GREEN:
+		greenSpawn(NULL);
+		break;
+	case ET_YELLOW:
+		yellowSpawn(NULL);
+		break;
+	case ET_SUPER:
+		superSpawn(NULL);
+		break;
+	default:
+		break;
+	}
+}
+
+List* getRoundEnemies(int round) {
+	List* res;
+	if (round < 0 || round > 19) {
+		slog("Round must be between 0 and 19 inclusive!");
+		return NULL;
+	}
+	res = gfc_list_new();
+	switch (round)
+	{
+	case 0:
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		break;
+	case 1:
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		break;
+	case 2:
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		break;
+	case 3:
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE); 
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		break;
+	case 4:
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		break;
+	case 5:
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		break;
+	case 6:
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		break;
+	case 7:
+		res = gfc_list_append(res, ET_SUPER);
+		res = gfc_list_append(res, ET_SUPER);
+		break;
+	case 8:
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		break;
+	case 9:
+		res = gfc_list_append(res, ET_SUPER);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		break;
+	case 10:
+		res = gfc_list_append(res, ET_SUPER);
+		res = gfc_list_append(res, ET_SUPER);
+		res = gfc_list_append(res, ET_SUPER);
+		break;
+	case 11:
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		break;
+	case 12:
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_RED);
+
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_BLUE);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_SUPER);
+		break;
+	case 13:
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+		break;
+	case 14:
+		res = gfc_list_append(res, ET_SUPER);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		break;
+	case 15:
+		res = gfc_list_append(res, ET_SUPER);
+
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		break;
+	case 16:
+		res = gfc_list_append(res, ET_SUPER);
+
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		res = gfc_list_append(res, ET_YELLOW);
+		break;
+	case 17:
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_GREEN);
+		break;
+	case 18:
+		res = gfc_list_append(res, ET_SUPER);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_SUPER);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+
+		res = gfc_list_append(res, ET_RED);
+		res = gfc_list_append(res, ET_BLUE);
+		res = gfc_list_append(res, ET_GREEN);
+		res = gfc_list_append(res, ET_YELLOW);
+		break;
+	case 19:
+		res = gfc_list_append(res, ET_SUPER);
+		res = gfc_list_append(res, ET_SUPER);
+		res = gfc_list_append(res, ET_SUPER);
+		res = gfc_list_append(res, ET_SUPER);
+		res = gfc_list_append(res, ET_SUPER);
+		res = gfc_list_append(res, ET_SUPER);
+		break;
+	default:
+		break;
+	}
+}
+
+List* getRoundTimings(int round) {
+	List* res;
+	if (round < 0 || round > 19) {
+		slog("Round must be between 0 and 19 inclusive!");
+		return NULL;
+	}
+	res = gfc_list_new();
+	switch (round)
+	{
+	case 0:
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		break;
+	case 1:
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 900);
+
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		break;
+	case 2:
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		break;
+	case 3:
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		break;
+	case 4:
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 700);
+		break;
+	case 5:
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 700);
+		break;
+	case 6:
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 700);
+		break;
+	case 7:
+		res = gfc_list_append(res, 3000);
+		res = gfc_list_append(res, 700);
+		break;
+	case 8:
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		break;
+	case 9:
+		res = gfc_list_append(res, 1500);
+
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		res = gfc_list_append(res, 450);
+		break;
+	case 10:
+		res = gfc_list_append(res, 200);
+		res = gfc_list_append(res, 200);
+		res = gfc_list_append(res, 200);
+		break;
+	case 11:
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		break;
+	case 12:
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 500);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 500);
+
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+		res = gfc_list_append(res, 500);
+
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 600);
+		res = gfc_list_append(res, 800);
+
+		res = gfc_list_append(res, 500);
+		break;
+	case 13:
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+		break;
+	case 14:
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		break;
+	case 15:
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		break;
+	case 16:
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		break;
+	case 17:
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		break;
+	case 18:
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 700);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 600);
+		break;
+	case 19:
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		res = gfc_list_append(res, 300);
+		break;
+	default:
+		break;
+	}
 }
