@@ -35,7 +35,9 @@ void applyTechnoUpgrade(Entity* tower, int upgradeNum);
 void applyWaterUpgrade(Entity* tower, int upgradeNum);
 
 void swarm_kill_all();
-void player_consume(TowerTypes type);
+void player_consume(TowerTypes type); 
+void timeWarp_slow_all();
+
 
 #pragma region Spawns
 Entity* stinger_spawn(Vector2D position) {
@@ -741,6 +743,7 @@ void placement_detach(Entity* ent) {
 		break;
 	case TT_Power_Time_Warp:
 		//slow things on screen
+		timeWarp_slow_all();
 		//subtract from player's inventory
 		player_consume(TT_Power_Time_Warp);
 		gf2d_entity_free(ent);
@@ -1129,6 +1132,32 @@ void swarm_kill_all() {
 				break;
 			}
 			gf2d_entity_free(currEntity);
+		}
+	}
+}
+
+void timeWarp_slow_all() {
+	Entity* currEntity;
+	Bucket* currBucket;
+	List* optiBuckets;
+	List* alreadySlowed;
+	int i, j;
+	optiBuckets = get_loaded_level()->optimalBuckets;
+	alreadySlowed = gfc_list_new();
+	for (i = 0; i < optiBuckets->count; i++) {
+		currBucket = gfc_list_get_nth(optiBuckets, i);
+		for (j = 0; j < currBucket->entities->count; j++) {
+			currEntity = gfc_list_get_nth(currBucket->entities, j);
+			if (currEntity->_inuse != 1 || currEntity->type != Type_Enemy || gfc_list_in_list(alreadySlowed, currEntity)>=0) {
+				continue;
+			}
+			alreadySlowed = gfc_list_append(alreadySlowed, currEntity);
+
+			vector2d_normalize(&currEntity->velocity);
+			currEntity->speed = currEntity->maxSpeed / 3.5f;
+			currEntity->velocity.x *= currEntity->speed;
+			currEntity->velocity.y *= currEntity->speed;
+			currEntity->cooldown = 6.0f;
 		}
 	}
 }
