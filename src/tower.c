@@ -139,6 +139,7 @@ Entity* placement_spawn(TowerTypes type) {
 	self->data = (int)type;
 	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
 	self->boundingBox.position = self->position;
+	self->type = Type_Placement;
 	return self;
 }
 #pragma endregion

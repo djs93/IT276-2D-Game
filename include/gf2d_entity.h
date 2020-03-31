@@ -20,7 +20,8 @@ typedef enum
 	Type_Decor = 0,
 	Type_Tower = 1,
 	Type_Enemy = 2,
-	Type_Projectile = 3
+	Type_Projectile = 3,
+	Type_Placement = 4
 }EntityType;
 
 typedef enum
