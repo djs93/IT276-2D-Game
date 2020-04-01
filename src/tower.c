@@ -611,19 +611,21 @@ void snowglobe_think(Entity* self){
 			gf2d_actor_set_action(&self->actor, "fire");
 			for (i = 0; i < targets->count; i++) {
 				target = gfc_list_get_nth(targets, i);
-				techno_damage(self, target);
-				vector2d_normalize(&target->velocity);
-				speedMod = 2.0f;
-				if (self->upgradeID == 2 || self->upgradeID == 5 || self->upgradeID == 6) {
-					speedMod *= 1.15f;
+				target = techno_damage(self, target);
+				if (target) {
+					vector2d_normalize(&target->velocity);
+					speedMod = 2.0f;
+					if (self->upgradeID == 2 || self->upgradeID == 5 || self->upgradeID == 6) {
+						speedMod *= 1.15f;
+					}
+					if (self->upgradeID == 5) {
+						speedMod *= 1.35f;
+					}
+					target->speed = target->maxSpeed / speedMod;
+					target->velocity.x *= target->speed;
+					target->velocity.y *= target->speed;
+					target->cooldown = 2.0f;
 				}
-				if (self->upgradeID == 5) {
-					speedMod *= 1.35f;
-				}
-				target->speed = target->maxSpeed/ speedMod;
-				target->velocity.x *= target->speed;
-				target->velocity.y *= target->speed;
-				target->cooldown = 2.0f;
 			}
 			snowwave_spawn(self);
 			self->cooldown = self->fireRate;
