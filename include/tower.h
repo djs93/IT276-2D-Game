@@ -44,6 +44,11 @@ void techno_buy();
 void snowglobe_buy();
 void music_buy();
 
+void swarm_buy();
+void cashDrop_buy();
+void speedTotem_buy();
+void timeWarp_buy();
+
 Entity* placement_spawn(TowerTypes type);
 
 void stinger_think(Entity* self);

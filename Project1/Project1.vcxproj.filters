@@ -427,5 +427,8 @@
     <None Include="..\actors\powerButton.actor">
       <Filter>Resource Files\Actors</Filter>
     </None>
+    <None Include="..\config\power_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
   </ItemGroup>
 </Project>

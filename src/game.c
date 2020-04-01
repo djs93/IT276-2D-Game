@@ -36,6 +36,8 @@ Window* lifeUI;
 Window* goButtonUI;
 Window* powerButtonUI;
 Window* towerButtonUI;
+Window* ui;
+Window* powerUI;
 Bool windowPress;
 Window* exitWindow;
 int done;
@@ -47,7 +49,6 @@ int main(int argc, char * argv[])
     done = 0;
     const Uint8 * keys;
     Sprite *sprite;
-    Window* ui;
     char windowTitle [30];
     
     mx = 0;
@@ -107,6 +108,10 @@ int main(int argc, char * argv[])
 
     ui = gf2d_window_load("config/yes_no_window2.json");
     setPrices(ui);
+
+    powerUI = gf2d_window_load("config/power_window.json");
+    powerUI->hide = 1;
+
     cashUI = gf2d_window_load("config/cash_UI.json");
     cashUI->no_draw_generic = 1;
 
@@ -156,6 +161,10 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("startRound", level_start_round, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("powers", toggle_powers, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("towers", toggle_towers, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("power1", swarm_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("power2", timeWarp_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("power3", speedTotem_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("power4", cashDrop_buy, NULL, NULL, NULL, NULL);
     /*main game loop*/
     while(!done)
     {
@@ -315,12 +324,16 @@ Player* getPlayer() {
 }
 
 void toggle_towers() {
-        towerButtonUI->hide = 1;
-        powerButtonUI->hide = 0;
+    powerButtonUI->hide = 0;
+    towerButtonUI->hide = 1;
+    powerUI->hide = 1;
+    ui->hide = 0;
 }
 
 void toggle_powers() {
-    powerButtonUI->hide = 1;
     towerButtonUI->hide = 0;
+    powerButtonUI->hide = 1;
+    powerUI->hide = 0;
+    ui->hide = 1;    
 }
 /*eol@eof*/

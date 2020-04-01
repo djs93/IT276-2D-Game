@@ -10,6 +10,7 @@
 #include "gf2d_draw.h"
 #include <enemies.h>
 #include "player.h"
+#include "game.h"
 
 Bool allyCollision(Entity* self);
 char* getStingerUpgradeDesc(Entity* tower, int upgradeNum);
@@ -324,6 +325,30 @@ void music_buy() {
 	if (get_loaded_level()->playerCash >= getPrice(TT_Music)) {
 		//level_addCash(-(float)getPrice(TT_Music));
 		placement_spawn(TT_Music);
+	}
+}
+
+void swarm_buy() {
+	if (getPlayer()->powerInventory[0] >= 1) {
+		placement_spawn(TT_Power_Bee_Swarm);
+	}
+}
+
+void cashDrop_buy() {
+	if (getPlayer()->powerInventory[1] >= 1) {
+		placement_spawn(TT_Power_Cash_Drop);
+	}
+}
+
+void speedTotem_buy() {
+	if (getPlayer()->powerInventory[2] >= 1) {
+		placement_spawn(TT_Power_Speed_Totem);
+	}
+}
+
+void timeWarp_buy() {
+	if (getPlayer()->powerInventory[3] >= 1) {
+		placement_spawn(TT_Power_Time_Warp);
 	}
 }
 #pragma endregion
