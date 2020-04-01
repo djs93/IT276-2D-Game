@@ -2289,7 +2289,7 @@ void applyWaterUpgrade(Entity* tower, int upgradeNum) {
 		}
 		else {
 			tower->upgradeID = 6;
-			tower->fireRate *= 0.20f;
+			tower->fireRate *= 0.80f;
 		}
 	}
 	else {
