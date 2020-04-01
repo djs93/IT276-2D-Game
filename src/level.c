@@ -493,6 +493,9 @@ Level* level_load(char* levelFile)
 	level->playerHealth = 0;
 	level->fileName = levelFile;
 	level_addCash(100.0f);
+	if (getPlayer()->perks[PN_Money]) {
+		level_addCash(150.0f);
+	}
 	level_addLife(100);
 	return level;
 }
