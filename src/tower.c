@@ -1435,9 +1435,15 @@ int getStingerUpgradeCost(Entity* tower, int upgradeNum) {
 
 	if (tower->upgradeID == 0) {//base tower state, no upgrades
 		if (upgradeNum == 0) {//first upgrade desc
+			if (getPlayer()->perks[PN_StingerUps]) {
+				return 0;
+			}
 			return 90;
 		}
 		else {
+			if (getPlayer()->perks[PN_StingerUps]) {
+				return 0;
+			}
 			return 75;
 		}
 	}
