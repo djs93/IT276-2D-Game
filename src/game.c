@@ -79,6 +79,7 @@ int main(int argc, char * argv[])
     gf2d_graphics_set_frame_delay(16);
     gf2d_sprite_init(1024);
     SDL_ShowCursor(SDL_DISABLE);
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
     
     /*demo setup*/
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
