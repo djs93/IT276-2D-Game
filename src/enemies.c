@@ -269,22 +269,6 @@ void flowerMove(Entity* self)
 	vector2d_copy(self->boundingBox.position, self->position);
 }
 
-void blueMove(Entity* self)
-{
-}
-
-void greenMove(Entity* self)
-{
-}
-
-void yellowMove(Entity* self)
-{
-}
-
-void superMove(Entity* self)
-{
-}
-
 Entity* redDie(Entity* self)
 {
 	level_addCash(1.0f);
