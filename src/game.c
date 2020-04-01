@@ -39,6 +39,7 @@ Window* towerButtonUI;
 Window* ui;
 Window* powerUI;
 Window* rewardWindow;
+Window* gameOverWindow;
 Bool windowPress;
 Window* exitWindow;
 int done;
@@ -122,9 +123,6 @@ int main(int argc, char * argv[])
     lifeUI = gf2d_window_load("config/life_UI.json");
     lifeUI->no_draw_generic = 1;
 
-    exitWindow = gf2d_window_load("config/exit_window.json");
-    exitWindow->hide = 1;
-
     goButtonUI = gf2d_window_load("config/go_button_window.json");
     goButtonUI->no_draw_generic = 1;
 
@@ -136,7 +134,13 @@ int main(int argc, char * argv[])
     powerButtonUI->no_draw_generic = 1;
 
     rewardWindow = gf2d_window_load("config/reward_window.json");
-    rewardWindow->hide = 0;
+    rewardWindow->hide = 1;
+
+    gameOverWindow = gf2d_window_load("config/gameover_window.json");
+    gameOverWindow->hide = 1;
+
+    exitWindow = gf2d_window_load("config/exit_window.json");
+    exitWindow->hide = 1;
 	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
@@ -314,6 +318,8 @@ void esc_press() {
 void exit_press() {
     done = 1; // exit condition
     //save stuff
+    level_save("saves/level.json");
+    player_save("saves/player.json");
 }
 
 void hideGoButton() {
@@ -340,5 +346,65 @@ void toggle_powers() {
     powerButtonUI->hide = 1;
     powerUI->hide = 0;
     ui->hide = 1;    
+}
+
+void showRewardWindow(TowerTypes power, PerkNumbers perk) {
+    Element* list;
+    Element* currLabel;
+    TextLine str;
+    list = gf2d_window_get_element_by_id(rewardWindow, 0);
+    currLabel = gf2d_element_list_get_item_by_id(list, 2);
+    switch (power)
+    {
+    case TT_Power_Bee_Swarm:
+        sprintf(str, "Obtained power: Bee Swarm (Now have %i)", player->powerInventory[0]);
+        break;
+    case TT_Power_Time_Warp:
+        sprintf(str, "Obtained power: Time Warp (Now have %i)", player->powerInventory[1]);
+        break;
+    case TT_Power_Speed_Totem:
+        sprintf(str, "Obtained power: Speed Totem (Now have %i)", player->powerInventory[2]);
+        break;
+    case TT_Power_Cash_Drop:
+        sprintf(str, "Obtained power: Cash Drop (Now have %i)", player->powerInventory[3]);
+        break;
+    default:
+        break;
+    }
+    gf2d_element_label_set_text(currLabel, str);
+
+    currLabel = gf2d_element_list_get_item_by_id(list, 3);
+    switch (perk)
+    {
+    case PN_Pierce:
+        sprintf(str, "Obtained perk: +1 pierce");
+        break;
+    case PN_Speed:
+        sprintf(str, "Obtained perk: +10%% speed");
+        break;
+    case PN_Discount:
+        sprintf(str, "Obtained perk: -20%% cost");
+        break;
+    case PN_Money:
+        sprintf(str, "Obtained perk: +$150 starting money");
+        break;
+    case PN_StingerUps:
+        sprintf(str, "Obtained perk: Stinger first upgrades free");
+        break;
+    default:
+        sprintf(str, " ");
+        break;
+    }
+    gf2d_element_label_set_text(currLabel, str);
+    rewardWindow->hide = 0;
+}
+
+void hideRewardWindow() {
+    rewardWindow->hide = 1;
+}
+
+
+void showGameOver() {
+    gameOverWindow->hide = 0;
 }
 /*eol@eof*/

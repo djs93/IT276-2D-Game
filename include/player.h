@@ -29,4 +29,10 @@ void player_consume(TowerTypes powerType);
 */
 Player* player_load(char* saveFile);
 
+/**
+* @brief Saves the current player
+* @param saveFile the file to save to
+*/
+void player_save(char* saveFile);
+
 #endif

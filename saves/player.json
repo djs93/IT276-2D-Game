@@ -1,4 +1,1 @@
-{
-  "powerInv": [ 1, 1, 1, 1 ],
-  "perks": [true,true,true,true,true]
-}
+{"powerInv":["0","1","2","1"],"perks":["true","false","false","false","false"]}

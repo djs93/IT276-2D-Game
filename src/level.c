@@ -651,6 +651,7 @@ void level_addRegen(int amountPerRound) {
 
 void level_loadNext()
 {
+	hideRewardWindow();
 	level_load(LOADED_LEVEL->nextLevel);
 }
 
@@ -659,9 +660,9 @@ void level_update()
 	if (LOADED_LEVEL->roundOver == true) { return; }
 	//if no more enemies and no more to spawn, 
 	if (LOADED_LEVEL->playerHealth <= 0) {
-		//show game over screen
 		slog("U ded");
 		LOADED_LEVEL->roundOver = true;
+		showGameOver();
 	}
 	if (LOADED_LEVEL->currentEnemy >= LOADED_LEVEL->roundEnemies->count) {
 		//check no more in play
@@ -687,12 +688,55 @@ void level_update()
 }
 
 void endRound() {
+	int reward;
+	int reward2;
 	//do regen at round end
 	level_addLife(LOADED_LEVEL->regenPerRound);
 	//show go button
 	showGoButton();
 	LOADED_LEVEL->roundOver = true;
 	//if it's the last round, bring up the rewards screen
+	if (LOADED_LEVEL->round == 19) {
+		reward = rand() % (3 + 1);
+		getPlayer()->powerInventory[reward] += 1;
+		if (reward == 0) {
+			reward = TT_Power_Bee_Swarm;
+		}
+		else if (reward == 1) {
+			reward = TT_Power_Time_Warp;
+		}
+		else if (reward == 2) {
+			reward = TT_Power_Speed_Totem;
+		}
+		else if (reward == 3) {
+			reward = TT_Power_Cash_Drop;
+		}
+		
+		if (!getPlayer()->perks[0]) {
+			reward2 = 0;
+			getPlayer()->perks[0] = true;
+		}
+		else if (!getPlayer()->perks[1]) {
+			reward2 = 1;
+			getPlayer()->perks[1] = true;
+		}
+		else if (!getPlayer()->perks[2]) {
+			reward2 = 2;
+			getPlayer()->perks[2] = true;
+		}
+		else if (!getPlayer()->perks[3]) {
+			reward2 = 3;
+			getPlayer()->perks[3] = true;
+		}
+		else if (!getPlayer()->perks[4]) {
+			reward2 = 4;
+			getPlayer()->perks[4] = true;
+		}
+		else {
+			reward2 = -1;
+		}
+		showRewardWindow(reward, reward2);
+	}
 }
 
 void level_start_round() {
