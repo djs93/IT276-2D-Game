@@ -640,6 +640,8 @@ void snowglobe_think(Entity* self){
 			gf2d_actor_set_action(&self->actor, "idle");
 		}
 		if (self->upgradeID == 3) {
+			gfc_list_delete(self->noTouch);
+			self->noTouch = gfc_list_new();
 			target = findClosest(self);
 			//if fire, reset cooldown to fireRate
 			if (target) {
