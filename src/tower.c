@@ -45,6 +45,9 @@ Entity* stinger_spawn(Vector2D position) {
 	self->fireRate = 0.5f;
 	self->distanceLeft = 1500.0f;
 	self->health = 2;
+	if (getPlayer()->perks[PN_Pierce]) {
+		self->health += 1;
+	}
 	self->damage = 2;
 	self->data = (int)TT_Stinger;
 	self->type = Type_Tower;
@@ -68,6 +71,9 @@ Entity* slingshot_spawn(Vector2D position) {
 	self->fireRate = 0.25f;
 	self->distanceLeft = 2000.0f;
 	self->health = 1;
+	if (getPlayer()->perks[PN_Pierce]) {
+		self->health += 1;
+	}
 	self->damage = 1;
 	self->data = (int)TT_Slingshot;
 	self->type = Type_Tower;
@@ -91,6 +97,9 @@ Entity* laser_spawn(Vector2D position) {
 	self->fireRate = 0.5f;
 	self->distanceLeft = 2000.0f;
 	self->health = 4;
+	if (getPlayer()->perks[PN_Pierce]) {
+		self->health += 1;
+	}
 	self->damage = 3;
 	self->data = (int)TT_Laser;
 	self->type = Type_Tower;
@@ -155,6 +164,9 @@ Entity* snowglobe_spawn(Vector2D position) {
 	self->fireRate = 1.45f;
 	self->damage = 1;
 	self->health = 10;
+	if (getPlayer()->perks[PN_Pierce]) {
+		self->health += 1;
+	}
 	self->distanceLeft = 3400.0f;
 	self->data = (int)TT_Snowglobe;
 	self->type = Type_Tower;
@@ -178,6 +190,9 @@ Entity* music_spawn(Vector2D position) {
 	self->fireRate = 0.5f;
 	self->distanceLeft = 1400.0f;
 	self->health = 1;
+	if (getPlayer()->perks[PN_Pierce]) {
+		self->health += 1;
+	}
 	self->damage = 1;
 	self->data = (int)TT_Music;
 	self->type = Type_Tower;
@@ -804,6 +819,9 @@ void placement_detach(Entity* ent) {
 		ent->fireRate = 0.5f;
 		ent->distanceLeft = 1500.0f;
 		ent->health = 2;
+		if (getPlayer()->perks[PN_Pierce]) {
+			ent->health += 1;
+		}
 		ent->damage = 2;
 		setSeekBuckets(ent);
 		break;
@@ -813,6 +831,9 @@ void placement_detach(Entity* ent) {
 		ent->fireRate = 0.25f;
 		ent->distanceLeft = 2000.0f;
 		ent->health = 1;
+		if (getPlayer()->perks[PN_Pierce]) {
+			ent->health += 1;
+		}
 		ent->damage = 1;
 		setSeekBuckets(ent);
 		break;
@@ -822,6 +843,9 @@ void placement_detach(Entity* ent) {
 		ent->fireRate = 0.5f;
 		ent->distanceLeft = 2000.0f;
 		ent->health = 4;
+		if (getPlayer()->perks[PN_Pierce]) {
+			ent->health += 1;
+		}
 		ent->damage = 3;
 		setSeekBuckets(ent);
 		break;
@@ -844,6 +868,9 @@ void placement_detach(Entity* ent) {
 		ent->fireRate = 1.45f;
 		ent->damage = 1;
 		ent->health = 10;
+		if (getPlayer()->perks[PN_Pierce]) {
+			ent->health += 1;
+		}
 		ent->distanceLeft = 3400.0f;
 		setSeekBuckets(ent);
 		break;
@@ -853,6 +880,9 @@ void placement_detach(Entity* ent) {
 		ent->fireRate = 0.5f;
 		ent->distanceLeft = 1400.0f;
 		ent->health = 1;
+		if (getPlayer()->perks[PN_Pierce]) {
+			ent->health += 1;
+		}
 		ent->damage = 1;
 		setSeekBuckets(ent);
 		break;
