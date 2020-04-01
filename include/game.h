@@ -35,5 +35,6 @@ Player* getPlayer();
 void showRewardWindow(TowerTypes power, PerkNumbers perk);
 void hideRewardWindow();
 void showGameOver();
+void hideGameOver();
 
 #endif

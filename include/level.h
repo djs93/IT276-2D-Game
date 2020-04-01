@@ -33,6 +33,7 @@ Level* level_new(char* backgroundFile);
 
 void level_save(char* fileName);
 Level* level_load(char* levelFile);
+void level_reload();
 Level* level_load_from_save(char* levelSaveFile);
 
 Bool pathCollision(Entity* entity);

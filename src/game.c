@@ -173,6 +173,7 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("power3", speedTotem_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("power4", cashDrop_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("loadNext", level_loadNext, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("reload", level_reload, NULL, NULL, NULL, NULL);
     /*main game loop*/
     while(!done)
     {
@@ -404,5 +405,9 @@ void hideRewardWindow() {
 
 void showGameOver() {
     gameOverWindow->hide = 0;
+}
+
+void hideGameOver() {
+    gameOverWindow->hide = 1;
 }
 /*eol@eof*/

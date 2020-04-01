@@ -505,6 +505,17 @@ Level* level_load(char* levelFile)
 	return level;
 }
 
+void level_reload() {
+	level_load(LOADED_LEVEL->fileName); 
+	level_addCash(100.0f);
+	if (getPlayer()->perks[PN_Money]) {
+		level_addCash(150.0f);
+	}
+	level_addLife(100);
+	hideGameOver();
+	showGoButton();
+}
+
 void level_save_level(char* fileName, Level* level) {
 	SJson* file = sj_object_new();
 	if (level->background) {
