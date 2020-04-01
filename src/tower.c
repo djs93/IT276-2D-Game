@@ -1019,25 +1019,38 @@ void setPrices(Window* window) {
 
 int getPrice(TowerTypes type)
 {
+	int price;
 	switch (type)
 	{
 	case TT_Stinger:
-		return 100;
+		price = 100;
+		break;
 	case TT_Slingshot:
-		return 175;
+		price = 175;
+		break;
 	case TT_Laser:
-		return 250;
+		price = 250;
+		break;
 	case TT_Water:
-		return 250;
+		price = 250;
+		break;
 	case TT_Techno:
-		return 350;
+		price = 350;
+		break;
 	case TT_Snowglobe:
-		return 150;
+		price = 150;
+		break;
 	case TT_Music:
-		return 200;
+		price = 200;
+		break;
 	default:
-		return 0;
+		price = 0;
+		break;
 	}
+	if (getPlayer()->perks[PN_Discount]) {
+		price *= 0.9f;
+	}
+	return price;
 }
 
 Entity* findClosest(Entity* self) {
