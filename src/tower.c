@@ -1898,6 +1898,7 @@ void applySlingshotUpgrade(Entity* tower, int upgradeNum) {
 	}
 	else if (tower->upgradeID == 1) {//speed path
 		if (upgradeNum == 0) {//first upgrade desc
+			tower->upgradeID = 3;
 			tower->shootRadius.radius *= 1.15f;
 			tower->distanceLeft *= 1.15f;
 			setSeekBuckets(tower);
