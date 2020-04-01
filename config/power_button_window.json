@@ -1,0 +1,39 @@
+{
+  "window": {
+    "color": [ 255, 255, 255, 255 ],
+    "dimensions": [ 0, 0, 520, 150 ],
+    "justify": "right",
+    "align": "bottom",
+    "elements": [
+      {
+        "type": "button",
+        "name": "powerButton",
+        "id": 51,
+        "bounds": [ 0, 0, 168, 64 ],
+        "hotkey": "powers",
+        "color": [ 255, 255, 255, 255 ],
+        "highColor": [ 255, 255, 255, 255 ],
+        "pressColor": [ 255, 255, 255, 255 ],
+        "label": {
+          "type": "label",
+          "name": "yes_l",
+          "id": 511,
+          "bounds": [ 0, 0, 168, 64 ],
+          "color": [ 255, 255, 255, 255 ],
+          "text": "Powers",
+          "justify": "center",
+          "align": "middle",
+          "style": "H5"
+        },
+        "actor": {
+          "type": "actor",
+          "name": "image",
+          "id": 512,
+          "bounds": [ 0, 0, 168, 64 ],
+          "color": [ 255, 255, 255, 255 ],
+          "actor": "actors/powerButton.actor"
+        }
+      }
+    ]
+  }
+}

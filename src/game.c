@@ -25,6 +25,8 @@ void draw_normal_entities();
 void draw_level();
 void esc_press();
 void exit_press();
+void toggle_towers();
+void toggle_powers();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
@@ -32,6 +34,8 @@ Window* cashUI;
 Window* upgradeUI;
 Window* lifeUI;
 Window* goButtonUI;
+Window* powerButtonUI;
+Window* towerButtonUI;
 Bool windowPress;
 Window* exitWindow;
 int done;
@@ -117,6 +121,13 @@ int main(int argc, char * argv[])
 
     goButtonUI = gf2d_window_load("config/go_button_window.json");
     goButtonUI->no_draw_generic = 1;
+
+    towerButtonUI = gf2d_window_load("config/tower_button_window.json");
+    towerButtonUI->no_draw_generic = 1;
+    towerButtonUI->hide = 1;
+
+    powerButtonUI = gf2d_window_load("config/power_button_window.json");
+    powerButtonUI->no_draw_generic = 1;
 	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
@@ -143,6 +154,8 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("no", esc_press, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("exit", exit_press, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("startRound", level_start_round, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("powers", toggle_powers, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("towers", toggle_towers, NULL, NULL, NULL, NULL);
     /*main game loop*/
     while(!done)
     {
@@ -299,5 +312,15 @@ void showGoButton() {
 
 Player* getPlayer() {
     return player;
+}
+
+void toggle_towers() {
+        towerButtonUI->hide = 1;
+        powerButtonUI->hide = 0;
+}
+
+void toggle_powers() {
+    powerButtonUI->hide = 1;
+    towerButtonUI->hide = 0;
 }
 /*eol@eof*/

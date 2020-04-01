@@ -253,6 +253,7 @@
     <None Include="..\actors\laser.actor" />
     <None Include="..\actors\mouse.actor" />
     <None Include="..\actors\music.actor" />
+    <None Include="..\actors\powerButton.actor" />
     <None Include="..\actors\projectiles\explosion.actor" />
     <None Include="..\actors\projectiles\laserlaser.actor" />
     <None Include="..\actors\projectiles\musicnote.actor" />
@@ -267,11 +268,14 @@
     <None Include="..\actors\stinger.actor" />
     <None Include="..\actors\techno.actor" />
     <None Include="..\actors\timeWarp.actor" />
+    <None Include="..\actors\towerButton.actor" />
     <None Include="..\actors\water.actor" />
     <None Include="..\config\cash_UI.json" />
     <None Include="..\config\exit_window.json" />
     <None Include="..\config\go_button_window.json" />
     <None Include="..\config\life_UI.json" />
+    <None Include="..\config\power_button_window.json" />
+    <None Include="..\config\tower_button_window.json" />
     <None Include="..\config\yes_no_window.json" />
     <None Include="..\config\yes_no_window2.json" />
     <None Include="..\levels\template.json" />

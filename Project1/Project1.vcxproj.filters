@@ -415,5 +415,17 @@
     <None Include="..\saves\playerTest.json">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\config\power_button_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\tower_button_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\actors\towerButton.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
+    <None Include="..\actors\powerButton.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
   </ItemGroup>
 </Project>
