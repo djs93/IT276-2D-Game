@@ -51,7 +51,7 @@ Entity* stinger_spawn(Vector2D position) {
 	if (getPlayer()->perks[PN_Pierce]) {
 		self->health += 1;
 	}
-	self->damage = 2;
+	self->damage = 1;
 	self->data = (int)TT_Stinger;
 	self->type = Type_Tower;
 	self->rotation.x = self->actor.sprite->frame_w / 2;
@@ -854,7 +854,7 @@ void placement_detach(Entity* ent) {
 		if (getPlayer()->perks[PN_Pierce]) {
 			ent->health += 1;
 		}
-		ent->damage = 2;
+		ent->damage = 1;
 		setSeekBuckets(ent);
 		break;
 	case TT_Slingshot:
