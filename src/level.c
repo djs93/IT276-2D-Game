@@ -129,7 +129,13 @@ Level* level_load_from_save(char* levelSaveFile) {
 	Vector2D pos;
 	file = sj_load(levelSaveFile);
 	if (!file) {
-		return level_load("levels/test.json");
+		level = level_load("levels/test.json");
+		level_addCash(100.0f);
+		if (getPlayer()->perks[PN_Money]) {
+			level_addCash(150.0f);
+		}
+		level_addLife(100);
+		return level;
 	}
 	tempJson = sj_object_get_value(file, "fileName");
 	if (tempJson) {
@@ -492,11 +498,6 @@ Level* level_load(char* levelFile)
 	LOADED_LEVEL = level;
 	level->playerHealth = 0;
 	level->fileName = levelFile;
-	level_addCash(100.0f);
-	if (getPlayer()->perks[PN_Money]) {
-		level_addCash(150.0f);
-	}
-	level_addLife(100);
 	return level;
 }
 
@@ -654,8 +655,14 @@ void level_addRegen(int amountPerRound) {
 
 void level_loadNext()
 {
+	Level* level;
 	hideRewardWindow();
-	level_load(LOADED_LEVEL->nextLevel);
+	level = level_load(LOADED_LEVEL->nextLevel);
+	level_addCash(100.0f);
+	if (getPlayer()->perks[PN_Money]) {
+		level_addCash(150.0f);
+	}
+	level_addLife(100);
 }
 
 void level_update()
