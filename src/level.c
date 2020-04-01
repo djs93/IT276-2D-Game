@@ -696,6 +696,7 @@ void level_loadNext()
 		level_addCash(150.0f);
 	}
 	level_addLife(100);
+	reloadPrices();
 }
 
 void level_update()

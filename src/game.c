@@ -423,4 +423,8 @@ void setRoundUI(int round) {
     sprintf(str, "Round: %i", round+1);
     gf2d_element_label_set_text(currLabel, str);
 }
+
+void reloadPrices() {
+    setPrices(ui);
+}
 /*eol@eof*/

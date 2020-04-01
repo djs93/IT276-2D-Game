@@ -38,4 +38,6 @@ void showGameOver();
 void hideGameOver();
 
 void setRoundUI(int round);
+
+void reloadPrices();
 #endif
