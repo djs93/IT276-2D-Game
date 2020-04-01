@@ -167,6 +167,7 @@ void setAllyBuckets(Entity* self) {
 	int r, c;
 	Bucket* currBucket;
 	List* allyBuckets = get_loaded_level()->allyBuckets;
+	if (!self) { return; }
 	if (!get_loaded_level()->allyBuckets) {
 		get_loaded_level()->allyBuckets = gfc_list_new();
 	}

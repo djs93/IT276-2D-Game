@@ -42,6 +42,333 @@ Level* level_new(char* backgroundFile)
 	return level;
 }
 
+void level_save(char* fileName)
+{
+	SJson* file;
+	SJson* tempJson;
+	SJson* tempJsonValue;
+	SJson* tempJsonValue2;
+	SJson* tempJsonValue3;
+	Level* level;
+	Entity* currEntity;
+	Bucket* currBucket;
+	List* alreadyAdded;
+	int i, j;
+	Player* player = getPlayer();
+	file = sj_object_new();
+	level = LOADED_LEVEL;
+	alreadyAdded = gfc_list_new();
+
+	//level file
+	//player health
+	//player cash
+	//round
+	//towers
+
+	tempJsonValue = sj_new_str(level->fileName);
+	sj_object_insert(file, "fileName", tempJsonValue);
+
+	tempJsonValue = sj_new_int(level->playerHealth);
+	sj_object_insert(file, "health", tempJsonValue);
+
+	tempJsonValue = sj_new_float(level->playerCash);
+	sj_object_insert(file, "cash", tempJsonValue);
+
+	if (LOADED_LEVEL->roundOver) {
+		tempJsonValue = sj_new_int(level->round);
+	}
+	else {
+		tempJsonValue = sj_new_int(level->round - 1);
+	}
+	sj_object_insert(file, "round", tempJsonValue);
+
+	tempJson = sj_array_new();
+	for (i = 0; i < LOADED_LEVEL->allyBuckets->count; i++) {
+		currBucket = gfc_list_get_nth(LOADED_LEVEL->allyBuckets, i);
+		for (j = 0; j < currBucket->entities->count; j++) {
+			currEntity = gfc_list_get_nth(currBucket->entities, j);
+			if (currEntity->_inuse != 1 || currEntity->type != Type_Tower || gfc_list_in_list(alreadyAdded, currEntity) >= 0) {
+				continue;
+			}
+			alreadyAdded = gfc_list_append(alreadyAdded, currEntity);
+			tempJsonValue = sj_object_new();
+			//upgradeID
+			tempJsonValue2 = sj_new_int(currEntity->upgradeID);
+			sj_object_insert(tempJsonValue, "upgradeID", tempJsonValue2);
+			//position
+			tempJsonValue2 = sj_array_new();
+			tempJsonValue3 = sj_new_float(currEntity->position.x);
+			sj_array_append(tempJsonValue2, tempJsonValue3);
+			tempJsonValue3 = sj_new_float(currEntity->position.y);
+			sj_array_append(tempJsonValue2, tempJsonValue3);
+			sj_object_insert(tempJsonValue, "position", tempJsonValue2);
+			//type
+			tempJsonValue2 = sj_new_int((TowerTypes)currEntity->data);
+			sj_object_insert(tempJsonValue, "towerType", tempJsonValue2);
+			sj_array_append(tempJson, tempJsonValue);
+		}
+	}
+	sj_object_insert(file, "towers", tempJson);
+	
+
+	sj_save(file, fileName);
+}
+
+Level* level_load_from_save(char* levelSaveFile) {
+	SJson* file;
+	SJson* tempJson;
+	SJson* tempJson2;
+	SJson* tempJson3;
+	SJson* tempJson4;
+	Level* level;
+	int tempInt;
+	int tempInt2;
+	float tempFloat;
+	int upgradeID;
+	Entity* currTower;
+	Vector2D pos;
+	file = sj_load(levelSaveFile);
+	if (!file) {
+		return level_load("levels/test.json");
+	}
+	tempJson = sj_object_get_value(file, "fileName");
+	if (tempJson) {
+		level = level_load(sj_get_string_value(tempJson));
+	}
+	else {
+		level = level_load("levels/test.json");
+	}
+
+	tempJson = sj_object_get_value(file, "health");
+	if (tempJson) {
+		sj_get_integer_value(tempJson, &tempInt);
+	}
+	else {
+		tempInt = 100;
+	}
+	level_addLife(tempInt);
+
+	tempJson = sj_object_get_value(file, "cash");
+	if (tempJson) {
+		sj_get_float_value(tempJson, &tempFloat);
+	}
+	else {
+		tempFloat = 100.0f;
+	}
+	level_addCash(tempFloat);
+
+	tempJson = sj_object_get_value(file, "round");
+	if (tempJson) {
+		sj_get_integer_value(tempJson, &tempInt);
+	}
+	else {
+		tempInt = -1;
+	}
+	level->round = tempInt;
+
+	tempJson = sj_object_get_value(file, "towers");
+	for (tempInt = 0; tempInt < sj_array_get_count(tempJson); tempInt++) {
+		tempJson2 = sj_array_get_nth(tempJson, tempInt);
+
+		tempJson3 = sj_object_get_value(tempJson2, "position");
+		tempJson4 = sj_array_get_nth(tempJson3, 0);
+		sj_get_float_value(tempJson4, &pos.x);
+		tempJson4 = sj_array_get_nth(tempJson3, 1);
+		sj_get_float_value(tempJson4, &pos.y);
+
+		tempJson3 = sj_object_get_value(tempJson2, "upgradeID");
+		sj_get_integer_value(tempJson3, &upgradeID);
+
+		tempJson3 = sj_object_get_value(tempJson2, "towerType");
+		sj_get_integer_value(tempJson3, &tempInt2);
+		switch ((TowerTypes)tempInt2)
+		{
+		case TT_Stinger:
+			currTower = stinger_spawn(pos);
+			if (upgradeID == 1) {
+				applyStingerUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 2) {
+				applyStingerUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 3) {
+				applyStingerUpgrade(currTower, 0);
+				applyStingerUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 4) {
+				applyStingerUpgrade(currTower, 0);
+				applyStingerUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 5) {
+				applyStingerUpgrade(currTower, 1);
+				applyStingerUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 6) {
+				applyStingerUpgrade(currTower, 1);
+				applyStingerUpgrade(currTower, 1);
+			}
+			break;
+		case TT_Slingshot:
+			currTower = slingshot_spawn(pos);
+			if (upgradeID == 1) {
+				applySlingshotUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 2) {
+				applySlingshotUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 3) {
+				applySlingshotUpgrade(currTower, 0);
+				applySlingshotUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 4) {
+				applySlingshotUpgrade(currTower, 0);
+				applySlingshotUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 5) {
+				applySlingshotUpgrade(currTower, 1);
+				applySlingshotUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 6) {
+				applySlingshotUpgrade(currTower, 1);
+				applySlingshotUpgrade(currTower, 1);
+			}
+			break;
+		case TT_Laser:
+			currTower = laser_spawn(pos);
+			if (upgradeID == 1) {
+				applyLaserUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 2) {
+				applyLaserUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 3) {
+				applyLaserUpgrade(currTower, 0);
+				applyLaserUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 4) {
+				applyLaserUpgrade(currTower, 0);
+				applyLaserUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 5) {
+				applyLaserUpgrade(currTower, 1);
+				applyLaserUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 6) {
+				applyLaserUpgrade(currTower, 1);
+				applyLaserUpgrade(currTower, 1);
+			}
+			break;
+		case TT_Water:
+			currTower = water_spawn(pos);
+			if (upgradeID == 1) {
+				applyWaterUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 2) {
+				applyWaterUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 3) {
+				applyWaterUpgrade(currTower, 0);
+				applyWaterUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 4) {
+				applyWaterUpgrade(currTower, 0);
+				applyWaterUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 5) {
+				applyWaterUpgrade(currTower, 1);
+				applyWaterUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 6) {
+				applyWaterUpgrade(currTower, 1);
+				applyWaterUpgrade(currTower, 1);
+			}
+			break;
+		case TT_Techno:
+			currTower = techno_spawn(pos);
+			if (upgradeID == 1) {
+				applyTechnoUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 2) {
+				applyTechnoUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 3) {
+				applyTechnoUpgrade(currTower, 0);
+				applyTechnoUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 4) {
+				applyTechnoUpgrade(currTower, 0);
+				applyTechnoUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 5) {
+				applyTechnoUpgrade(currTower, 1);
+				applyTechnoUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 6) {
+				applyTechnoUpgrade(currTower, 1);
+				applyTechnoUpgrade(currTower, 1);
+			}
+			break;
+		case TT_Snowglobe:
+			currTower = snowglobe_spawn(pos);
+			if (upgradeID == 1) {
+				applySnowUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 2) {
+				applySnowUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 3) {
+				applySnowUpgrade(currTower, 0);
+				applySnowUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 4) {
+				applySnowUpgrade(currTower, 0);
+				applySnowUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 5) {
+				applySnowUpgrade(currTower, 1);
+				applySnowUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 6) {
+				applySnowUpgrade(currTower, 1);
+				applySnowUpgrade(currTower, 1);
+			}
+			break;
+		case TT_Music:
+			currTower = music_spawn(pos);
+			if (upgradeID == 1) {
+				applyMusicUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 2) {
+				applyMusicUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 3) {
+				applyMusicUpgrade(currTower, 0);
+				applyMusicUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 4) {
+				applyMusicUpgrade(currTower, 0);
+				applyMusicUpgrade(currTower, 1);
+			}
+			else if (upgradeID == 5) {
+				applyMusicUpgrade(currTower, 1);
+				applyMusicUpgrade(currTower, 0);
+			}
+			else if (upgradeID == 6) {
+				applyMusicUpgrade(currTower, 1);
+				applyMusicUpgrade(currTower, 1);
+			}
+			break;
+		case TT_Power_Speed_Totem:
+			currTower = speed_totem_spawn(pos);
+			break;
+		default:
+			currTower = NULL;
+			break;
+		}
+		setAllyBuckets(currTower);
+	}
+}
+
 Level* level_load(char* levelFile)
 {
 	SJson* levelJson;
@@ -154,12 +481,13 @@ Level* level_load(char* levelFile)
 	level->round = -1;
 	LOADED_LEVEL = level;
 	level->playerHealth = 0;
+	level->fileName = levelFile;
 	level_addCash(100.0f);
 	level_addLife(100);
 	return level;
 }
 
-void level_save(char* fileName, Level* level) {
+void level_save_level(char* fileName, Level* level) {
 	SJson* file = sj_object_new();
 	if (level->background) {
 		SJson* spriteFile = sj_new_str(level->background->filepath);

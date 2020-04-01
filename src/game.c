@@ -128,9 +128,9 @@ int main(int argc, char * argv[])
 	slog("%f", testPath.totalLength);
 	*/
     gf2d_mouse_load("actors/mouse.actor");
-    level_load("Levels/test.json");
+    level_load_from_save("saves/level.json");
     level_addCash(10000.0f);
-    gfc_input_set_callbacks("test", placement_spawn, NULL, NULL, NULL, TT_Power_Time_Warp);
+    gfc_input_set_callbacks("test", level_save, NULL, NULL, NULL, "saves/level.json");
     gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyLaser", laser_buy, NULL, NULL, NULL, NULL);

@@ -27,14 +27,6 @@ int getTechnoUpgradeCost(Entity* tower, int upgradeNum);
 char* getWaterUpgradeDesc(Entity* tower, int upgradeNum);
 int getWaterUpgradeCost(Entity* tower, int upgradeNum);
 
-void applyStingerUpgrade(Entity* tower, int upgradeNum);
-void applyLaserUpgrade(Entity* tower, int upgradeNum);
-void applyMusicUpgrade(Entity* tower, int upgradeNum);
-void applySlingshotUpgrade(Entity* tower, int upgradeNum);
-void applySnowUpgrade(Entity* tower, int upgradeNum);
-void applyTechnoUpgrade(Entity* tower, int upgradeNum);
-void applyWaterUpgrade(Entity* tower, int upgradeNum);
-
 void swarm_kill_all();
 void timeWarp_slow_all();
 
@@ -45,6 +37,21 @@ Entity* stinger_spawn(Vector2D position) {
 	self = gf2d_entity_new();
 	gf2d_actor_load(&self->actor, "actors/stinger.actor");
 	vector2d_copy(self->position, position);
+	vector2d_copy(self->shootRadius.position, position);
+	self->shootRadius.radius = 150.0f; 
+	self->think = stinger_think;
+	self->name = "stinger";
+	self->fireRate = 0.5f;
+	self->distanceLeft = 1500.0f;
+	self->health = 2;
+	self->damage = 2;
+	self->data = (int)TT_Stinger;
+	self->type = Type_Tower;
+	self->rotation.x = self->actor.sprite->frame_w / 2;
+	self->rotation.y = self->actor.sprite->frame_h / 2;
+	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
+	self->boundingBox.position = self->position;
+	setSeekBuckets(self);
 	return self;
 }
 
@@ -53,6 +60,21 @@ Entity* slingshot_spawn(Vector2D position) {
 	self = gf2d_entity_new();
 	gf2d_actor_load(&self->actor, "actors/slingshot.actor");
 	vector2d_copy(self->position, position);
+	vector2d_copy(self->shootRadius.position, position);
+	self->shootRadius.radius = 225.0f;
+	self->think = slingshot_think;
+	self->name = "slingshot";
+	self->fireRate = 0.25f;
+	self->distanceLeft = 2000.0f;
+	self->health = 1;
+	self->damage = 1;
+	self->data = (int)TT_Slingshot;
+	self->type = Type_Tower;
+	self->rotation.x = self->actor.sprite->frame_w / 2;
+	self->rotation.y = self->actor.sprite->frame_h / 2;
+	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
+	self->boundingBox.position = self->position;
+	setSeekBuckets(self);
 	return self;
 }
 
@@ -61,6 +83,21 @@ Entity* laser_spawn(Vector2D position) {
 	self = gf2d_entity_new();
 	gf2d_actor_load(&self->actor, "actors/laser.actor");
 	vector2d_copy(self->position, position);
+	vector2d_copy(self->shootRadius.position, position);
+	self->shootRadius.radius = 200.0f;
+	self->think = laser_think;
+	self->name = "laser";
+	self->fireRate = 0.5f;
+	self->distanceLeft = 2000.0f;
+	self->health = 4;
+	self->damage = 3;
+	self->data = (int)TT_Laser;
+	self->type = Type_Tower;
+	self->rotation.x = self->actor.sprite->frame_w / 2;
+	self->rotation.y = self->actor.sprite->frame_h / 2;
+	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
+	self->boundingBox.position = self->position;
+	setSeekBuckets(self);
 	return self;
 }
 
@@ -69,6 +106,19 @@ Entity* water_spawn(Vector2D position) {
 	self = gf2d_entity_new();
 	gf2d_actor_load(&self->actor, "actors/water.actor");
 	vector2d_copy(self->position, position);
+	vector2d_copy(self->shootRadius.position, position);
+	self->shootRadius.radius = 90.0f;
+	self->think = water_think;
+	self->name = "water";
+	self->fireRate = 0.75f;
+	self->damage = 1;
+	self->data = (int)TT_Water;
+	self->type = Type_Tower;
+	self->rotation.x = self->actor.sprite->frame_w / 2;
+	self->rotation.y = self->actor.sprite->frame_h / 2;
+	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
+	self->boundingBox.position = self->position;
+	setSeekBuckets(self);
 	return self;
 }
 
@@ -77,6 +127,18 @@ Entity* techno_spawn(Vector2D position) {
 	self = gf2d_entity_new();
 	gf2d_actor_load(&self->actor, "actors/techno.actor");
 	vector2d_copy(self->position, position);
+	vector2d_copy(self->shootRadius.position, position);
+	self->shootRadius.radius = 0.0f;
+	self->think = techno_think;
+	self->name = "techno";
+	self->fireRate = 1.0f;
+	self->damage = 2;
+	self->data = (int)TT_Techno;
+	self->type = Type_Tower;
+	self->rotation.x = self->actor.sprite->frame_w / 2;
+	self->rotation.y = self->actor.sprite->frame_h / 2;
+	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
+	self->boundingBox.position = self->position;
 	return self;
 }
 
@@ -85,6 +147,21 @@ Entity* snowglobe_spawn(Vector2D position) {
 	self = gf2d_entity_new();
 	gf2d_actor_load(&self->actor, "actors/snowglobe.actor");
 	vector2d_copy(self->position, position);
+	vector2d_copy(self->shootRadius.position, position);
+	self->shootRadius.radius = 100.0f;
+	self->think = snowglobe_think;
+	self->name = "snowglobe";
+	self->fireRate = 1.45f;
+	self->damage = 1;
+	self->health = 10;
+	self->distanceLeft = 3400.0f;
+	self->data = (int)TT_Snowglobe;
+	self->type = Type_Tower;
+	self->rotation.x = self->actor.sprite->frame_w / 2;
+	self->rotation.y = self->actor.sprite->frame_h / 2;
+	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
+	self->boundingBox.position = self->position;
+	setSeekBuckets(self);
 	return self;
 }
 
@@ -93,6 +170,40 @@ Entity* music_spawn(Vector2D position) {
 	self = gf2d_entity_new();
 	gf2d_actor_load(&self->actor, "actors/music.actor");
 	vector2d_copy(self->position, position);
+	vector2d_copy(self->shootRadius.position, position);
+	self->shootRadius.radius = 125.0f;
+	self->think = music_think;
+	self->name = "music";
+	self->fireRate = 0.5f;
+	self->distanceLeft = 1400.0f;
+	self->health = 1;
+	self->damage = 1;
+	self->data = (int)TT_Music;
+	self->type = Type_Tower;
+	self->rotation.x = self->actor.sprite->frame_w / 2;
+	self->rotation.y = self->actor.sprite->frame_h / 2;
+	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
+	self->boundingBox.position = self->position;
+	setSeekBuckets(self);
+	return self;
+}
+
+Entity* speed_totem_spawn(Vector2D position) {
+	Entity* self;
+	self = gf2d_entity_new();
+	gf2d_actor_load(&self->actor, "actors/speedTotem.actor");
+	vector2d_copy(self->position, position);
+	vector2d_copy(self->shootRadius.position, position);
+	self->shootRadius.radius = 130.0f;
+	self->think = speedTotem_think;
+	self->name = "speedTotem";
+	self->data = (int)TT_Power_Speed_Totem;
+	self->type = Type_Tower;
+	self->rotation.x = self->actor.sprite->frame_w / 2;
+	self->rotation.y = self->actor.sprite->frame_h / 2;
+	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
+	self->boundingBox.position = self->position;
+	setSeekBuckets(self);
 	return self;
 }
 

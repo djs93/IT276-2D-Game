@@ -19,11 +19,11 @@ typedef struct Level_S{
 	int round; /**<What round we're on*/
 	float spawnCooldown; /**<How long until spawning the next enemy*/
 	int currentEnemy; /**<Current enemy spawned (index)*/
-	int lives; /**<How many lives the player has*/
 	List* roundTimings; /**<How long after each enemy to spawn the next (in milliseconds) (List of ints)*/
 	List* roundEnemies; /**<What to spawn after the last enemy (List of EnemyTypes)*/
 	Bool roundOver; /**<If the current round is over or not*/
 	int regenPerRound; /**<How much life to regenerate each round*/
+	char* fileName; /**<Level's filename*/
 }Level;
 
 Level* get_loaded_level();
@@ -32,6 +32,7 @@ Level* level_new(char* backgroundFile);
 
 void level_save(char* fileName);
 Level* level_load(char* levelFile);
+Level* level_load_from_save(char* levelSaveFile);
 
 Bool pathCollision(Entity* entity);
 

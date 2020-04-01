@@ -33,7 +33,8 @@ Entity* laser_spawn(Vector2D position);
 Entity* water_spawn(Vector2D position);
 Entity* techno_spawn(Vector2D position);
 Entity* snowglobe_spawn(Vector2D position);
-Entity* music_spawn(Vector2D position);
+Entity* music_spawn(Vector2D position); 
+Entity* speed_totem_spawn(Vector2D position);
 
 void stinger_buy();
 void slingshot_buy();
@@ -68,5 +69,13 @@ int getUpgradeTwoPrice(Entity* tower);
 
 void upgradeOne_buy();
 void upgradeTwo_buy();
+
+void applyStingerUpgrade(Entity* tower, int upgradeNum);
+void applyLaserUpgrade(Entity* tower, int upgradeNum);
+void applyMusicUpgrade(Entity* tower, int upgradeNum);
+void applySlingshotUpgrade(Entity* tower, int upgradeNum);
+void applySnowUpgrade(Entity* tower, int upgradeNum);
+void applyTechnoUpgrade(Entity* tower, int upgradeNum);
+void applyWaterUpgrade(Entity* tower, int upgradeNum);
 
 #endif
