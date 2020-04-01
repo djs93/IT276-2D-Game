@@ -90,7 +90,7 @@ Entity* find_entity(char* name) {
 	}
 	for (; from < &entity_list[gf2d_entity_manager.num_ents]; from++)
 	{
-		if (from->_inuse != 1 || !from->name || from->type<0 || from->type > 4 || from->frame >60)
+		if (from->_inuse != 1 || !from->name || from->type<0 || from->type > 4 || from->frame >60 || from->frame < 0)
 			continue;
 		if (!strcmp(from->name, name))
 			return from;

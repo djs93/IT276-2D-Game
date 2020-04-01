@@ -717,6 +717,7 @@ void endRound() {
 	int reward2;
 	//do regen at round end
 	level_addLife(LOADED_LEVEL->regenPerRound);
+	level_addCash(30.0f);
 	//show go button
 	showGoButton();
 	LOADED_LEVEL->roundOver = true;
