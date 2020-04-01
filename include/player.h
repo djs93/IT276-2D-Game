@@ -18,7 +18,16 @@ typedef enum
 	PN_StingerUps = 4
 }PerkNumbers;
 
+/**
+* @brief add's a perk to the player's inventory
+* @param perkNum perk to add to inventory
+*/
 void player_addPerk(PerkNumbers perkNum);
+
+/**
+* @brief subtract a power from the player's inventory
+* @param powerType power to add to inventory
+*/
 void player_consume(TowerTypes powerType);
 
 /**

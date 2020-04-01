@@ -27,20 +27,66 @@ typedef struct Level_S{
 	char* nextLevel; /**<File name of next level to load*/
 }Level;
 
+/**
+* @brief Get the currently loaded level
+* @return A pointer to the current level
+*/
 Level* get_loaded_level();
 
+/**
+* @brief Create a new empty level with a specified background
+* @param backgroundFile the background to the load with the empty level
+* @return A pointer to the new empty level
+*/
 Level* level_new(char* backgroundFile);
 
+/**
+* @brief Save the level's state. This includes, health, cash, round, and towers placed
+* @param fileName the name for the level save file
+* @note name the save "saves/level.json" to auto-load when the game opens
+*/
 void level_save(char* fileName);
+
+/**
+* @brief Load a base level from a level file. This does NOT include towers, health, or cash
+* @param levelFile the file for the level. Outlines path width, paths, and background.
+* @return A pointer to the level loaded
+*/
 Level* level_load(char* levelFile);
+
+/**
+* @brief Reload the currently loaded level
+*/
 void level_reload();
+
+/**
+* @brief Reload the currently loaded level with one life and 10000 cash
+*/
 void level_reload_test();
+
+/**
+* @brief Load a level from a level save. This does includes towers, health, round, and cash
+* @param levelSaveFile the file for the level save. Outlines towers, health, round, and cash as well as the base level file to load.
+* @return A pointer to the level loaded
+*/
 Level* level_load_from_save(char* levelSaveFile);
 
+/**
+* @brief Checks if an entity collides with any of the paths
+* @param entity the entity to check path collisions
+* @return True if the entity collides with any of the loaded level's paths
+*/
 Bool pathCollision(Entity* entity);
 
+/**
+* @brief Return the level's next available spawning path. Round-robin
+* @return A pointer to the path
+*/
 Path2D* nextPath();
 
+/**
+* @brief Runs collisions for every entity
+*/
 void do_collisions();
 
 /**

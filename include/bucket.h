@@ -68,6 +68,10 @@ void bucket_calc();
 */
 void calcOptimalLineBuckets(void* data, void* context);
 
+/**
+* @brief update ally buckets for a specified entity
+* @param ent the entity to update ally buckets for
+*/
 void setAllyBuckets(Entity* self);
 
 #endif
