@@ -153,7 +153,6 @@ int main(int argc, char * argv[])
 	*/
     gf2d_mouse_load("actors/mouse.actor");
     level_load_from_save("saves/level.json");
-    level_addCash(10000.0f);
     gfc_input_set_callbacks("test", level_save, NULL, NULL, NULL, "saves/level.json");
     gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
@@ -204,11 +203,11 @@ int main(int argc, char * argv[])
         draw_level();
         level_update();
         gf2d_entity_update_all();		
-		draw_buckets();
-        draw_buckets_optimal();
+		//draw_buckets();
+        //draw_buckets_optimal();
         draw_normal_entities();
-        draw_buckets_ally();
-		drawPaths();
+        //draw_buckets_ally();
+		//drawPaths();
         gf2d_windows_draw_all();
         gf2d_mouse_draw();
         //gf2d_sprite_draw(mouseEnt->actor.sprite, mouseEnt->position, &mouseEnt->scale, &mouseEnt->scaleCenter, &mouseEnt->rotation, &mouseEnt->flip, &mouseEnt->colorShift, (Uint32)mouseEnt->actor.frame);
@@ -236,7 +235,7 @@ void draw_normal_entities() {
 			i++;
 			continue;
 		}
-        
+        /*
         if (ent->seekBuckets) {
             SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 0, 0, 255, 255);
             for (j = 0; j < ent->seekBuckets->count; j++) {
@@ -251,11 +250,10 @@ void draw_normal_entities() {
             }
             SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 255, 255, 255, 255);
         }
-        
         if (ent->shootRadius.radius > 0.1f) {
             gf2d_draw_circle(ent->shootRadius.position, ent->shootRadius.radius, vector4d(255.0f, 255.0f, 0.0f, 255.0f));
         }
-        
+        */
 		if (ent->actor.sprite) {
 			//if (!ent->name || strcmp(ent->name, "axes_attach") != 0) { //These are checks just in case there are specific things we don't want to draw
             vector2d_copy(newPos, ent->position);
@@ -264,11 +262,11 @@ void draw_normal_entities() {
 			gf2d_sprite_draw(ent->actor.sprite, newPos, &ent->actor.al->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);
 			//}
 		}
-        
+        /*
         if (ent->boundingBox.radius > 0.1f) {
             gf2d_draw_circle(ent->boundingBox.position, ent->boundingBox.radius, vector4d(0.0f, 255.0f, 0.0f, 255.0f));
         }
-        
+        */
 		i++;
 	}
     ent = gf2d_entity_get_selected();

@@ -1,1 +1,1 @@
-{"fileName":"levels/test.json","health":"100","cash":"100.000000","round":"-1","towers":[]}
+{"fileName":"levels/level1.json","health":"100","cash":"40.000000","round":"1","towers":[{"upgradeID":"0","position":["260.000000","61.000000"],"towerType":"0"}]}
