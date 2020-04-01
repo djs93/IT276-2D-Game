@@ -37,4 +37,5 @@ void hideRewardWindow();
 void showGameOver();
 void hideGameOver();
 
+void setRoundUI(int round);
 #endif

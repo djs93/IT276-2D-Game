@@ -1,0 +1,21 @@
+{
+  "window": {
+    "color": [ 255, 255, 255, 255 ],
+    "dimensions": [ 0, 0, 360, 165 ],
+    "justify": "left",
+    "align": "bottom",
+    "elements": [
+      {
+        "type": "label",
+        "name": "lifeLabel",
+        "id": 0,
+        "bounds": [ 0, 0, 370, 64 ],
+        "color": [ 255, 255, 255, 255 ],
+        "text": "lifeLabel",
+        "justify": "center",
+        "align": "top",
+        "style": "H4"
+      }
+    ]
+  }
+}

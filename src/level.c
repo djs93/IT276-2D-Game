@@ -173,6 +173,12 @@ Level* level_load_from_save(char* levelSaveFile) {
 		tempInt = -1;
 	}
 	level->round = tempInt;
+	if (tempInt < 0) {
+		setRoundUI(0);
+	}
+	else {
+		setRoundUI(tempInt);
+	}
 
 	tempJson = sj_object_get_value(file, "towers");
 	if (!tempJson) { return level; }
@@ -499,6 +505,7 @@ Level* level_load(char* levelFile)
 
 	level->roundOver = true;
 	level->round = -1;
+	setRoundUI(0);
 	LOADED_LEVEL = level;
 	level->playerHealth = 0;
 	level->fileName = levelFile;
@@ -512,6 +519,17 @@ void level_reload() {
 		level_addCash(150.0f);
 	}
 	level_addLife(100);
+	hideGameOver();
+	showGoButton();
+}
+
+void level_reload_test() {
+	level_load(LOADED_LEVEL->fileName);
+	level_addCash(10000.0f);
+	if (getPlayer()->perks[PN_Money]) {
+		level_addCash(150.0f);
+	}
+	level_addLife(1);
 	hideGameOver();
 	showGoButton();
 }
@@ -722,7 +740,7 @@ void endRound() {
 	showGoButton();
 	LOADED_LEVEL->roundOver = true;
 	//if it's the last round, bring up the rewards screen
-	if (LOADED_LEVEL->round == 19) {
+	if (LOADED_LEVEL->round >= 10) {
 		reward = rand() % (3 + 1);
 		getPlayer()->powerInventory[reward] += 1;
 		if (reward == 0) {
@@ -769,6 +787,7 @@ void level_start_round() {
 	if (LOADED_LEVEL->roundOver) {
 		LOADED_LEVEL->roundOver = false;
 		LOADED_LEVEL->round += 1;
+		setRoundUI(LOADED_LEVEL->round);
 		LOADED_LEVEL->roundEnemies = getRoundEnemies(LOADED_LEVEL->round);
 		LOADED_LEVEL->roundTimings = getRoundTimings(LOADED_LEVEL->round);
 		LOADED_LEVEL->currentEnemy = 0;

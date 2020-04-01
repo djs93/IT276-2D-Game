@@ -33,6 +33,7 @@ Entity* selectedEntity;
 Window* cashUI;
 Window* upgradeUI;
 Window* lifeUI;
+Window* roundUI;
 Window* goButtonUI;
 Window* powerButtonUI;
 Window* towerButtonUI;
@@ -123,6 +124,9 @@ int main(int argc, char * argv[])
     lifeUI = gf2d_window_load("config/life_UI.json");
     lifeUI->no_draw_generic = 1;
 
+    roundUI = gf2d_window_load("config/round_UI.json");
+    roundUI->no_draw_generic = 1;
+
     goButtonUI = gf2d_window_load("config/go_button_window.json");
     goButtonUI->no_draw_generic = 1;
 
@@ -153,7 +157,7 @@ int main(int argc, char * argv[])
 	*/
     gf2d_mouse_load("actors/mouse.actor");
     level_load_from_save("saves/level.json");
-    gfc_input_set_callbacks("test", level_save, NULL, NULL, NULL, "saves/level.json");
+    gfc_input_set_callbacks("test", level_reload_test, NULL, NULL, NULL, "saves/level.json");
     gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyLaser", laser_buy, NULL, NULL, NULL, NULL);
@@ -409,5 +413,14 @@ void showGameOver() {
 
 void hideGameOver() {
     gameOverWindow->hide = 1;
+}
+
+void setRoundUI(int round) {
+    Element* list;
+    Element* currLabel;
+    TextLine str;
+    currLabel = gf2d_window_get_element_by_id(roundUI, 0);
+    sprintf(str, "Round: %i", round+1);
+    gf2d_element_label_set_text(currLabel, str);
 }
 /*eol@eof*/

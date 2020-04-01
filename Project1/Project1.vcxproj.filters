@@ -436,5 +436,8 @@
     <None Include="..\config\gameover_window.json">
       <Filter>Resource Files\windows</Filter>
     </None>
+    <None Include="..\config\round_UI.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
   </ItemGroup>
 </Project>
