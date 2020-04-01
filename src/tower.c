@@ -609,10 +609,16 @@ void snowglobe_think(Entity* self){
 		//if fire, reset cooldown to fireRate
 		if (targets && targets->count > 0) {
 			gf2d_actor_set_action(&self->actor, "fire");
+			gfc_list_delete(self->noTouch);
+			self->noTouch = gfc_list_new();
 			for (i = 0; i < targets->count; i++) {
 				target = gfc_list_get_nth(targets, i);
+				if (gfc_list_in_list(self->noTouch, target) >= 0) {
+					continue;
+				}
 				target = techno_damage(self, target);
 				if (target) {
+					self->noTouch = gfc_list_append(self->noTouch, target);
 					vector2d_normalize(&target->velocity);
 					speedMod = 2.0f;
 					if (self->upgradeID == 2 || self->upgradeID == 5 || self->upgradeID == 6) {
