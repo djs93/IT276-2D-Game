@@ -43,6 +43,9 @@ Entity* stinger_spawn(Vector2D position) {
 	self->think = stinger_think;
 	self->name = "stinger";
 	self->fireRate = 0.5f;
+	if (getPlayer()->perks[PN_Speed]) {
+		self->fireRate *= 0.9f;
+	}
 	self->distanceLeft = 1500.0f;
 	self->health = 2;
 	if (getPlayer()->perks[PN_Pierce]) {
@@ -69,6 +72,9 @@ Entity* slingshot_spawn(Vector2D position) {
 	self->think = slingshot_think;
 	self->name = "slingshot";
 	self->fireRate = 0.25f;
+	if (getPlayer()->perks[PN_Speed]) {
+		self->fireRate *= 0.9f;
+	}
 	self->distanceLeft = 2000.0f;
 	self->health = 1;
 	if (getPlayer()->perks[PN_Pierce]) {
@@ -95,6 +101,9 @@ Entity* laser_spawn(Vector2D position) {
 	self->think = laser_think;
 	self->name = "laser";
 	self->fireRate = 0.5f;
+	if (getPlayer()->perks[PN_Speed]) {
+		self->fireRate *= 0.9f;
+	}
 	self->distanceLeft = 2000.0f;
 	self->health = 4;
 	if (getPlayer()->perks[PN_Pierce]) {
@@ -121,6 +130,9 @@ Entity* water_spawn(Vector2D position) {
 	self->think = water_think;
 	self->name = "water";
 	self->fireRate = 0.75f;
+	if (getPlayer()->perks[PN_Speed]) {
+		self->fireRate *= 0.9f;
+	}
 	self->damage = 1;
 	self->data = (int)TT_Water;
 	self->type = Type_Tower;
@@ -142,6 +154,9 @@ Entity* techno_spawn(Vector2D position) {
 	self->think = techno_think;
 	self->name = "techno";
 	self->fireRate = 1.0f;
+	if (getPlayer()->perks[PN_Speed]) {
+		self->fireRate *= 0.9f;
+	}
 	self->damage = 2;
 	self->data = (int)TT_Techno;
 	self->type = Type_Tower;
@@ -162,6 +177,9 @@ Entity* snowglobe_spawn(Vector2D position) {
 	self->think = snowglobe_think;
 	self->name = "snowglobe";
 	self->fireRate = 1.45f;
+	if (getPlayer()->perks[PN_Speed]) {
+		self->fireRate *= 0.9f;
+	}
 	self->damage = 1;
 	self->health = 10;
 	if (getPlayer()->perks[PN_Pierce]) {
@@ -188,6 +206,9 @@ Entity* music_spawn(Vector2D position) {
 	self->think = music_think;
 	self->name = "music";
 	self->fireRate = 0.5f;
+	if (getPlayer()->perks[PN_Speed]) {
+		self->fireRate *= 0.9f;
+	}
 	self->distanceLeft = 1400.0f;
 	self->health = 1;
 	if (getPlayer()->perks[PN_Pierce]) {
@@ -817,6 +838,9 @@ void placement_detach(Entity* ent) {
 		ent->think = stinger_think;
 		ent->name = "stinger";
 		ent->fireRate = 0.5f;
+		if (getPlayer()->perks[PN_Speed]) {
+			ent->fireRate *= 0.9f;
+		}
 		ent->distanceLeft = 1500.0f;
 		ent->health = 2;
 		if (getPlayer()->perks[PN_Pierce]) {
@@ -829,6 +853,9 @@ void placement_detach(Entity* ent) {
 		ent->think = slingshot_think;
 		ent->name = "slingshot";
 		ent->fireRate = 0.25f;
+		if (getPlayer()->perks[PN_Speed]) {
+			ent->fireRate *= 0.9f;
+		}
 		ent->distanceLeft = 2000.0f;
 		ent->health = 1;
 		if (getPlayer()->perks[PN_Pierce]) {
@@ -841,6 +868,9 @@ void placement_detach(Entity* ent) {
 		ent->think = laser_think;
 		ent->name = "laser";
 		ent->fireRate = 0.5f;
+		if (getPlayer()->perks[PN_Speed]) {
+			ent->fireRate *= 0.9f;
+		}
 		ent->distanceLeft = 2000.0f;
 		ent->health = 4;
 		if (getPlayer()->perks[PN_Pierce]) {
@@ -853,6 +883,9 @@ void placement_detach(Entity* ent) {
 		ent->think = water_think;
 		ent->name = "water";
 		ent->fireRate = 0.75f;
+		if (getPlayer()->perks[PN_Speed]) {
+			ent->fireRate *= 0.9f;
+		}
 		ent->damage = 1;
 		setSeekBuckets(ent);
 		break;
@@ -860,12 +893,18 @@ void placement_detach(Entity* ent) {
 		ent->think = techno_think;
 		ent->name = "techno";
 		ent->fireRate = 1.0f;
+		if (getPlayer()->perks[PN_Speed]) {
+			ent->fireRate *= 0.9f;
+		}
 		ent->damage = 2;
 		break;
 	case TT_Snowglobe:
 		ent->think = snowglobe_think;
 		ent->name = "snowglobe";
 		ent->fireRate = 1.45f;
+		if (getPlayer()->perks[PN_Speed]) {
+			ent->fireRate *= 0.9f;
+		}
 		ent->damage = 1;
 		ent->health = 10;
 		if (getPlayer()->perks[PN_Pierce]) {
@@ -878,6 +917,9 @@ void placement_detach(Entity* ent) {
 		ent->think = music_think;
 		ent->name = "music";
 		ent->fireRate = 0.5f;
+		if (getPlayer()->perks[PN_Speed]) {
+			ent->fireRate *= 0.9f;
+		}
 		ent->distanceLeft = 1400.0f;
 		ent->health = 1;
 		if (getPlayer()->perks[PN_Pierce]) {
