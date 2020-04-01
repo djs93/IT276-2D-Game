@@ -38,6 +38,7 @@ Window* powerButtonUI;
 Window* towerButtonUI;
 Window* ui;
 Window* powerUI;
+Window* rewardWindow;
 Bool windowPress;
 Window* exitWindow;
 int done;
@@ -133,6 +134,9 @@ int main(int argc, char * argv[])
 
     powerButtonUI = gf2d_window_load("config/power_button_window.json");
     powerButtonUI->no_draw_generic = 1;
+
+    rewardWindow = gf2d_window_load("config/reward_window.json");
+    rewardWindow->hide = 0;
 	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
@@ -165,6 +169,7 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("power2", timeWarp_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("power3", speedTotem_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("power4", cashDrop_buy, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("loadNext", level_loadNext, NULL, NULL, NULL, NULL);
     /*main game loop*/
     while(!done)
     {
@@ -195,10 +200,10 @@ int main(int argc, char * argv[])
         draw_level();
         level_update();
         gf2d_entity_update_all();		
-		//draw_buckets();
-        //draw_buckets_optimal();
+		draw_buckets();
+        draw_buckets_optimal();
         draw_normal_entities();
-        //draw_buckets_ally();
+        draw_buckets_ally();
 		drawPaths();
         gf2d_windows_draw_all();
         gf2d_mouse_draw();
@@ -227,7 +232,7 @@ void draw_normal_entities() {
 			i++;
 			continue;
 		}
-        /*
+        
         if (ent->seekBuckets) {
             SDL_SetRenderDrawColor(gf2d_graphics_get_renderer(), 0, 0, 255, 255);
             for (j = 0; j < ent->seekBuckets->count; j++) {
@@ -246,7 +251,7 @@ void draw_normal_entities() {
         if (ent->shootRadius.radius > 0.1f) {
             gf2d_draw_circle(ent->shootRadius.position, ent->shootRadius.radius, vector4d(255.0f, 255.0f, 0.0f, 255.0f));
         }
-        */
+        
 		if (ent->actor.sprite) {
 			//if (!ent->name || strcmp(ent->name, "axes_attach") != 0) { //These are checks just in case there are specific things we don't want to draw
             vector2d_copy(newPos, ent->position);
@@ -255,11 +260,11 @@ void draw_normal_entities() {
 			gf2d_sprite_draw(ent->actor.sprite, newPos, &ent->actor.al->scale, &ent->scaleCenter, &ent->rotation, &ent->flip, &ent->colorShift, (Uint32)ent->actor.frame);
 			//}
 		}
-        /*
+        
         if (ent->boundingBox.radius > 0.1f) {
             gf2d_draw_circle(ent->boundingBox.position, ent->boundingBox.radius, vector4d(0.0f, 255.0f, 0.0f, 255.0f));
         }
-        */
+        
 		i++;
 	}
     ent = gf2d_entity_get_selected();

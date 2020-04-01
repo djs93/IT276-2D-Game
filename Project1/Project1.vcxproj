@@ -276,6 +276,7 @@
     <None Include="..\config\life_UI.json" />
     <None Include="..\config\power_button_window.json" />
     <None Include="..\config\power_window.json" />
+    <None Include="..\config\reward_window.json" />
     <None Include="..\config\tower_button_window.json" />
     <None Include="..\config\yes_no_window.json" />
     <None Include="..\config\yes_no_window2.json" />

@@ -16,5 +16,6 @@
       [ 1200, 600 ]
     ]
   ],
-  "pathWidth" :  15.0
+  "pathWidth": 15.0,
+  "nextLevel": "levels/level1.json"
 }

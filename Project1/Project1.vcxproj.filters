@@ -430,5 +430,8 @@
     <None Include="..\config\power_window.json">
       <Filter>Resource Files\windows</Filter>
     </None>
+    <None Include="..\config\reward_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
   </ItemGroup>
 </Project>

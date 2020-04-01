@@ -391,6 +391,7 @@ Level* level_load(char* levelFile)
 	int k;
 	float pathDist;
 
+	gf2d_entity_free_all();
 	levelJson = sj_load(levelFile);
 	if (!levelJson) {
 		slog("Level json %s not found!", levelFile);
@@ -466,6 +467,15 @@ Level* level_load(char* levelFile)
 	else {
 		level->pathDistance = 15.0f;
 	}
+
+	tempJson = sj_object_get_value(levelJson, "nextLevel");
+	if (tempJson) {
+		level->nextLevel = sj_get_string_value(tempJson);
+	}
+	else {
+		level->nextLevel = "levels/test.json";
+	}
+
 	gfc_list_foreach(pathsList, calcPathBoundaries, level);
 
 	gfc_list_foreach(pathsList, calcOptimalBuckets, level);
@@ -637,6 +647,11 @@ void level_addLife(int amount)
 
 void level_addRegen(int amountPerRound) {
 	LOADED_LEVEL->regenPerRound += amountPerRound;
+}
+
+void level_loadNext()
+{
+	level_load(LOADED_LEVEL->nextLevel);
 }
 
 void level_update()

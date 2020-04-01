@@ -24,6 +24,7 @@ typedef struct Level_S{
 	Bool roundOver; /**<If the current round is over or not*/
 	int regenPerRound; /**<How much life to regenerate each round*/
 	char* fileName; /**<Level's filename*/
+	char* nextLevel; /**<File name of next level to load*/
 }Level;
 
 Level* get_loaded_level();
@@ -67,5 +68,10 @@ void level_start_round();
 * @param amount The amount of life to additionally restore each round
 */
 void level_addRegen(int amountPerRound);
+
+/**
+* @brief Loads the next level
+*/
+void level_loadNext();
 
 #endif

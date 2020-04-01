@@ -1,0 +1,17 @@
+{
+  "background": "images/backgrounds/bg_flat.png",
+  "paths": [
+    [
+      [ 0, 25 ],
+      [ 1170, 26 ],
+      [ 1170, 200 ],
+      [ 25, 201 ],
+      [ 25, 375 ],
+      [ 1170, 376 ],
+      [ 1170, 525 ],
+      [ 0, 526 ]
+    ]
+  ],
+  "pathWidth": 15.0,
+  "nextLevel": "levels/test.json"
+}
