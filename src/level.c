@@ -108,7 +108,9 @@ void level_save(char* fileName)
 			sj_array_append(tempJson, tempJsonValue);
 		}
 	}
-	sj_object_insert(file, "towers", tempJson);
+	if (sj_array_get_count(tempJson) > 0) {
+		sj_object_insert(file, "towers", tempJson);
+	}
 	
 
 	sj_save(file, fileName);
@@ -173,6 +175,7 @@ Level* level_load_from_save(char* levelSaveFile) {
 	level->round = tempInt;
 
 	tempJson = sj_object_get_value(file, "towers");
+	if (!tempJson) { return level; }
 	for (tempInt = 0; tempInt < sj_array_get_count(tempJson); tempInt++) {
 		tempJson2 = sj_array_get_nth(tempJson, tempInt);
 
@@ -373,6 +376,7 @@ Level* level_load_from_save(char* levelSaveFile) {
 		}
 		setAllyBuckets(currTower);
 	}
+	return level;
 }
 
 Level* level_load(char* levelFile)
