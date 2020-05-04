@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include "gfc_audio.h"
 #include "gf2d_graphics.h"
 #include "gf2d_draw.h"
 #include "gf2d_sprite.h"
@@ -19,6 +20,7 @@
 #include "tower.h"
 #include "enemies.h"
 #include "player.h"
+#include "sound_handler.h"
 
 Entity* entity_list;
 void draw_normal_entities();
@@ -78,6 +80,17 @@ int main(int argc, char * argv[])
         0);
     gf2d_graphics_set_frame_delay(16);
     gf2d_sprite_init(1024);
+    gfc_audio_init(256, 16, 4, 1, 1, 1);
+    sound_manager_init(
+        "sfx/pop.mp3", 
+        "sfx/fire.mp3",
+        "sfx/laser.mp3",
+        "sfx/trumpet.mp3",
+        "sfx/wave.mp3",
+        "sfx/snow.mp3",
+        "bgm/anttisinstrumentals_allaboardthefunkytrainvwkinstrumental.mp3",
+        "sfx/buy.mp3",
+        "sfx/game_win.mp3");
     SDL_ShowCursor(SDL_DISABLE);
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
     
@@ -179,6 +192,8 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("power4", cashDrop_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("loadNext", level_loadNext, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("reload", level_reload, NULL, NULL, NULL, NULL);
+
+    gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
     /*main game loop*/
     while(!done)
     {
