@@ -83,7 +83,7 @@ int main(int argc, char * argv[])
     gf2d_sprite_init(1024);
     gfc_audio_init(256, 16, 4, 1, 1, 1);
     sound_manager_init(
-        "sfx/pop.mp3", 
+        "sfx/pop.wav", 
         "sfx/fire.mp3",
         "sfx/laser.mp3",
         "sfx/trumpet.mp3",

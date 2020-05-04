@@ -2,6 +2,7 @@
 #include "level.h"
 #include "bucket.h"
 #include "gf2d_graphics.h"
+#include "sound_handler.h"
 
 Entity* commonSpawn(Entity* parent);
 
@@ -272,6 +273,7 @@ void flowerMove(Entity* self)
 Entity* redDie(Entity* self)
 {
 	level_addCash(1.0f);
+	sound_play_default(ST_Pop);
 	gf2d_entity_free(self);
 	return NULL;
 }
@@ -281,6 +283,7 @@ Entity* blueDie(Entity* self)
 	Entity* ent;
 	level_addCash(1.0f);
 	ent = redSpawn(self);
+	sound_play_default(ST_Pop);
 	gf2d_entity_free(self);
 	return ent;
 }
@@ -290,6 +293,7 @@ Entity* greenDie(Entity* self)
 	Entity* ent;
 	level_addCash(1.0f);
 	ent = blueSpawn(self);
+	sound_play_default(ST_Pop);
 	gf2d_entity_free(self);
 	return ent;
 }
@@ -299,6 +303,7 @@ Entity* yellowDie(Entity* self)
 	Entity* ent;
 	level_addCash(1.0f);
 	ent = greenSpawn(self);
+	sound_play_default(ST_Pop);
 	gf2d_entity_free(self);
 	return ent;
 }
@@ -317,6 +322,7 @@ Entity* superDie(Entity* self)
 	ent->move(self);
 	ent->move(self);
 	ent->move(self);
+	sound_play_default(ST_Pop);
 	gf2d_entity_free(self);
 	return NULL;
 }
