@@ -77,3 +77,11 @@ Sound* sound_get(SoundTypes soundType)
 		break;
 	}
 }
+
+void sound_play_default(SoundTypes soundType)
+{
+	Sound* sound = sound_get(soundType);
+	if (sound) {
+		gfc_sound_play(sound, 0, sound->volume, sound->defaultChannel, 0);
+	}
+}

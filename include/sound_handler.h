@@ -56,4 +56,10 @@ void sound_change_bgm(char* newBGM);
 */
 Sound* sound_get(SoundTypes soundType);
 
+/**
+* @breif play a soundType with volume of 1.0f and no loops on its default channel
+* @param soundType the type of sound to play
+*/
+void sound_play_default(SoundTypes soundType);
+
 #endif

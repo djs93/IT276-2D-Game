@@ -1,3 +1,4 @@
+#include "gfc_audio.h"
 #include "tower.h"
 #include "simple_logger.h"
 #include "local.h"
@@ -11,6 +12,7 @@
 #include <enemies.h>
 #include "player.h"
 #include "game.h"
+#include "sound_handler.h"
 
 Bool allyCollision(Entity* self);
 char* getStingerUpgradeDesc(Entity* tower, int upgradeNum);
@@ -419,6 +421,7 @@ void stinger_think(Entity* self){
 			else {
 				self->flip = vector2d(0, 0);
 			}
+			sound_play_default(ST_Fire);
 			self->cooldown = self->fireRate;
 		}
 		else {
@@ -450,6 +453,7 @@ void slingshot_think(Entity* self){
 			else {
 				self->flip = vector2d(0, 0);
 			}
+			sound_play_default(ST_Fire);
 			self->cooldown = self->fireRate;
 			slog("Firerate: %f", self->fireRate);
 		}
@@ -482,6 +486,7 @@ void laser_think(Entity* self){
 			else {
 				self->flip = vector2d(0, 0);
 			}
+			sound_play_default(ST_Zap);
 			self->cooldown = self->fireRate;
 		}
 		else {
@@ -516,6 +521,7 @@ void water_think(Entity* self){
 				}
 			}
 			waterwave_spawn(self);
+			sound_play_default(ST_Wave);
 			self->cooldown = self->fireRate;
 		}
 		else {
@@ -584,6 +590,7 @@ void techno_think(Entity* self){
 				gfc_list_delete(self->noTouch);
 				self->noTouch = NULL;
 			}
+			sound_play_default(ST_Zap);
 			self->cooldown = self->fireRate;
 		}
 		else {
@@ -634,6 +641,7 @@ void snowglobe_think(Entity* self){
 				}
 			}
 			snowwave_spawn(self);
+			sound_play_default(ST_Snow);
 			self->cooldown = self->fireRate;
 		}
 		else {
@@ -658,6 +666,7 @@ void snowglobe_think(Entity* self){
 				else {
 					self->flip = vector2d(0, 0);
 				}
+				sound_play_default(ST_Fire);
 				self->cooldown = self->fireRate;
 			}
 			else {
@@ -761,6 +770,7 @@ void music_think(Entity* self){
 			else {
 				self->flip = vector2d(0, 0);
 			}
+			sound_play_default(ST_Trumpet);
 			self->cooldown = self->fireRate;
 		}
 		else {
