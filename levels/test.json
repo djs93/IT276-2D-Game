@@ -17,5 +17,6 @@
     ]
   ],
   "pathWidth": 15.0,
-  "nextLevel": "levels/level1.json"
+  "nextLevel": "levels/level1.json",
+  "music": "bgm/anttisinstrumentals_cooltrace.mp3"
 }

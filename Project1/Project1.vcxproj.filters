@@ -445,5 +445,8 @@
     <None Include="..\config\round_UI.json">
       <Filter>Resource Files\windows</Filter>
     </None>
+    <None Include="..\levels\level1.json">
+      <Filter>Resource Files\Levels</Filter>
+    </None>
   </ItemGroup>
 </Project>

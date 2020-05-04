@@ -33,12 +33,12 @@ void sound_manager_init(char* popFile, char* fireFile, char* zapFile, char* trum
 
 void sound_change_bgm(char* newBGM)
 {
-	int chan;
+	int chan = -1;
 	if (sound_manager.sound_bgm) {
 		chan = sound_manager.sound_bgm->defaultChannel;
 		Mix_HaltChannel(chan);
 	}
-	sound_manager.sound_bgm = gfc_sound_load(newBGM, 1.0f, 15);
+	sound_manager.sound_bgm = gfc_sound_load(newBGM, 1.0f, 6);
 	gfc_sound_play(sound_manager.sound_bgm, -1, sound_manager.sound_bgm->volume, sound_manager.sound_bgm->defaultChannel, 0);
 }
 

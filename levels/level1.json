@@ -13,5 +13,6 @@
     ]
   ],
   "pathWidth": 15.0,
-  "nextLevel": "levels/test.json"
+  "nextLevel": "levels/test.json",
+  "music": "bgm/anttisinstrumentals_socialdistancing.mp3"
 }

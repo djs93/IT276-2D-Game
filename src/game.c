@@ -29,6 +29,7 @@ void esc_press();
 void exit_press();
 void toggle_towers();
 void toggle_powers();
+void sound_test();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
@@ -171,7 +172,7 @@ int main(int argc, char * argv[])
 	*/
     gf2d_mouse_load("actors/mouse.actor");
     level_load_from_save("saves/level.json");
-    gfc_input_set_callbacks("test", level_reload_test, NULL, NULL, NULL, "saves/level.json");
+    gfc_input_set_callbacks("test", sound_test, NULL, NULL, NULL, "saves/level.json");
     gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyLaser", laser_buy, NULL, NULL, NULL, NULL);
@@ -442,5 +443,9 @@ void setRoundUI(int round) {
 
 void reloadPrices() {
     setPrices(ui);
+}
+
+void sound_test() {
+    sound_change_bgm("bgm/anttisinstrumentals_allaboardthefunkytrainvwkinstrumental.mp3");
 }
 /*eol@eof*/

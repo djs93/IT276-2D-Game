@@ -9,6 +9,7 @@
 #include "gf2d_element_button.h"
 #include "gf2d_elements.h"
 #include "gf2d_graphics.h"
+#include "sound_handler.h"
 #include <enemies.h>
 
 static Level* LOADED_LEVEL;
@@ -490,6 +491,11 @@ Level* level_load(char* levelFile)
 	}
 	else {
 		level->nextLevel = "levels/test.json";
+	}
+
+	tempJson = sj_object_get_value(levelJson, "music");
+	if (tempJson) {
+		sound_change_bgm(sj_get_string_value(tempJson));
 	}
 
 	gfc_list_foreach(pathsList, calcPathBoundaries, level);

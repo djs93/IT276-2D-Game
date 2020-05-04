@@ -284,6 +284,7 @@
     <None Include="..\config\tower_button_window.json" />
     <None Include="..\config\yes_no_window.json" />
     <None Include="..\config\yes_no_window2.json" />
+    <None Include="..\levels\level1.json" />
     <None Include="..\levels\template.json" />
     <None Include="..\levels\test.json" />
     <None Include="..\saves\playerTest.json" />
