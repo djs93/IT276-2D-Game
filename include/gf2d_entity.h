@@ -71,6 +71,7 @@ typedef struct Entity_S
 	List* noTouch;					/**<List of entities this entity won't see when touching*/
 	Path2D* path;					/**<Path for entity to follow*/
 	float distanceLeft;				/**<Distance until the end of the current line on the path*/
+	int targetingMode;				/**<Current targeting mode described by TargetingModes*/
 	void* data;                     /**<additional entity specific data*/
 
 }Entity;

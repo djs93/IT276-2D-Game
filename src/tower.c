@@ -2410,3 +2410,11 @@ void upgradeTwo_buy() {
 
 	gf2d_entity_set_selected(gf2d_entity_get_selected());//update upgrade window
 }
+
+void targetModePrev() {
+
+}
+
+void targetModeNext() {
+
+}

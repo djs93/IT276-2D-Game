@@ -193,6 +193,8 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("power4", cashDrop_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("loadNext", level_loadNext, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("reload", level_reload, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("modePrev", targetModePrev, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("modeNext", targetModeNext, NULL, NULL, NULL, NULL);
 
     gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
     /*main game loop*/

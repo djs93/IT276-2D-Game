@@ -21,6 +21,15 @@ typedef enum
 	TT_Power_Cash_Drop
 }TowerTypes;
 
+typedef enum
+{
+	TM_FIRST,
+	TM_CLOSE,
+	TM_FAR,
+	TM_STRONG,
+	TM_WEAK
+}TargetingModes;
+
 /**
 * @brief get enemies in range of a tower
 * @param self the tower to check for enemies in range
@@ -324,5 +333,15 @@ void applyTechnoUpgrade(Entity* tower, int upgradeNum);
 * @param upgradeNum 0 or 1, specifies to apply the first or second available upgrade
 */
 void applyWaterUpgrade(Entity* tower, int upgradeNum);
+
+/**
+* @brief sets the selected tower's targeting mode to the previous one (cycles through first, close, far, strong, weak)
+*/
+void targetModePrev();
+
+/**
+* @brief sets the selected tower's targeting mode to the next one (cycles through first, close, far, strong, weak)
+*/
+void targetModeNext();
 
 #endif

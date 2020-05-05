@@ -1,7 +1,7 @@
 {
   "window": {
     "color": [ 255, 255, 255, 255 ],
-    "dimensions": [ 0, 0, 350, 120 ],
+    "dimensions": [ 0, 0, 350, 230 ],
     "justify": "right",
     "align": "top",
     "elements": [
@@ -109,6 +109,86 @@
                   "type": "actor",
                   "name": "image",
                   "id": 522,
+                  "bounds": [ 0, 0, 168, 64 ],
+                  "color": [ 255, 255, 255, 255 ],
+                  "actor": "actors/button.actor"
+                }
+              }
+            ]
+          },
+          {
+            "type": "label",
+            "name": "modeLabel",
+            "id": 60,
+            "bounds": [ 0, 30, 1, 70 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": "You won!",
+            "justify": "center",
+            "align": "middle",
+            "style": "H3"
+          },
+          {
+            "type": "list",
+            "name": "targetingButtons",
+            "id": 70,
+            "bounds": [ 0, 40, 200, 1 ],
+            "color": [ 255, 255, 255, 255 ],
+            "style": "horizontal",
+            "item_size": [ 168, 64 ],
+            "elements": [
+              {
+                "type": "button",
+                "name": "modePrevButton",
+                "id": 71,
+                "bounds": [ 0, 0, 168, 64 ],
+                "hotkey": "modePrev",
+                "color": [ 255, 255, 255, 255 ],
+                "highColor": [ 255, 255, 255, 255 ],
+                "pressColor": [ 255, 255, 255, 255 ],
+                "label": {
+                  "type": "label",
+                  "name": "modePrevLabel",
+                  "id": 711,
+                  "bounds": [ 0, 0, 168, 64 ],
+                  "color": [ 255, 255, 255, 255 ],
+                  "text": "<",
+                  "justify": "center",
+                  "align": "middle",
+                  "style": "H5"
+                },
+                "actor": {
+                  "type": "actor",
+                  "name": "image",
+                  "id": 712,
+                  "bounds": [ 0, 0, 168, 64 ],
+                  "color": [ 255, 255, 255, 255 ],
+                  "actor": "actors/button.actor"
+                }
+              },
+              {
+                "type": "button",
+                "name": "modeNextButton",
+                "id": 72,
+                "bounds": [ 0, 0, 164, 68 ],
+                "color": [ 255, 255, 255, 255 ],
+                "hotkey": "modeNext",
+                "highColor": [ 255, 255, 255, 255 ],
+                "pressColor": [ 255, 255, 255, 255 ],
+                "label": {
+                  "type": "label",
+                  "name": "modeNextLabel",
+                  "id": 721,
+                  "bounds": [ 0, 0, 168, 64 ],
+                  "color": [ 255, 255, 255, 255 ],
+                  "text": ">",
+                  "align": "middle",
+                  "justify": "center",
+                  "style": "H5"
+                },
+                "actor": {
+                  "type": "actor",
+                  "name": "image",
+                  "id": 722,
                   "bounds": [ 0, 0, 168, 64 ],
                   "color": [ 255, 255, 255, 255 ],
                   "actor": "actors/button.actor"
