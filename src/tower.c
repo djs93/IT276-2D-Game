@@ -410,12 +410,10 @@ void stinger_think(Entity* self){
 			target = findFirst(self);
 			break;
 		case(TM_STRONG):
-			//target = findStrongest(self);
-			target = findClosest(self);
+			target = findStrongest(self);
 			break;
 		case(TM_WEAK):
-			//target = findWeakest(self);
-			target = findClosest(self);
+			target = findWeakest(self);
 			break;
 		default:
 			target = findClosest(self);
@@ -461,7 +459,27 @@ void slingshot_think(Entity* self){
 	Entity* target;
 	if (self->cooldown < 0.0000001f) {
 		//try to fire
-		target = findClosest(self);
+		switch (self->targetingMode)
+		{
+		case(TM_CLOSE):
+			target = findClosest(self);
+			break;
+		case(TM_FAR):
+			target = findFarthest(self);
+			break;
+		case(TM_FIRST):
+			target = findFirst(self);
+			break;
+		case(TM_STRONG):
+			target = findStrongest(self);
+			break;
+		case(TM_WEAK):
+			target = findWeakest(self);
+			break;
+		default:
+			target = findClosest(self);
+			break;
+		}
 		//if fire, reset cooldown to fireRate
 		if (target) {
 			gf2d_actor_set_action(&self->actor, "fire");
@@ -494,7 +512,27 @@ void laser_think(Entity* self){
 	Entity* target;
 	if (self->cooldown < 0.0000001f) {
 		//try to fire
-		target = findClosest(self);
+		switch (self->targetingMode)
+		{
+		case(TM_CLOSE):
+			target = findClosest(self);
+			break;
+		case(TM_FAR):
+			target = findFarthest(self);
+			break;
+		case(TM_FIRST):
+			target = findFirst(self);
+			break;
+		case(TM_STRONG):
+			target = findStrongest(self);
+			break;
+		case(TM_WEAK):
+			target = findWeakest(self);
+			break;
+		default:
+			target = findClosest(self);
+			break;
+		}
 		//if fire, reset cooldown to fireRate
 		if (target) {
 			gf2d_actor_set_action(&self->actor, "fire");
@@ -694,7 +732,27 @@ void snowglobe_think(Entity* self){
 		if (self->upgradeID == 3) {
 			gfc_list_delete(self->noTouch);
 			self->noTouch = gfc_list_new();
-			target = findClosest(self);
+			switch (self->targetingMode)
+			{
+			case(TM_CLOSE):
+				target = findClosest(self);
+				break;
+			case(TM_FAR):
+				target = findFarthest(self);
+				break;
+			case(TM_FIRST):
+				target = findFirst(self);
+				break;
+			case(TM_STRONG):
+				target = findStrongest(self);
+				break;
+			case(TM_WEAK):
+				target = findWeakest(self);
+				break;
+			default:
+				target = findClosest(self);
+				break;
+			}
 			//if fire, reset cooldown to fireRate
 			if (target) {
 				gf2d_actor_set_action(&self->actor, "fire");
@@ -798,7 +856,27 @@ void music_think(Entity* self){
 	}
 	if (self->cooldown < 0.0000001f) {
 		//try to fire
-		target = findClosest(self);
+		switch (self->targetingMode)
+		{
+		case(TM_CLOSE):
+			target = findClosest(self);
+			break;
+		case(TM_FAR):
+			target = findFarthest(self);
+			break;
+		case(TM_FIRST):
+			target = findFirst(self);
+			break;
+		case(TM_STRONG):
+			target = findStrongest(self);
+			break;
+		case(TM_WEAK):
+			target = findWeakest(self);
+			break;
+		default:
+			target = findClosest(self);
+			break;
+		}
 		//if fire, reset cooldown to fireRate
 		if (target) {
 			gf2d_actor_set_action(&self->actor, "fire");
