@@ -59,6 +59,34 @@ void setSeekBuckets(Entity* self);
 Entity* findClosest(Entity* self);
 
 /**
+* @brief find the farthest enemy to a tower
+* @param self the tower to find the farthest enemy to
+* @return a pointer to the farthest enemy entity, NULL if none
+*/
+Entity* findFarthest(Entity* self);
+
+/**
+* @brief find the enemy closest to the exit
+* @param self the tower to find the farthest enemy to
+* @return a pointer to the farthest enemy entity, NULL if none
+*/
+Entity* findFirst(Entity* self);
+
+/**
+* @brief find the enemy that is the strongest, then closest to the exit
+* @param self the tower to find the strongest enemy to
+* @return a pointer to the strongest then farthest enemy entity, NULL if none
+*/
+Entity* findStrongest(Entity* self);
+
+/**
+* @brief find the enemy that is the weakest, then closest to the exit
+* @param self the tower to find the weakest enemy to
+* @return a pointer to the weakest then farthest enemy entity, NULL if none
+*/
+Entity* findWeakest(Entity* self);
+
+/**
 * @brief spawn a new stinger
 * @param position where to spawn the tower
 * @return the spawned tower

@@ -398,7 +398,29 @@ void stinger_think(Entity* self){
 	Entity* target;
 	if (self->cooldown < 0.0000001f) {
 		//try to fire
-		target = findClosest(self);
+		switch (self->targetingMode)
+		{
+		case(TM_CLOSE):
+			target = findClosest(self);
+			break;
+		case(TM_FAR):
+			target = findFarthest(self);
+			break;
+		case(TM_FIRST):
+			target = findFirst(self);
+			break;
+		case(TM_STRONG):
+			//target = findStrongest(self);
+			target = findClosest(self);
+			break;
+		case(TM_WEAK):
+			//target = findWeakest(self);
+			target = findClosest(self);
+			break;
+		default:
+			target = findClosest(self);
+			break;
+		}
 		//if fire, reset cooldown to fireRate
 		if (target) {
 			gf2d_actor_set_action(&self->actor, "fire");
@@ -541,7 +563,27 @@ void techno_think(Entity* self){
 	Vector2D firePos;
 	if (self->cooldown < 0.0000001f) {
 		//try to fire
-		target = findClosest(self);
+		switch (self->targetingMode)
+		{
+		case(TM_CLOSE):
+			target = findClosest(self);
+			break;
+		case(TM_FAR):
+			target = findFarthest(self);
+			break;
+		case(TM_FIRST):
+			target = findFirst(self);
+			break;
+		case(TM_STRONG):
+			target = findStrongest(self);
+			break;
+		case(TM_WEAK):
+			target = findWeakest(self);
+			break;
+		default:
+			target = findClosest(self);
+			break;
+		}
 		//if fire, reset cooldown to fireRate
 		if (target) {
 			gf2d_actor_set_action(&self->actor, "fire");
@@ -1114,6 +1156,234 @@ Entity* findClosest(Entity* self) {
 					else if (testDist < currClosestDist) {
 						targetEnemy = currEnemy;
 						currClosestDist = testDist;
+					}
+				}
+			}
+		}
+	}
+	return targetEnemy;
+}
+
+Entity* findFarthest(Entity* self) {
+	int i, j;
+	Bucket* bucket;
+	Entity* currEnemy;
+	Entity* targetEnemy;
+	int count;
+	float currFarthestDist;
+	float testDist;
+	targetEnemy = NULL;
+	currFarthestDist = -1.0f;
+
+	count = self->seekBuckets ? self->seekBuckets->count : get_loaded_level()->optimalBuckets->count;
+	for (i = 0; i < count; i++) {
+		if (!self->seekBuckets) {
+			bucket = gfc_list_get_nth(get_loaded_level()->optimalBuckets, i);
+		}
+		else {
+			bucket = gfc_list_get_nth(self->seekBuckets, i);
+		}
+		for (j = 0; j < bucket->entities->count; j++) { //I think the problem is we're clearing buckets before thinking and not recalcing until after.
+			currEnemy = gfc_list_get_nth(bucket->entities, j);
+			if (!currEnemy || currEnemy->_inuse != 1) { continue; }
+			if (self->noTouch && gfc_list_in_list(self->noTouch, currEnemy) >= 0) {
+				continue;
+			}
+			if (currEnemy->type == Type_Enemy) {
+				if (self->shootRadius.radius == 0.0f || CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
+					testDist = LengthSqLine2D(line2d(self->shootRadius.position, currEnemy->boundingBox.position));
+					if (currFarthestDist < 0.0f) {
+						targetEnemy = currEnemy;
+						currFarthestDist = testDist;
+					}
+					else if (testDist > currFarthestDist) {
+						targetEnemy = currEnemy;
+						currFarthestDist = testDist;
+					}
+				}
+			}
+		}
+	}
+	return targetEnemy;
+}
+
+Entity* findFirst(Entity* self) {
+	int i, j, k;
+	Bucket* bucket;
+	Entity* currEnemy;
+	Entity* targetEnemy;
+	Line2D* currLine;
+	int count;
+	float currSmallestDist;
+	float testDist;
+	targetEnemy = NULL;
+	currSmallestDist = -1.0f;
+
+	//add up remaining distance, if at any point it gets higher than current lowest, abort
+	//get path
+	//for loop, i is current index, until is the length of lines in the path
+	count = self->seekBuckets ? self->seekBuckets->count : get_loaded_level()->optimalBuckets->count;
+	for (i = 0; i < count; i++) {
+		if (!self->seekBuckets) {
+			bucket = gfc_list_get_nth(get_loaded_level()->optimalBuckets, i);
+		}
+		else {
+			bucket = gfc_list_get_nth(self->seekBuckets, i);
+		}
+		for (j = 0; j < bucket->entities->count; j++) { //I think the problem is we're clearing buckets before thinking and not recalcing until after.
+			currEnemy = gfc_list_get_nth(bucket->entities, j);
+			if (!currEnemy || currEnemy->_inuse != 1) { continue; }
+			if (self->noTouch && gfc_list_in_list(self->noTouch, currEnemy) >= 0) {
+				continue;
+			}
+			if (currEnemy->type == Type_Enemy) {
+				if (self->shootRadius.radius == 0.0f || CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
+					currLine = gfc_list_get_nth(currEnemy->path->lines, (int)currEnemy->data);
+					testDist = LengthLine2D(line2d(currEnemy->position, currLine->end));
+					for (k = ((int)currEnemy->data)+1; k < currEnemy->path->lines->count; k++) {
+						currLine = gfc_list_get_nth(currEnemy->path->lines, k);
+						testDist += LengthLine2D(*currLine);
+						if (currSmallestDist > 0.0f && testDist > currSmallestDist) {
+							break;
+						}
+					}
+					if (currSmallestDist < 0.0f) {
+						targetEnemy = currEnemy;
+						currSmallestDist = testDist;
+					}
+					else if (testDist < currSmallestDist) {
+						targetEnemy = currEnemy;
+						currSmallestDist = testDist;
+					}
+				}
+			}
+		}
+	}
+	return targetEnemy;
+}
+
+Entity* findStrongest(Entity* self) {
+	int i, j, k;
+	Bucket* bucket;
+	Entity* currEnemy;
+	Entity* targetEnemy;
+	Line2D* currLine;
+	EnemyTypes strongestType;
+	int count;
+	float currSmallestDist;
+	float testDist;
+	targetEnemy = NULL;
+	currSmallestDist = -1.0f;
+
+	//add up remaining distance, if at any point it gets higher than current lowest, abort
+	//get path
+	//for loop, i is current index, until is the length of lines in the path
+	count = self->seekBuckets ? self->seekBuckets->count : get_loaded_level()->optimalBuckets->count;
+	strongestType = -1;
+	for (i = 0; i < count; i++) {
+		if (!self->seekBuckets) {
+			bucket = gfc_list_get_nth(get_loaded_level()->optimalBuckets, i);
+		}
+		else {
+			bucket = gfc_list_get_nth(self->seekBuckets, i);
+		}
+		for (j = 0; j < bucket->entities->count; j++) { //I think the problem is we're clearing buckets before thinking and not recalcing until after.
+			currEnemy = gfc_list_get_nth(bucket->entities, j);
+			if (!currEnemy || currEnemy->_inuse != 1) { continue; }
+			if (self->noTouch && gfc_list_in_list(self->noTouch, currEnemy) >= 0) {
+				continue;
+			}
+			if (currEnemy->type == Type_Enemy) {
+				if (currEnemy->flags < strongestType) {
+					continue;
+				}
+				if (currEnemy->flags > strongestType) {
+					currSmallestDist = -1.0f;
+				}
+				if (self->shootRadius.radius == 0.0f || CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
+					currLine = gfc_list_get_nth(currEnemy->path->lines, (int)currEnemy->data);
+					testDist = LengthLine2D(line2d(currEnemy->position, currLine->end));
+					for (k = ((int)currEnemy->data) + 1; k < currEnemy->path->lines->count; k++) {
+						currLine = gfc_list_get_nth(currEnemy->path->lines, k);
+						testDist += LengthLine2D(*currLine);
+						if (currSmallestDist > 0.0f && testDist > currSmallestDist) {
+							break;
+						}
+					}
+					if (currSmallestDist < 0.0f) {
+						targetEnemy = currEnemy;
+						currSmallestDist = testDist;
+						strongestType = currEnemy->flags;
+					}
+					else if (testDist < currSmallestDist) {
+						targetEnemy = currEnemy;
+						currSmallestDist = testDist;
+						strongestType = currEnemy->flags;
+					}
+				}
+			}
+		}
+	}
+	return targetEnemy;
+}
+
+Entity* findWeakest(Entity* self) {
+	int i, j, k;
+	Bucket* bucket;
+	Entity* currEnemy;
+	Entity* targetEnemy;
+	Line2D* currLine;
+	EnemyTypes weakestType;
+	int count;
+	float currSmallestDist;
+	float testDist;
+	targetEnemy = NULL;
+	currSmallestDist = -1.0f;
+
+	//add up remaining distance, if at any point it gets higher than current lowest, abort
+	//get path
+	//for loop, i is current index, until is the length of lines in the path
+	count = self->seekBuckets ? self->seekBuckets->count : get_loaded_level()->optimalBuckets->count;
+	weakestType = 90;
+	for (i = 0; i < count; i++) {
+		if (!self->seekBuckets) {
+			bucket = gfc_list_get_nth(get_loaded_level()->optimalBuckets, i);
+		}
+		else {
+			bucket = gfc_list_get_nth(self->seekBuckets, i);
+		}
+		for (j = 0; j < bucket->entities->count; j++) { //I think the problem is we're clearing buckets before thinking and not recalcing until after.
+			currEnemy = gfc_list_get_nth(bucket->entities, j);
+			if (!currEnemy || currEnemy->_inuse != 1) { continue; }
+			if (self->noTouch && gfc_list_in_list(self->noTouch, currEnemy) >= 0) {
+				continue;
+			}
+			if (currEnemy->flags < weakestType) {
+				currSmallestDist = -1.0f;
+			}
+			if (currEnemy->type == Type_Enemy) {
+				if (currEnemy->flags > weakestType) {
+					continue;
+				}
+				if (self->shootRadius.radius == 0.0f || CircleCircle(self->shootRadius, currEnemy->boundingBox)) {
+					currLine = gfc_list_get_nth(currEnemy->path->lines, (int)currEnemy->data);
+					testDist = LengthLine2D(line2d(currEnemy->position, currLine->end));
+					for (k = ((int)currEnemy->data) + 1; k < currEnemy->path->lines->count; k++) {
+						currLine = gfc_list_get_nth(currEnemy->path->lines, k);
+						testDist += LengthLine2D(*currLine);
+						if (currSmallestDist > 0.0f && testDist > currSmallestDist) {
+							break;
+						}
+					}
+					if (currSmallestDist < 0.0f) {
+						targetEnemy = currEnemy;
+						currSmallestDist = testDist;
+						weakestType = currEnemy->flags;
+					}
+					else if (testDist < currSmallestDist) {
+						targetEnemy = currEnemy;
+						currSmallestDist = testDist;
+						weakestType = currEnemy->flags;
 					}
 				}
 			}
