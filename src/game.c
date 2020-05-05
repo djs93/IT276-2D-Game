@@ -33,6 +33,7 @@ void sound_test();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
+Entity* placementEntity;
 Window* cashUI;
 Window* upgradeUI;
 Window* lifeUI;
@@ -322,10 +323,11 @@ Bool getWindowPressed() {
 }
 
 void esc_press() {
-    Entity* placeEnt;
-    placeEnt = find_entity("placement");
-    if (placeEnt) {
-        gf2d_entity_free(placeEnt);
+    //Entity* placeEnt;
+    //placeEnt = find_entity("placement");
+    if (placementEntity) {
+        gf2d_entity_free(placementEntity);
+        placementEntity = NULL;
     }
     else {
         if (exitWindow->hide) {

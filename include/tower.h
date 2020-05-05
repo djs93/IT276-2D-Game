@@ -344,4 +344,11 @@ void targetModePrev();
 */
 void targetModeNext();
 
+/**
+* @brief gets the string representation of a targeting mode
+* @param targetingMode the targeting mode to convert into a string
+* @return the 
+*/
+char* targetModeString(TargetingModes targetingMode);
+
 #endif

@@ -88,6 +88,7 @@ typedef struct
 
 static EntityManager gf2d_entity_manager = { 0, 300 };
 extern Entity* selectedEntity;
+extern Entity* placementEntity;
 /**
  * @brief initializes the entity subsystem
  * @param entity_max maximum number of simultaneous entities you wish to support

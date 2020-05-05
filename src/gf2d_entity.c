@@ -682,6 +682,11 @@ void gf2d_entity_set_selected(Entity* entity) {
 			sprintf(str, " ");
 		}
 		gf2d_element_label_set_text(currLabel, str);
+
+		list = gf2d_window_get_element_by_id(upgradeWindow, 0);
+		currLabel = gf2d_element_list_get_item_by_id(list, 60);
+		sprintf(str, targetModeString(selectedEntity->targetingMode));
+		gf2d_element_label_set_text(currLabel, str);
 	}
 }
 /*eol@eof*/

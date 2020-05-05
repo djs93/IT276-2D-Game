@@ -248,11 +248,12 @@ Entity* speed_totem_spawn(Vector2D position) {
 
 Entity* placement_spawn(TowerTypes type) {
 	Entity* self;
-	self = find_entity("placement");
+	self = placementEntity;
 	if (self) {
 		return self;
 	}
-	self = gf2d_entity_new();
+	placementEntity = gf2d_entity_new();
+	self = placementEntity;
 	switch (type)
 	{
 	case TT_Stinger:
@@ -312,6 +313,7 @@ Entity* placement_spawn(TowerTypes type) {
 	self->boundingBox.radius = 10.0f * self->actor.al->scale.x;
 	self->boundingBox.position = self->position;
 	self->type = Type_Placement;
+	self->targetingMode = TM_FIRST;
 	return self;
 }
 #pragma endregion
@@ -954,6 +956,7 @@ void placement_detach(Entity* ent) {
 		//subtract from player's inventory
 		player_consume(TT_Power_Bee_Swarm);
 		gf2d_entity_free(ent);
+		placementEntity = NULL;
 		return;
 		break;
 	case TT_Power_Cash_Drop:
@@ -961,6 +964,7 @@ void placement_detach(Entity* ent) {
 		//subtract from player's inventory
 		player_consume(TT_Power_Cash_Drop);
 		gf2d_entity_free(ent);
+		placementEntity = NULL;
 		return;
 		break;
 	case TT_Power_Speed_Totem:
@@ -975,6 +979,7 @@ void placement_detach(Entity* ent) {
 		//subtract from player's inventory
 		player_consume(TT_Power_Time_Warp);
 		gf2d_entity_free(ent);
+		placementEntity = NULL;
 		return;
 		break;
 	default:
@@ -992,6 +997,7 @@ void placement_detach(Entity* ent) {
 	ent->rotation.x = ent->actor.sprite->frame_w/2;
 	ent->rotation.y = ent->actor.sprite->frame_h/2;
 	setAllyBuckets(ent);
+	placementEntity = NULL;
 }
 #pragma endregion
 
@@ -2412,9 +2418,81 @@ void upgradeTwo_buy() {
 }
 
 void targetModePrev() {
-
+	Entity* tower = selectedEntity;
+	if (!selectedEntity || selectedEntity->_inuse < 1) {
+		return;
+	}
+	switch (selectedEntity->targetingMode)
+	{
+	case TM_FIRST:
+		tower->targetingMode = TM_WEAK;
+		break;
+	case TM_CLOSE:
+		tower->targetingMode = TM_FIRST;
+		break;
+	case TM_FAR:
+		tower->targetingMode = TM_CLOSE;
+		break;
+	case TM_STRONG:
+		tower->targetingMode = TM_FAR;
+		break;
+	case TM_WEAK:
+		tower->targetingMode = TM_STRONG;
+		break;
+	default:
+		return;
+	}
+	gf2d_entity_set_selected(gf2d_entity_get_selected());//update upgrade window
 }
 
 void targetModeNext() {
+	Entity* tower = selectedEntity;
+	if (!selectedEntity || selectedEntity->_inuse < 1) {
+		return;
+	}
+	switch (selectedEntity->targetingMode)
+	{
+	case TM_FIRST:
+		tower->targetingMode = TM_CLOSE;
+		break;
+	case TM_CLOSE:
+		tower->targetingMode = TM_FAR;
+		break;
+	case TM_FAR:
+		tower->targetingMode = TM_STRONG;
+		break;
+	case TM_STRONG:
+		tower->targetingMode = TM_WEAK;
+		break;
+	case TM_WEAK:
+		tower->targetingMode = TM_FIRST;
+		break;
+	default:
+		return;
+	}
+	gf2d_entity_set_selected(gf2d_entity_get_selected());//update upgrade window
+}
 
+char* targetModeString(TargetingModes targetingMode)
+{
+	switch (targetingMode)
+	{
+	case TM_FIRST:
+		return "First";
+		break;
+	case TM_CLOSE:
+		return "Close";
+		break;
+	case TM_FAR:
+		return "Far";
+		break;
+	case TM_STRONG:
+		return "Strong";
+		break;
+	case TM_WEAK:
+		return "Weak";
+		break;
+	default:
+		return "invalid targeting mode";
+	}
 }
