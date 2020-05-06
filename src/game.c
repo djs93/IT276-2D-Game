@@ -47,6 +47,7 @@ Bool windowPress;
 Window* exitWindow;
 int done;
 Player* player;
+int uiState;
 
 int main(int argc, char * argv[])
 {
@@ -59,6 +60,7 @@ int main(int argc, char * argv[])
     mx = 0;
     my = 0;
     float mf = 0;
+    uiState = 0;
     //Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};
 
@@ -178,7 +180,7 @@ int main(int argc, char * argv[])
 	slog("%f", testPath.totalLength);
 	*/
     gf2d_mouse_load("actors/mouse.actor");
-    level_load_from_save("saves/level.json");
+    //level_load_from_save("saves/level.json");
     gfc_input_set_callbacks("test", sound_test, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
@@ -242,12 +244,14 @@ int main(int argc, char * argv[])
             
             //UI elements last
             //gf2d_sprite_draw(mouse, vector2d(mx,my), NULL, NULL, NULL, NULL, &mouseColor, (int)mf);
-        draw_level();
-        level_update();
-        gf2d_entity_update_all();		
+        if (state!=GS_MainMenu) {
+            draw_level();
+            level_update();
+            gf2d_entity_update_all();
+            draw_normal_entities();
+        }	
 		//draw_buckets();
         //draw_buckets_optimal();
-        draw_normal_entities();
         //draw_buckets_ally();
 		//drawPaths();
         gf2d_windows_draw_all();
@@ -337,6 +341,10 @@ void setWindowPressed(Bool state) {
 }
 Bool getWindowPressed() {
     return windowPress;
+}
+
+Window* getMainMenuWindow() {
+    return mainMenuWindow;
 }
 
 void esc_press() {
@@ -478,9 +486,33 @@ void loadMainMenu() {
 void loadLevelSelect(){
 }
 
-void loadEdtior() {
+void loadEditor() {
 }
 
 void loadPerks() {
+}
+
+void toggleInGameGUI() {
+    
+    if (uiState == 0) {
+        //enable
+        cashUI->hide = 0;
+        lifeUI->hide = 0;
+        roundUI->hide = 0;
+        powerButtonUI->hide = 0;
+        ui->hide = 0;
+        uiState = 1;
+    }
+    else {
+        //disable
+        cashUI->hide = 1;
+        lifeUI->hide = 1;
+        roundUI->hide = 1;
+        powerButtonUI->hide = 1;
+        towerButtonUI->hide = 1;
+        ui->hide = 1;
+        powerUI->hide = 1;
+        uiState = 0;
+    }
 }
 /*eol@eof*/

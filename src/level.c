@@ -410,6 +410,10 @@ Level* level_load(char* levelFile)
 
 	gf2d_entity_free_all();
 	levelJson = sj_load(levelFile);
+	getMainMenuWindow()->hide = 1;
+	state = GS_InGame;
+	toggleInGameGUI();
+	showGoButton();
 	if (!levelJson) {
 		slog("Level json %s not found!", levelFile);
 		return level_new("images/backgrounds/bg_flat.png");

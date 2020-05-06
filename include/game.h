@@ -92,4 +92,15 @@ void setRoundUI(int round);
 * @brief reload the prices on the tower selection ui
 */
 void reloadPrices();
+
+/**
+* @brief get the main menu window
+* @return a pointer to the main menu window
+*/
+Window* getMainMenuWindow();
+
+/**
+* @brief toggle the in-game gui on and off
+*/
+void toggleInGameGUI();
 #endif
