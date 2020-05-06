@@ -116,6 +116,10 @@ void gf2d_fonts_parse(FILE *file)
             {
                 font_manager.font_tags[FT_H6] = font;
             }
+            else if (strcmp(buf, "title") == 0)
+            {
+                font_manager.font_tags[FT_TITLE] = font;
+            }
             continue;
         }
         fgets(buf, sizeof(buf), file);

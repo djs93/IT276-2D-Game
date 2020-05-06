@@ -160,7 +160,11 @@ void gf2d_element_load_label_from_config(Element *e,SJson *json)
         }
         else if (strcmp(buffer,"H6") == 0)
         {
-        style = FT_H6;
+            style = FT_H6;
+        }
+        else if (strcmp(buffer, "title") == 0)
+        {
+            style = FT_TITLE;
         }
     }
 

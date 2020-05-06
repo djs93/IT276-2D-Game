@@ -41,6 +41,7 @@ typedef enum
     FT_H4,
     FT_H5,
     FT_H6,
+    FT_TITLE,
     FT_MAX
 }FontTypes;
 
