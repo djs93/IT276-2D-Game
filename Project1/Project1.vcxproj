@@ -253,6 +253,7 @@
     <None Include="..\actors\enemies\yellow.actor" />
     <None Include="..\actors\goButton.actor" />
     <None Include="..\actors\laser.actor" />
+    <None Include="..\actors\mainmenubackground.actor" />
     <None Include="..\actors\mouse.actor" />
     <None Include="..\actors\music.actor" />
     <None Include="..\actors\powerButton.actor" />
@@ -277,6 +278,7 @@
     <None Include="..\config\gameover_window.json" />
     <None Include="..\config\go_button_window.json" />
     <None Include="..\config\life_UI.json" />
+    <None Include="..\config\main_menu.json" />
     <None Include="..\config\power_button_window.json" />
     <None Include="..\config\power_window.json" />
     <None Include="..\config\reward_window.json" />

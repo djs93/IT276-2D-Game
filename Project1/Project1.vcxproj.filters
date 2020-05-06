@@ -448,5 +448,11 @@
     <None Include="..\levels\level1.json">
       <Filter>Resource Files\Levels</Filter>
     </None>
+    <None Include="..\config\main_menu.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\actors\mainmenubackground.actor">
+      <Filter>Resource Files\Actors</Filter>
+    </None>
   </ItemGroup>
 </Project>

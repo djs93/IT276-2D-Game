@@ -23,6 +23,10 @@ void exit_press();
 void toggle_towers();
 void toggle_powers();
 void sound_test();
+void loadMainMenu();
+void loadLevelSelect();
+void loadEditor();
+void loadPerks();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
@@ -38,6 +42,7 @@ Window* ui;
 Window* powerUI;
 Window* rewardWindow;
 Window* gameOverWindow;
+Window* mainMenuWindow;
 Bool windowPress;
 Window* exitWindow;
 int done;
@@ -116,28 +121,31 @@ int main(int argc, char * argv[])
     gfc_input_init("config/input.cfg");
     gf2d_windows_init(32);
 
-    ui = gf2d_window_new();
-
     ui = gf2d_window_load("config/yes_no_window2.json");
     setPrices(ui);
+    ui->hide = 1;
 
     powerUI = gf2d_window_load("config/power_window.json");
     powerUI->hide = 1;
 
     cashUI = gf2d_window_load("config/cash_UI.json");
     cashUI->no_draw_generic = 1;
+    cashUI->hide = 1;
 
     upgradeUI = gf2d_window_load("config/yes_no_window.json");
     upgradeUI->hide = 1;
 
     lifeUI = gf2d_window_load("config/life_UI.json");
     lifeUI->no_draw_generic = 1;
+    lifeUI->hide = 1;
 
     roundUI = gf2d_window_load("config/round_UI.json");
     roundUI->no_draw_generic = 1;
+    roundUI->hide = 1;
 
     goButtonUI = gf2d_window_load("config/go_button_window.json");
     goButtonUI->no_draw_generic = 1;
+    goButtonUI->hide = 1;
 
     towerButtonUI = gf2d_window_load("config/tower_button_window.json");
     towerButtonUI->no_draw_generic = 1;
@@ -145,6 +153,7 @@ int main(int argc, char * argv[])
 
     powerButtonUI = gf2d_window_load("config/power_button_window.json");
     powerButtonUI->no_draw_generic = 1;
+    powerButtonUI->hide = 1;
 
     rewardWindow = gf2d_window_load("config/reward_window.json");
     rewardWindow->hide = 1;
@@ -154,6 +163,10 @@ int main(int argc, char * argv[])
 
     exitWindow = gf2d_window_load("config/exit_window.json");
     exitWindow->hide = 1;
+
+    mainMenuWindow = gf2d_window_load("config/main_menu.json");
+    mainMenuWindow->hide = 0;
+    mainMenuWindow->no_draw_generic = 1;
 	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
@@ -166,7 +179,7 @@ int main(int argc, char * argv[])
 	*/
     gf2d_mouse_load("actors/mouse.actor");
     level_load_from_save("saves/level.json");
-    gfc_input_set_callbacks("test", sound_test, NULL, NULL, NULL, "saves/level.json");
+    gfc_input_set_callbacks("test", sound_test, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyLaser", laser_buy, NULL, NULL, NULL, NULL);
@@ -189,9 +202,18 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("reload", level_reload, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("modePrev", targetModePrev, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("modeNext", targetModeNext, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("mainMenu", loadMainMenu, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("level1", level_load, NULL, NULL, NULL, "levels/test.json");
+    gfc_input_set_callbacks("level2", level_load, NULL, NULL, NULL, "levels/level1.json");
+    gfc_input_set_callbacks("levelSelect", loadLevelSelect, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("loadSave", level_load_from_save, NULL, NULL, NULL, "saves/level.json");
+    gfc_input_set_callbacks("loadEditor", loadEditor, NULL, NULL, NULL, "saves/level.json");
+    gfc_input_set_callbacks("loadPerks", loadPerks, NULL, NULL, NULL, "saves/level.json");
 
     gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
     
+    loadMainMenu();
+
     state = GS_MainMenu;
     /*main game loop*/
     while(!done)
@@ -446,5 +468,19 @@ void reloadPrices() {
 
 void sound_test() {
     sound_change_bgm("bgm/anttisinstrumentals_allaboardthefunkytrainvwkinstrumental.mp3");
+}
+
+void loadMainMenu() {
+    mainMenuWindow->hide = 0;
+    state = GS_MainMenu;
+}
+
+void loadLevelSelect(){
+}
+
+void loadEdtior() {
+}
+
+void loadPerks() {
 }
 /*eol@eof*/
