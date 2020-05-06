@@ -1,25 +1,18 @@
 #include <SDL.h>
+#include <game.h>
 #include "gfc_audio.h"
 #include "gf2d_graphics.h"
 #include "gf2d_draw.h"
-#include "gf2d_sprite.h"
 #include "simple_logger.h"
 #include "local.h"
-#include "gf2d_entity.h"
-#include "level.h"
 #include "bucket.h"
-#include "Geometry2D.h"
-#include "gf2d_windows.h"
 #include "gf2d_elements.h"
 #include "gf2d_font.h"
 #include "gfc_input.h"
 #include "gf2d_element_button.h"
-#include "gf2d_element_label.h"
 #include "gf2d_element_actor.h"
 #include "gf2d_mouse.h"
-#include "tower.h"
 #include "enemies.h"
-#include "player.h"
 #include "sound_handler.h"
 
 Entity* entity_list;
@@ -198,6 +191,8 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("modeNext", targetModeNext, NULL, NULL, NULL, NULL);
 
     gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
+    
+    state = GS_MainMenu;
     /*main game loop*/
     while(!done)
     {
