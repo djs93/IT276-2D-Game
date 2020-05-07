@@ -84,9 +84,9 @@ Player* player_load(char* saveFile) {
 		}
 	}
 
-	tempJson = sj_object_get_value(file, "perks");
+	tempJson = sj_object_get_value(file, "perkMoney");
 	if (tempJson) {
-		sj_get_float_value(tempJson, &player->perkMoney);
+		sj_get_integer_value(tempJson, &player->perkMoney);
 	}
 
 	return player;
@@ -112,6 +112,9 @@ void player_save(char* saveFile) {
 	sj_array_append(tempJson, sj_new_bool(player->perks[3]));
 	sj_array_append(tempJson, sj_new_bool(player->perks[4]));
 	sj_object_insert(file, "perks", tempJson);
+
+	tempJson = sj_new_int(player->perkMoney);
+	sj_object_insert(file, "perkMoney", tempJson);
 
 	sj_save(file, saveFile);
 }
