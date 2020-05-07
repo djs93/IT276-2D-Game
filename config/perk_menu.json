@@ -36,6 +36,17 @@
         "style": "title"
       },
       {
+        "type": "label",
+        "name": "currentMoney",
+        "id": 7,
+        "bounds": [ 0, 140, 1, 160 ],
+        "color": [ 255, 255, 255, 255 ],
+        "text": "$x,xxx",
+        "justify": "center",
+        "align": "middle",
+        "style": "H1"
+      },
+      {
         "type": "list",
         "name": "list",
         "id": 3,
