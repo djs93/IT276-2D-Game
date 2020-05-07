@@ -52,4 +52,10 @@ void player_save(char* saveFile);
 */
 int get_perk_cost(PerkNumbers perkNumber);
 
+/**
+* @brief Tries to purchase a perk
+* @param perkNumber the perk to purchase
+*/
+void tryBuyPerk(PerkNumbers perkNumber);
+
 #endif

@@ -26,8 +26,7 @@ void sound_test();
 void loadMainMenu();
 void loadLevelSelect();
 void loadEditor();
-void loadPerks(); 
-void updatePerkUI();
+void loadPerks();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
@@ -226,6 +225,11 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("loadSave", level_load_from_save, NULL, NULL, NULL, "saves/level.json");
     gfc_input_set_callbacks("loadEditor", loadEditor, NULL, NULL, NULL, "saves/level.json");
     gfc_input_set_callbacks("loadPerks", loadPerks, NULL, NULL, NULL, "saves/level.json");
+    gfc_input_set_callbacks("perk1", tryBuyPerk, NULL, NULL, NULL, PN_Pierce);
+    gfc_input_set_callbacks("perk2", tryBuyPerk, NULL, NULL, NULL, PN_Speed);
+    gfc_input_set_callbacks("perk3", tryBuyPerk, NULL, NULL, NULL, PN_Discount);
+    gfc_input_set_callbacks("perk4", tryBuyPerk, NULL, NULL, NULL, PN_Money);
+    gfc_input_set_callbacks("perk5", tryBuyPerk, NULL, NULL, NULL, PN_StingerUps);
 
     gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
     
@@ -611,27 +615,52 @@ void updatePerkUI() {
     list = gf2d_window_get_element_by_id(perkWindow, 5);
     currButton = gf2d_element_list_get_item_by_id(list, 51);
     currLabel = ((ButtonElement*)currButton->data)->label;
-    sprintf(str, "$%i", get_perk_cost(PN_Pierce));
+    if (player->perks[0] == true) {
+        sprintf(str, "Bought!");
+    }
+    else {
+        sprintf(str, "$%i", get_perk_cost(PN_Pierce));
+    }
     gf2d_element_label_set_text(currLabel, str);
 
     currButton = gf2d_element_list_get_item_by_id(list, 52);
     currLabel = ((ButtonElement*)currButton->data)->label;
-    sprintf(str, "$%i", get_perk_cost(PN_Speed));
+    if (player->perks[1] == true) {
+        sprintf(str, "Bought!");
+    }
+    else {
+        sprintf(str, "$%i", get_perk_cost(PN_Speed));
+    }
     gf2d_element_label_set_text(currLabel, str);
 
     currButton = gf2d_element_list_get_item_by_id(list, 53);
     currLabel = ((ButtonElement*)currButton->data)->label;
-    sprintf(str, "$%i", get_perk_cost(PN_Discount));
+    if (player->perks[2] == true) {
+        sprintf(str, "Bought!");
+    }
+    else {
+        sprintf(str, "$%i", get_perk_cost(PN_Discount));
+    }
     gf2d_element_label_set_text(currLabel, str);
 
     currButton = gf2d_element_list_get_item_by_id(list, 54);
-    currLabel = ((ButtonElement*)currButton->data)->label;
-    sprintf(str, "$%i", get_perk_cost(PN_Money));
+    currLabel = ((ButtonElement*)currButton->data)->label; 
+    if (player->perks[3] == true) {
+        sprintf(str, "Bought!");
+    }
+    else {
+        sprintf(str, "$%i", get_perk_cost(PN_Money));
+    }
     gf2d_element_label_set_text(currLabel, str);
 
     currButton = gf2d_element_list_get_item_by_id(list, 55);
     currLabel = ((ButtonElement*)currButton->data)->label;
-    sprintf(str, "$%i", get_perk_cost(PN_StingerUps));
+    if (player->perks[4] == true) {
+        sprintf(str, "Bought!");
+    }
+    else {
+        sprintf(str, "$%i", get_perk_cost(PN_StingerUps));
+    }
     gf2d_element_label_set_text(currLabel, str);
 }
 /*eol@eof*/

@@ -138,6 +138,23 @@ int get_perk_cost(PerkNumbers perkNumber) {
 		return 600;
 		break;
 	default:
+		return -1;
 		break;
+	}
+}
+
+void tryBuyPerk(PerkNumbers perkNumber) {
+	int perkCost;
+	Player* player;
+
+	perkCost = get_perk_cost(perkNumber);
+	player = getPlayer();
+	if (get_perk_cost < 0)return;
+	if (player->perks[perkNumber] == false && player->perkMoney >= perkCost) {
+		//buy and update
+		player->perks[perkNumber] = true;
+		player->perkMoney -= perkCost;
+		updatePerkUI();
+		player_save("saves/player.json");
 	}
 }

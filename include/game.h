@@ -116,7 +116,12 @@ void toggleInGameGUI();
 void showInGameGUI();
 
 /**
-* @brief hdie the in-game gui
+* @brief hide the in-game gui
 */
 void hideInGameGUI();
+
+/**
+* @brief updates prices and buy status on perk window
+*/
+void updatePerkUI();
 #endif
