@@ -23,6 +23,7 @@ void exit_press();
 void toggle_towers();
 void toggle_powers();
 void sound_test();
+void perkMoneyTest();
 void loadMainMenu();
 void loadLevelSelect();
 void loadEditor();
@@ -195,7 +196,7 @@ int main(int argc, char * argv[])
 	*/
     gf2d_mouse_load("actors/mouse.actor");
     //level_load_from_save("saves/level.json");
-    gfc_input_set_callbacks("test", sound_test, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("test", perkMoneyTest, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyStinger", stinger_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buySlingshot", slingshot_buy, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("buyLaser", laser_buy, NULL, NULL, NULL, NULL);
@@ -522,6 +523,11 @@ void sound_test() {
     sound_change_bgm("bgm/anttisinstrumentals_allaboardthefunkytrainvwkinstrumental.mp3");
 }
 
+void perkMoneyTest() {
+    player->perkMoney += 1000;
+    updatePerkUI();
+}
+
 void loadMainMenu() {
     mainMenuWindow->hide = 0;
     levelSelectWindow->hide = 1;
@@ -617,19 +623,34 @@ void updatePerkUI() {
     currLabel = ((ButtonElement*)currButton->data)->label;
     if (player->perks[0] == true) {
         sprintf(str, "Bought!");
+        gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(120.0f, 120.0f, 120.0f, 255.0f);
     }
     else {
         sprintf(str, "$%i", get_perk_cost(PN_Pierce));
+        if (player->perkMoney < get_perk_cost(PN_Pierce)) {
+            gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(120.0f, 120.0f, 120.0f, 255.0f);
+        }
+        else {
+            gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(255.0f, 255.0f, 255.0f, 255.0f);
+        }
     }
+    
     gf2d_element_label_set_text(currLabel, str);
 
     currButton = gf2d_element_list_get_item_by_id(list, 52);
     currLabel = ((ButtonElement*)currButton->data)->label;
     if (player->perks[1] == true) {
         sprintf(str, "Bought!");
+        gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(120.0f, 120.0f, 120.0f, 255.0f);
     }
     else {
         sprintf(str, "$%i", get_perk_cost(PN_Speed));
+        if (player->perkMoney < get_perk_cost(PN_Speed)) {
+            gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(120.0f, 120.0f, 120.0f, 255.0f);
+        }
+        else {
+            gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(255.0f, 255.0f, 255.0f, 255.0f);
+        }
     }
     gf2d_element_label_set_text(currLabel, str);
 
@@ -637,9 +658,16 @@ void updatePerkUI() {
     currLabel = ((ButtonElement*)currButton->data)->label;
     if (player->perks[2] == true) {
         sprintf(str, "Bought!");
+        gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(120.0f, 120.0f, 120.0f, 255.0f);
     }
     else {
         sprintf(str, "$%i", get_perk_cost(PN_Discount));
+        if (player->perkMoney < get_perk_cost(PN_Discount)) {
+            gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(120.0f, 120.0f, 120.0f, 255.0f);
+        }
+        else {
+            gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(255.0f, 255.0f, 255.0f, 255.0f);
+        }
     }
     gf2d_element_label_set_text(currLabel, str);
 
@@ -647,9 +675,16 @@ void updatePerkUI() {
     currLabel = ((ButtonElement*)currButton->data)->label; 
     if (player->perks[3] == true) {
         sprintf(str, "Bought!");
+        gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(120.0f, 120.0f, 120.0f, 255.0f);
     }
     else {
         sprintf(str, "$%i", get_perk_cost(PN_Money));
+        if (player->perkMoney < get_perk_cost(PN_Money)) {
+            gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(120.0f, 120.0f, 120.0f, 255.0f);
+        }
+        else {
+            gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(255.0f, 255.0f, 255.0f, 255.0f);
+        }
     }
     gf2d_element_label_set_text(currLabel, str);
 
@@ -657,9 +692,16 @@ void updatePerkUI() {
     currLabel = ((ButtonElement*)currButton->data)->label;
     if (player->perks[4] == true) {
         sprintf(str, "Bought!");
+        gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(120.0f, 120.0f, 120.0f, 255.0f);
     }
     else {
         sprintf(str, "$%i", get_perk_cost(PN_StingerUps));
+        if (player->perkMoney < get_perk_cost(PN_StingerUps)) {
+            gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(120.0f, 120.0f, 120.0f, 255.0f);
+        }
+        else {
+            gf2d_element_actor_get_actor(((ButtonElement*)currButton->data)->actor)->color = vector4d(255.0f, 255.0f, 255.0f, 255.0f);
+        }
     }
     gf2d_element_label_set_text(currLabel, str);
 }
