@@ -55,6 +55,17 @@ void level_save(char* fileName);
 Level* level_load(char* levelFile);
 
 /**
+* @brief Initialize the loaded level. Adds cash and lives
+*/
+void level_init();
+
+/**
+* @brief Load and initialize a level
+* @param levelName the path to the file
+*/
+void level_load_new(char* levelName);
+
+/**
 * @brief Reload the currently loaded level
 */
 void level_reload();

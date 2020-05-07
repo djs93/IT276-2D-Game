@@ -411,6 +411,7 @@ Level* level_load(char* levelFile)
 	gf2d_entity_free_all();
 	levelJson = sj_load(levelFile);
 	getMainMenuWindow()->hide = 1;
+	hideLevelSelect();
 	state = GS_InGame;
 	toggleInGameGUI();
 	showGoButton();
@@ -531,6 +532,20 @@ void level_reload() {
 	level_addLife(100);
 	hideGameOver();
 	showGoButton();
+}
+
+void level_init() {
+	level_addCash(100.0f);
+	if (getPlayer()->perks[PN_Money]) {
+		level_addCash(150.0f);
+	}
+	level_addLife(100);
+	showGoButton();
+}
+
+void level_load_new(char* levelName) {
+	level_load(levelName);
+	level_init();
 }
 
 void level_reload_test() {

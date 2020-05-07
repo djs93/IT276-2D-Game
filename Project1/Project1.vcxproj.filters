@@ -454,5 +454,8 @@
     <None Include="..\actors\mainmenubackground.actor">
       <Filter>Resource Files\Actors</Filter>
     </None>
+    <None Include="..\config\level_select.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
   </ItemGroup>
 </Project>

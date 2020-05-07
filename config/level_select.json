@@ -1,0 +1,139 @@
+{
+"window":{
+    "color" : [255,255,255, 255],
+    "dimensions": [ 0, 0, 1200, 720 ],
+    "justify" : "left",
+    "align" : "top",
+    "elements":
+    [
+      {
+        "type": "list",
+        "name": "list",
+        "id" : 0,
+        "bounds": [0,0,1200,720],
+        "color" : [255,255,255,255],
+        "style": "vertical",
+        "item_size" : [100,36],
+        "elements": [
+          {
+            "type": "actor",
+            "name": "bgimage",
+            "id": 1,
+            "bounds": [ 0, 0, 0, 0 ],
+            "color": [ 255, 255, 255, 255 ],
+            "actor": "actors/mainmenubackground.actor"
+          },
+          {
+            "type": "label",
+            "name": "titleShadow",
+            "id": 2,
+            "bounds": [ 10, 0, 1, 220 ],
+            "color": [ 179, 98, 0, 100 ],
+            "text": "Level Select",
+            "justify": "center",
+            "align": "middle",
+            "style": "title"
+          },
+          {
+            "type": "label",
+            "name": "titleText",
+            "id": 3,
+            "bounds": [ 0, 0, 1, 160 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": "Level Select",
+            "justify": "center",
+            "align": "middle",
+            "style": "title"
+          },
+          {
+            "type": "button",
+            "name": "levelSelectButton",
+            "id": 4,
+            "bounds": [ 516, 170, 168, 64 ],
+            "hotkey": "level1",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "levelSelect_label",
+              "id": 41,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Level One",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 42,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "loadButton",
+            "id": 5,
+            "bounds": [ 516, 210, 168, 64 ],
+            "hotkey": "level2",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "save_label",
+              "id": 51,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Level Two",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 52,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "exitButton",
+            "id": 8,
+            "bounds": [ 516, 340, 168, 64 ],
+            "hotkey": "mainMenu",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "exit_label",
+              "id": 81,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Main Menu",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 82,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          }
+        ]
+      }
+    ]
+    }
+}

@@ -81,6 +81,12 @@ void showGameOver();
 * @brief hide the game over window
 */
 void hideGameOver();
+
+/**
+* @brief hide the level select window
+*/
+void hideLevelSelect();
+
 /**
 * @brief set the round ui label to the specified round PLUS ONE
 * @param round the round index to display
