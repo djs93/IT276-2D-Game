@@ -1,0 +1,357 @@
+{
+  "window": {
+    "color": [ 255, 255, 255, 255 ],
+    "dimensions": [ 0, 0, 1200, 720 ],
+    "justify": "left",
+    "align": "top",
+    "elements": [
+      {
+        "type": "actor",
+        "name": "bgimage",
+        "id": 0,
+        "bounds": [ 0, 0, 0, 0 ],
+        "color": [ 255, 255, 255, 255 ],
+        "actor": "actors/mainmenubackground.actor"
+      },
+      {
+        "type": "label",
+        "name": "titleShadow",
+        "id": 1,
+        "bounds": [ 10, 20, 1, 220 ],
+        "color": [ 179, 98, 0, 100 ],
+        "text": "Perks",
+        "justify": "center",
+        "align": "middle",
+        "style": "title"
+      },
+      {
+        "type": "label",
+        "name": "titleText",
+        "id": 2,
+        "bounds": [ 0, 20, 1, 160 ],
+        "color": [ 255, 255, 255, 255 ],
+        "text": "Perks",
+        "justify": "center",
+        "align": "middle",
+        "style": "title"
+      },
+      {
+        "type": "list",
+        "name": "list",
+        "id": 3,
+        "bounds": [ 110, 250, 1200, 300 ],
+        "color": [ 255, 255, 255, 255 ],
+        "style": "horizontal",
+        "item_size": [ 200, 36 ],
+        "elements": [
+          {
+            "type": "label",
+            "name": "perk1_label",
+            "id": 31,
+            "bounds": [ 0, 0, 168, 64 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": "+1 Pierce",
+            "justify": "center",
+            "align": "middle",
+            "style": "H5"
+          },
+          {
+            "type": "label",
+            "name": "perk2_label",
+            "id": 32,
+            "bounds": [ 0, 0, 168, 64 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": "+10% Speed",
+            "justify": "center",
+            "align": "middle",
+            "style": "H5"
+          },
+          {
+            "type": "label",
+            "name": "perk3_label",
+            "id": 33,
+            "bounds": [ 0, 0, 168, 64 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": "-20% cost",
+            "justify": "center",
+            "align": "middle",
+            "style": "H5"
+          },
+          {
+            "type": "label",
+            "name": "perk4_label",
+            "id": 34,
+            "bounds": [ 0, 0, 168, 64 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": "+$150 starting",
+            "justify": "center",
+            "align": "middle",
+            "style": "H5"
+          },
+          {
+            "type": "label",
+            "name": "perk5_label",
+            "id": 35,
+            "bounds": [ 0, 0, 168, 64 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": "Stinger first",
+            "justify": "center",
+            "align": "middle",
+            "style": "H5"
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "name": "list",
+        "id": 4,
+        "bounds": [ 110, 280, 1200, 300 ],
+        "color": [ 255, 255, 255, 255 ],
+        "style": "horizontal",
+        "item_size": [ 200, 36 ],
+        "elements": [
+          {
+            "type": "label",
+            "name": "perk1_label2",
+            "id": 41,
+            "bounds": [ 0, 0, 168, 64 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": " ",
+            "justify": "center",
+            "align": "middle",
+            "style": "H5"
+          },
+          {
+            "type": "label",
+            "name": "perk2_label2",
+            "id": 42,
+            "bounds": [ 0, 0, 168, 64 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": " ",
+            "justify": "center",
+            "align": "middle",
+            "style": "H5"
+          },
+          {
+            "type": "label",
+            "name": "perk3_label2",
+            "id": 43,
+            "bounds": [ 0, 0, 168, 64 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": " ",
+            "justify": "center",
+            "align": "middle",
+            "style": "H5"
+          },
+          {
+            "type": "label",
+            "name": "perk4_label2",
+            "id": 44,
+            "bounds": [ 0, 0, 168, 64 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": "money",
+            "justify": "center",
+            "align": "middle",
+            "style": "H5"
+          },
+          {
+            "type": "label",
+            "name": "perk5_label2",
+            "id": 45,
+            "bounds": [ 0, 0, 168, 64 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": "upgrades free",
+            "justify": "center",
+            "align": "middle",
+            "style": "H5"
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "name": "list",
+        "id": 5,
+        "bounds": [ 110, 330, 1200, 300 ],
+        "color": [ 255, 255, 255, 255 ],
+        "style": "horizontal",
+        "item_size": [ 200, 36 ],
+        "elements": [
+          {
+            "type": "button",
+            "name": "perk1_button",
+            "id": 51,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "perk1",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "perk1_label",
+              "id": 511,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "$x,xxx",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 512,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "perk1_button",
+            "id": 52,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "perk2",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "perk1_label",
+              "id": 521,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "$x,xxx",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 522,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "perk1_button",
+            "id": 53,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "perk3",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "perk1_label",
+              "id": 531,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "$x,xxx",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 532,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "perk1_button",
+            "id": 54,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "perk4",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "perk1_label",
+              "id": 541,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "$x,xxx",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 542,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "perk1_button",
+            "id": 55,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "perk5",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "perk1_label",
+              "id": 551,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "$x,xxx",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 552,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "name": "mainmenu_button",
+        "id": 6,
+        "bounds": [ 516, 550, 168, 64 ],
+        "hotkey": "mainMenu",
+        "color": [ 255, 255, 255, 255 ],
+        "highColor": [ 255, 255, 255, 255 ],
+        "pressColor": [ 255, 255, 255, 255 ],
+        "label": {
+          "type": "label",
+          "name": "mainmenu_label",
+          "id": 61,
+          "bounds": [ 0, 0, 168, 64 ],
+          "color": [ 255, 255, 255, 255 ],
+          "text": "Main Menu",
+          "justify": "center",
+          "align": "middle",
+          "style": "H5"
+        },
+        "actor": {
+          "type": "actor",
+          "name": "image",
+          "id": 62,
+          "bounds": [ 0, 0, 168, 64 ],
+          "color": [ 255, 255, 255, 255 ],
+          "actor": "actors/towerButton.actor"
+        }
+      }
+    ]
+  }
+}

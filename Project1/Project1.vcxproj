@@ -280,6 +280,7 @@
     <None Include="..\config\level_select.json" />
     <None Include="..\config\life_UI.json" />
     <None Include="..\config\main_menu.json" />
+    <None Include="..\config\perk_menu.json" />
     <None Include="..\config\power_button_window.json" />
     <None Include="..\config\power_window.json" />
     <None Include="..\config\reward_window.json" />

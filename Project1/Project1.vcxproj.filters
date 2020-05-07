@@ -457,5 +457,8 @@
     <None Include="..\config\level_select.json">
       <Filter>Resource Files\windows</Filter>
     </None>
+    <None Include="..\config\perk_menu.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
   </ItemGroup>
 </Project>

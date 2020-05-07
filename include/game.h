@@ -68,7 +68,7 @@ Player* getPlayer();
 * @param power the power obtained
 * @param perk the perk obtained
 */
-void showRewardWindow(TowerTypes power, PerkNumbers perk);
+void showRewardWindow(TowerTypes power, int perkMoney);
 /**
 * @brief hide the reward window
 */

@@ -7,6 +7,7 @@ typedef struct
 {
 	int powerInventory[4];	/**<How many of each power the player has*/
 	Bool perks[5];			/**<If the player has one of the 5 perks*/
+	int perkMoney;			/**<Currency used to buy perks*/
 }Player;
 
 typedef enum

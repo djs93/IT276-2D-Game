@@ -782,6 +782,8 @@ void endRound() {
 			reward = TT_Power_Cash_Drop;
 		}
 		
+		getPlayer()->perkMoney += 250;
+		/*
 		if (!getPlayer()->perks[0]) {
 			reward2 = 0;
 			getPlayer()->perks[0] = true;
@@ -805,7 +807,8 @@ void endRound() {
 		else {
 			reward2 = -1;
 		}
-		showRewardWindow(reward, reward2);
+		*/
+		showRewardWindow(reward, 250);
 	}
 }
 

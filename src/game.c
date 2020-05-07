@@ -44,6 +44,7 @@ Window* rewardWindow;
 Window* gameOverWindow;
 Window* mainMenuWindow;
 Window* levelSelectWindow;
+Window* perkWindow;
 Bool windowPress;
 Window* exitWindow;
 int done;
@@ -174,6 +175,10 @@ int main(int argc, char * argv[])
     levelSelectWindow = gf2d_window_load("config/level_select.json");
     levelSelectWindow->hide = 1;
     levelSelectWindow->no_draw_generic = 1;
+
+    perkWindow = gf2d_window_load("config/perk_menu.json");
+    perkWindow->hide = 1;
+    perkWindow->no_draw_generic = 1;
 	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
@@ -404,7 +409,7 @@ void toggle_powers() {
     ui->hide = 1;    
 }
 
-void showRewardWindow(TowerTypes power, PerkNumbers perk) {
+void showRewardWindow(TowerTypes power, int perkMoney) {
     Element* list;
     Element* currLabel;
     TextLine str;
@@ -430,6 +435,7 @@ void showRewardWindow(TowerTypes power, PerkNumbers perk) {
     gf2d_element_label_set_text(currLabel, str);
 
     currLabel = gf2d_element_list_get_item_by_id(list, 3);
+    /*
     switch (perk)
     {
     case PN_Pierce:
@@ -451,6 +457,8 @@ void showRewardWindow(TowerTypes power, PerkNumbers perk) {
         sprintf(str, " ");
         break;
     }
+    */
+    sprintf(str, "Obtained %i perk cash!", perkMoney);
     gf2d_element_label_set_text(currLabel, str);
     rewardWindow->hide = 0;
 }
@@ -488,6 +496,7 @@ void sound_test() {
 void loadMainMenu() {
     mainMenuWindow->hide = 0;
     levelSelectWindow->hide = 1;
+    perkWindow->hide = 1;
     state = GS_MainMenu;
 }
 
@@ -504,6 +513,8 @@ void loadEditor() {
 }
 
 void loadPerks() {
+    perkWindow->hide = 0;
+    mainMenuWindow->hide = 1;
 }
 
 void toggleInGameGUI() {

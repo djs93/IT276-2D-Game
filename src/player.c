@@ -84,6 +84,11 @@ Player* player_load(char* saveFile) {
 		}
 	}
 
+	tempJson = sj_object_get_value(file, "perks");
+	if (tempJson) {
+		sj_get_float_value(tempJson, &player->perkMoney);
+	}
+
 	return player;
 }
 
