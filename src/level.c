@@ -413,7 +413,7 @@ Level* level_load(char* levelFile)
 	getMainMenuWindow()->hide = 1;
 	hideLevelSelect();
 	state = GS_InGame;
-	toggleInGameGUI();
+	showInGameGUI();
 	showGoButton();
 	if (!levelJson) {
 		slog("Level json %s not found!", levelFile);

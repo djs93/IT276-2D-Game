@@ -460,5 +460,8 @@
     <None Include="..\config\perk_menu.json">
       <Filter>Resource Files\windows</Filter>
     </None>
+    <None Include="..\config\to_main_menu_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
   </ItemGroup>
 </Project>

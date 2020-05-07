@@ -109,4 +109,14 @@ Window* getMainMenuWindow();
 * @brief toggle the in-game gui on and off
 */
 void toggleInGameGUI();
+
+/**
+* @brief show the in-game gui
+*/
+void showInGameGUI();
+
+/**
+* @brief hdie the in-game gui
+*/
+void hideInGameGUI();
 #endif

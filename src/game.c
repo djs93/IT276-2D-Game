@@ -48,6 +48,7 @@ Window* levelSelectWindow;
 Window* perkWindow;
 Bool windowPress;
 Window* exitWindow;
+Window* toMainMenuWindow;
 int done;
 Player* player;
 int uiState;
@@ -166,9 +167,6 @@ int main(int argc, char * argv[])
     gameOverWindow = gf2d_window_load("config/gameover_window.json");
     gameOverWindow->hide = 1;
 
-    exitWindow = gf2d_window_load("config/exit_window.json");
-    exitWindow->hide = 1;
-
     mainMenuWindow = gf2d_window_load("config/main_menu.json");
     mainMenuWindow->hide = 0;
     mainMenuWindow->no_draw_generic = 1;
@@ -180,6 +178,12 @@ int main(int argc, char * argv[])
     perkWindow = gf2d_window_load("config/perk_menu.json");
     perkWindow->hide = 1;
     perkWindow->no_draw_generic = 1;
+
+    exitWindow = gf2d_window_load("config/exit_window.json");
+    exitWindow->hide = 1;
+
+    toMainMenuWindow = gf2d_window_load("config/to_main_menu_window.json");
+    toMainMenuWindow->hide = 1;
 	/*
 	List* testLines = gfc_list_new();
 	Line2D line1 = line2d(point2d(0, 0), point2d(0, 1));
@@ -361,16 +365,36 @@ Window* getMainMenuWindow() {
 void esc_press() {
     //Entity* placeEnt;
     //placeEnt = find_entity("placement");
-    if (placementEntity) {
-        gf2d_entity_free(placementEntity);
-        placementEntity = NULL;
+    if (state == GS_MainMenu) {
+        if (mainMenuWindow->hide == 0) {
+            if (exitWindow->hide) {
+                exitWindow->hide = 0;
+            }
+            else {
+                gf2d_mouse_consume_input(0);
+                exitWindow->hide = 1;
+            }
+        }
+        else if (levelSelectWindow->hide == 0) {
+            loadMainMenu();
+        }
+        else if (perkWindow->hide == 0) {
+            loadMainMenu();
+        }
+        
     }
-    else {
-        if (exitWindow->hide) {
-            exitWindow->hide = 0;
+    else if (state == GS_InGame) {
+        if (placementEntity) {
+            gf2d_entity_free(placementEntity);
+            placementEntity = NULL;
         }
         else {
-            exitWindow->hide = 1;
+            if (toMainMenuWindow->hide) {
+                toMainMenuWindow->hide = 0;
+            }
+            else {
+                toMainMenuWindow->hide = 1;
+            }
         }
     }
 }
@@ -498,7 +522,12 @@ void loadMainMenu() {
     mainMenuWindow->hide = 0;
     levelSelectWindow->hide = 1;
     perkWindow->hide = 1;
+    toMainMenuWindow->hide = 1;
+    if (state != GS_MainMenu) {
+        sound_change_bgm("bgm/anttisinstrumentals_allaboardthefunkytrainvwkinstrumental.mp3");
+    }
     state = GS_MainMenu;
+    hideInGameGUI();
     gf2d_mouse_consume_input(0);
 }
 
@@ -522,6 +551,28 @@ void loadPerks() {
     mainMenuWindow->hide = 1;
     gf2d_mouse_consume_input(0);
     updatePerkUI();
+}
+
+void showInGameGUI() {
+    cashUI->hide = 0;
+    lifeUI->hide = 0;
+    roundUI->hide = 0;
+    powerButtonUI->hide = 0;
+    towerButtonUI->hide = 1;
+    powerUI->hide = 1;
+    ui->hide = 0;
+    uiState = 1;
+}
+
+void hideInGameGUI() {
+    cashUI->hide = 1;
+    lifeUI->hide = 1;
+    roundUI->hide = 1;
+    powerButtonUI->hide = 1;
+    towerButtonUI->hide = 1;
+    ui->hide = 1;
+    powerUI->hide = 1;
+    uiState = 0;
 }
 
 void toggleInGameGUI() {
