@@ -26,7 +26,8 @@ void sound_test();
 void loadMainMenu();
 void loadLevelSelect();
 void loadEditor();
-void loadPerks();
+void loadPerks(); 
+void updatePerkUI();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
@@ -520,6 +521,7 @@ void loadPerks() {
     perkWindow->hide = 0;
     mainMenuWindow->hide = 1;
     gf2d_mouse_consume_input(0);
+    updatePerkUI();
 }
 
 void toggleInGameGUI() {
@@ -544,5 +546,41 @@ void toggleInGameGUI() {
         powerUI->hide = 1;
         uiState = 0;
     }
+}
+
+void updatePerkUI() {
+    Element* list;
+    Element* currLabel;
+    Element* currButton;
+    TextLine str;
+    currLabel = gf2d_window_get_element_by_id(perkWindow, 7);
+    sprintf(str, "$%i", player->perkMoney);
+    gf2d_element_label_set_text(currLabel, str);
+
+    list = gf2d_window_get_element_by_id(perkWindow, 5);
+    currButton = gf2d_element_list_get_item_by_id(list, 51);
+    currLabel = ((ButtonElement*)currButton->data)->label;
+    sprintf(str, "$%i", get_perk_cost(PN_Pierce));
+    gf2d_element_label_set_text(currLabel, str);
+
+    currButton = gf2d_element_list_get_item_by_id(list, 52);
+    currLabel = ((ButtonElement*)currButton->data)->label;
+    sprintf(str, "$%i", get_perk_cost(PN_Speed));
+    gf2d_element_label_set_text(currLabel, str);
+
+    currButton = gf2d_element_list_get_item_by_id(list, 53);
+    currLabel = ((ButtonElement*)currButton->data)->label;
+    sprintf(str, "$%i", get_perk_cost(PN_Discount));
+    gf2d_element_label_set_text(currLabel, str);
+
+    currButton = gf2d_element_list_get_item_by_id(list, 54);
+    currLabel = ((ButtonElement*)currButton->data)->label;
+    sprintf(str, "$%i", get_perk_cost(PN_Money));
+    gf2d_element_label_set_text(currLabel, str);
+
+    currButton = gf2d_element_list_get_item_by_id(list, 55);
+    currLabel = ((ButtonElement*)currButton->data)->label;
+    sprintf(str, "$%i", get_perk_cost(PN_StingerUps));
+    gf2d_element_label_set_text(currLabel, str);
 }
 /*eol@eof*/
