@@ -45,4 +45,11 @@ Player* player_load(char* saveFile);
 */
 void player_save(char* saveFile);
 
+/**
+* @brief Gets the cost of a perk
+* @param perkNumber the perk to get the price of
+* @return The cost of the perk, -1 if non-valid perk number
+*/
+int get_perk_cost(PerkNumbers perkNumber);
+
 #endif

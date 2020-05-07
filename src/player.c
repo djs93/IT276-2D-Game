@@ -118,3 +118,26 @@ void player_save(char* saveFile) {
 
 	sj_save(file, saveFile);
 }
+
+int get_perk_cost(PerkNumbers perkNumber) {
+	switch (perkNumber)
+	{
+	case PN_Pierce:
+		return 200;
+		break;
+	case PN_Speed:
+		return 300;
+		break;
+	case PN_Discount:
+		return 400;
+		break;
+	case PN_Money:
+		return 500;
+		break;
+	case PN_StingerUps:
+		return 600;
+		break;
+	default:
+		break;
+	}
+}
