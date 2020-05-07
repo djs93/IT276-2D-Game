@@ -498,23 +498,28 @@ void loadMainMenu() {
     levelSelectWindow->hide = 1;
     perkWindow->hide = 1;
     state = GS_MainMenu;
+    gf2d_mouse_consume_input(0);
 }
 
 void loadLevelSelect(){
     levelSelectWindow->hide = 0;
     mainMenuWindow->hide = 1;
+    gf2d_mouse_consume_input(0);
 }
 
 void hideLevelSelect() {
     levelSelectWindow->hide = 1;
+    gf2d_mouse_consume_input(0);
 }
 
 void loadEditor() {
+    gf2d_mouse_consume_input(0);
 }
 
 void loadPerks() {
     perkWindow->hide = 0;
     mainMenuWindow->hide = 1;
+    gf2d_mouse_consume_input(0);
 }
 
 void toggleInGameGUI() {

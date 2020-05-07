@@ -82,4 +82,10 @@ Vector2D gf2d_mouse_get_movement();
  * @return 1 if it is within the rect, 0 otherwise
  */
 int gf2d_mouse_in_rect(Rect r);
+
+/**
+ * @brief consume an input, setting both current and previous states to 0
+ * @param button the button number to check (left mouse button is 0, right mouse button is 1, etc)
+ */
+void gf2d_mouse_consume_input(int button);
 #endif

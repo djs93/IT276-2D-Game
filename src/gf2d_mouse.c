@@ -118,4 +118,11 @@ int gf2d_mouse_in_rect(Rect r)
     return gf2d_point_in_rect(_mouse.mouse[0].position,r);
 }
 
+void gf2d_mouse_consume_input(int button) {
+    int mask;
+    mask = 1 << button;
+    _mouse.mouse[0].buttons = _mouse.mouse[0].buttons | mask;
+    _mouse.mouse[1].buttons = _mouse.mouse[1].buttons | mask;
+}
+
 /*eol@eof*/
