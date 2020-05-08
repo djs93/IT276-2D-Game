@@ -55,3 +55,15 @@ void background_music_input_process(Editor* editor){
         popInvalidInput();
     }
 }
+
+void increasePathWidth() {
+    get_loaded_level()->pathDistance += 1.0f;
+    updateWidthUI();
+}
+
+void decreasePathWidth() {
+    if (get_loaded_level()->pathDistance > 1.0f) {
+        get_loaded_level()->pathDistance -= 1.0f;
+        updateWidthUI();
+    }
+}

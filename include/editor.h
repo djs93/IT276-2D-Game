@@ -40,4 +40,14 @@ void background_input_process(Editor* editor);
 * @param editor The Editor to process input for
 */
 void background_music_input_process(Editor* editor);
+
+/**
+* @brief increase width of ALL paths in level
+*/
+void increasePathWidth();
+
+/**
+* @brief decrease width of ALL paths in level
+*/
+void decreasePathWidth();
 #endif

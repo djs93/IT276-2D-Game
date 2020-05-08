@@ -266,6 +266,8 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("bgminputyes", background_music_input_process, NULL, NULL, NULL, editor);
     gfc_input_set_callbacks("setBG", popBGInput, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("setBGM", popBGMInput, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("widthIncrease", increasePathWidth, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("widthDecrease", decreasePathWidth, NULL, NULL, NULL, NULL);
 
     gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
 
@@ -624,6 +626,7 @@ void loadEditor() {
     hideGoButton();
     state = GS_InContentEditor;
     showEditorControls();
+    updateWidthUI();
 }
 
 void showEditorControls() {
@@ -812,6 +815,14 @@ void popBGMInput() {
 void hideBackgroundMusicInputWindow() {
     editorBGMInputWindow->hide = 1;
     gf2d_mouse_consume_input(0);
+}
+
+void updateWidthUI() {
+    Element* currLabel;
+    TextLine str;
+    currLabel = gf2d_window_get_element_by_id(editorCoordWindow, 2);
+    sprintf(str, "Width:%i", (int)get_loaded_level()->pathDistance);
+    gf2d_element_label_set_text(currLabel, str);
 }
 
 /*eol@eof*/

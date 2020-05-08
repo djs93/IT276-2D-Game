@@ -26,6 +26,17 @@
         "justify": "center",
         "align": "top",
         "style": "H5"
+      },
+      {
+        "type": "label",
+        "name": "lifeLabel",
+        "id": 2,
+        "bounds": [ 0, 80, 130, 64 ],
+        "color": [ 255, 255, 255, 255 ],
+        "text": "Width: xx",
+        "justify": "center",
+        "align": "top",
+        "style": "H5"
       }
     ]
   }

@@ -145,4 +145,9 @@ void hideBackgroundInputWindow();
 * @brief hide the background music input window
 */
 void hideBackgroundMusicInputWindow();
+
+/**
+* @brief update the path width on the editor UI
+*/
+void updateWidthUI();
 #endif
