@@ -1,0 +1,109 @@
+{
+"window":{
+    "color" : [255,255,255, 255],
+    "dimensions" : [0,0,800,120],
+    "justify" : "center",
+    "align" : "middle",
+    "elements":
+    [
+      {
+        "type": "list",
+        "name": "list",
+        "id" : 0,
+        "bounds": [10,10,1,1],
+        "color" : [255,255,255,255],
+        "style": "vertical",
+        "item_size" : [100,36],
+        "elements": [
+          {
+            "type": "label",
+            "name": "congrats",
+            "id": 1,
+            "bounds": [ 0, 0, 1, 40 ],
+            "color": [ 255, 255, 255, 255 ],
+            "text": "Background Music Input",
+            "justify": "center",
+            "align": "middle",
+            "style": "H2"
+          },
+          {
+            "type": "entry",
+            "name": "entry",
+            "id": 2,
+            "bounds": [ 0, 0, 0.99, 40 ],
+            "color": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "entry_l",
+              "id": 21,
+              "bounds": [ 0.01, 0, 0.98, 1 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Enter image name and format, must be in bgm folder",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            }
+          },
+          {
+            "type": "button",
+            "name": "Accept",
+            "id": 51,
+            "bounds": [ 216, 36, 168, 64 ],
+            "hotkey": "bgminputyes",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "yes_l",
+              "id": 511,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Accept",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 512,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          }
+          {
+            "type": "button",
+            "name": "Close",
+            "id": 51,
+            "bounds": [ 416, 0, 168, 64 ],
+            "hotkey": "no",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "yes_l",
+              "id": 511,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Close",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 512,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          }
+        ]
+      }
+    ]
+    }
+}

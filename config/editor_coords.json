@@ -1,0 +1,32 @@
+{
+  "window": {
+    "color": [ 255, 255, 255, 255 ],
+    "dimensions": [ 0, 0, 110, 165 ],
+    "justify": "right",
+    "align": "top",
+    "elements": [
+      {
+        "type": "label",
+        "name": "lifeLabel",
+        "id": 0,
+        "bounds": [ 0, 0, 130, 64 ],
+        "color": [ 255, 255, 255, 255 ],
+        "text": "X:xxxxxxx",
+        "justify": "center",
+        "align": "top",
+        "style": "H5"
+      },
+      {
+        "type": "label",
+        "name": "lifeLabel",
+        "id": 1,
+        "bounds": [ 0, 40, 130, 64 ],
+        "color": [ 255, 255, 255, 255 ],
+        "text": "Y:xxxxxxx",
+        "justify": "center",
+        "align": "top",
+        "style": "H5"
+      }
+    ]
+  }
+}

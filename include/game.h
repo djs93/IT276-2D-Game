@@ -124,4 +124,25 @@ void hideInGameGUI();
 * @brief updates prices and buy status on perk window
 */
 void updatePerkUI();
+
+/**
+* @brief get the editor coordinate window
+* @return a pointer to the editor coordinate window
+*/
+Window* getEditorCoordWindow();
+
+/**
+* @brief Opens the invalid input window
+*/
+void popInvalidInput();
+
+/**
+* @brief hide the background image input window
+*/
+void hideBackgroundInputWindow();
+
+/**
+* @brief hide the background music input window
+*/
+void hideBackgroundMusicInputWindow();
 #endif

@@ -11,9 +11,11 @@
 #include "gfc_input.h"
 #include "gf2d_element_button.h"
 #include "gf2d_element_actor.h"
+#include "gf2d_element_entry.h"
 #include "gf2d_mouse.h"
 #include "enemies.h"
 #include "sound_handler.h"
+#include "editor.h"
 
 Entity* entity_list;
 void draw_normal_entities();
@@ -28,6 +30,10 @@ void loadMainMenu();
 void loadLevelSelect();
 void loadEditor();
 void loadPerks();
+void showEditorControls();
+void hideEditorControls();
+void popBGInput();
+void popBGMInput();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
@@ -49,9 +55,15 @@ Window* perkWindow;
 Bool windowPress;
 Window* exitWindow;
 Window* toMainMenuWindow;
+Window* editorControlsWindow;
+Window* editorCoordWindow;
+Window* editorBGMInputWindow;
+Window* editorBackgroundInputWindow;
+Window* inputInvalidMenu;
 int done;
 Player* player;
 int uiState;
+Editor* editor;
 
 int main(int argc, char * argv[])
 {
@@ -126,6 +138,7 @@ int main(int argc, char * argv[])
     gf2d_font_init("config/font.cfg");
     gfc_input_init("config/input.cfg");
     gf2d_windows_init(32);
+    editor = editor_new();
 
     ui = gf2d_window_load("config/yes_no_window2.json");
     setPrices(ui);
@@ -166,6 +179,24 @@ int main(int argc, char * argv[])
 
     gameOverWindow = gf2d_window_load("config/gameover_window.json");
     gameOverWindow->hide = 1;
+
+    editorBackgroundInputWindow = gf2d_window_load("config/input_background_window.json");
+    editorBackgroundInputWindow->hide = 0;
+    gf2d_element_entry_set_text_pointer(gf2d_window_get_element_by_id(editorBackgroundInputWindow, 2), &editor->inputString, 500);
+
+    editorBGMInputWindow = gf2d_window_load("config/input_background_music_window.json");
+    editorBGMInputWindow->hide = 1;
+    gf2d_element_entry_set_text_pointer(gf2d_window_get_element_by_id(editorBGMInputWindow, 2), &editor->inputString, 500);
+
+    inputInvalidMenu = gf2d_window_load("config/input_invalid_window.json");
+    inputInvalidMenu->hide = 1;
+
+    editorControlsWindow = gf2d_window_load("config/editor_controls.json");
+    editorControlsWindow->hide = 1;
+
+    editorCoordWindow = gf2d_window_load("config/editor_coords.json");
+    editorCoordWindow->hide = 1;
+    editorCoordWindow->no_draw_generic = 1;
 
     mainMenuWindow = gf2d_window_load("config/main_menu.json");
     mainMenuWindow->hide = 0;
@@ -231,12 +262,16 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("perk3", tryBuyPerk, NULL, NULL, NULL, PN_Discount);
     gfc_input_set_callbacks("perk4", tryBuyPerk, NULL, NULL, NULL, PN_Money);
     gfc_input_set_callbacks("perk5", tryBuyPerk, NULL, NULL, NULL, PN_StingerUps);
+    gfc_input_set_callbacks("bginputyes", background_input_process, NULL, NULL, NULL, editor);
+    gfc_input_set_callbacks("bgminputyes", background_music_input_process, NULL, NULL, NULL, editor);
+    gfc_input_set_callbacks("setBG", popBGInput, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("setBGM", popBGMInput, NULL, NULL, NULL, NULL);
 
     gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
-    
-    loadMainMenu();
 
     state = GS_MainMenu;
+    
+    loadMainMenu();
     /*main game loop*/
     while(!done)
     {
@@ -266,14 +301,22 @@ int main(int argc, char * argv[])
             //gf2d_sprite_draw(mouse, vector2d(mx,my), NULL, NULL, NULL, NULL, &mouseColor, (int)mf);
         if (state!=GS_MainMenu) {
             draw_level();
-            level_update();
+            if (state == GS_InGame) {
+                level_update();
+            }
+            if (state == GS_InContentEditor) {
+                editorUpdate(editor);
+            }
             gf2d_entity_update_all();
             draw_normal_entities();
         }	
 		//draw_buckets();
         //draw_buckets_optimal();
         //draw_buckets_ally();
-		//drawPaths();
+        if (state == GS_InContentEditor) { 
+            drawPaths(); 
+            //drawEditorLines(editor);
+        }
         gf2d_windows_draw_all();
         gf2d_mouse_draw();
         //gf2d_sprite_draw(mouseEnt->actor.sprite, mouseEnt->position, &mouseEnt->scale, &mouseEnt->scaleCenter, &mouseEnt->rotation, &mouseEnt->flip, &mouseEnt->colorShift, (Uint32)mouseEnt->actor.frame);
@@ -344,7 +387,9 @@ void draw_normal_entities() {
 }
 
 void draw_level() {
-    gf2d_sprite_draw(get_loaded_level()->background, vector2d_zero, NULL, NULL, NULL, NULL, NULL, 0);
+    if ((get_loaded_level() && get_loaded_level()->background)) {
+        gf2d_sprite_draw(get_loaded_level()->background, vector2d_zero, NULL, NULL, NULL, NULL, NULL, 0);
+    }
 }
 
 Window* getCashWindow() {
@@ -388,17 +433,32 @@ void esc_press() {
         }
         
     }
-    else if (state == GS_InGame) {
+    else if (state == GS_InGame || state == GS_InContentEditor) {
         if (placementEntity) {
             gf2d_entity_free(placementEntity);
             placementEntity = NULL;
         }
         else {
-            if (toMainMenuWindow->hide) {
-                toMainMenuWindow->hide = 0;
+            if (inputInvalidMenu->hide == 1) {
+                if (editorBackgroundInputWindow->hide == 1) {
+                    if (editorBGMInputWindow->hide == 1) {
+                        if (toMainMenuWindow->hide) {
+                            toMainMenuWindow->hide = 0;
+                        }
+                        else {
+                            toMainMenuWindow->hide = 1;
+                        }
+                    }
+                    else {
+                        editorBGMInputWindow->hide = 1;
+                    }
+                }
+                else {
+                    editorBackgroundInputWindow->hide = 1;
+                }
             }
             else {
-                toMainMenuWindow->hide = 1;
+                inputInvalidMenu->hide = 1;
             }
         }
     }
@@ -533,8 +593,13 @@ void loadMainMenu() {
     levelSelectWindow->hide = 1;
     perkWindow->hide = 1;
     toMainMenuWindow->hide = 1;
-    if (state != GS_MainMenu) {
+    hideEditorControls();
+    if (state != GS_MainMenu && state != GS_InContentEditor) {
         sound_change_bgm("bgm/anttisinstrumentals_allaboardthefunkytrainvwkinstrumental.mp3");
+    }
+    if (state == GS_InGame) {
+        level_save("saves/level.json");
+        player_save("saves/player.json");
     }
     state = GS_MainMenu;
     hideInGameGUI();
@@ -554,6 +619,20 @@ void hideLevelSelect() {
 
 void loadEditor() {
     gf2d_mouse_consume_input(0);
+    level_load("");
+    hideInGameGUI();
+    hideGoButton();
+    state = GS_InContentEditor;
+    showEditorControls();
+}
+
+void showEditorControls() {
+    editorControlsWindow->hide = 0;
+    editorCoordWindow->hide = 0;
+}
+void hideEditorControls() {
+    editorControlsWindow->hide = 1;
+    editorCoordWindow->hide = 1;
 }
 
 void loadPerks() {
@@ -705,4 +784,34 @@ void updatePerkUI() {
     }
     gf2d_element_label_set_text(currLabel, str);
 }
+
+Window* getEditorCoordWindow() {
+    return editorCoordWindow;
+}
+
+void popBGInput() {
+    editorBackgroundInputWindow->hide = 0;
+    gf2d_mouse_consume_input(0);
+}
+
+void popInvalidInput() {
+    inputInvalidMenu->hide = 0;
+    gf2d_mouse_consume_input(0);
+}
+
+void hideBackgroundInputWindow() {
+    editorBackgroundInputWindow->hide = 1;
+    gf2d_mouse_consume_input(0);
+}
+
+void popBGMInput() {
+    editorBGMInputWindow->hide = 0;
+    gf2d_mouse_consume_input(0);
+}
+
+void hideBackgroundMusicInputWindow() {
+    editorBGMInputWindow->hide = 1;
+    gf2d_mouse_consume_input(0);
+}
+
 /*eol@eof*/

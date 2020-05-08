@@ -46,8 +46,9 @@ void sound_manager_init(char* popFile, char* fireFile, char* zapFile, char* trum
 /**
 * @brief changes the background music, useful for level music swaps
 * @param newBGM the path to the MP3 file used for the new music
+* @return 1 if success, 0 else
 */
-void sound_change_bgm(char* newBGM);
+int sound_change_bgm(char* newBGM);
 
 /**
 * @brief get the sound associated with a SoundType

@@ -172,6 +172,7 @@
     <ClCompile Include="..\gfc\src\gfc_types.c" />
     <ClCompile Include="..\gfc\src\gfc_vector.c" />
     <ClCompile Include="..\src\bucket.c" />
+    <ClCompile Include="..\src\editor.c" />
     <ClCompile Include="..\src\enemies.c" />
     <ClCompile Include="..\src\game.c" />
     <ClCompile Include="..\src\Geometry2D.c" />
@@ -217,6 +218,7 @@
     <ClInclude Include="..\gfc\simple_json\include\simple_json_value.h" />
     <ClInclude Include="..\gfc\simple_logger\include\simple_logger.h" />
     <ClInclude Include="..\include\bucket.h" />
+    <ClInclude Include="..\include\editor.h" />
     <ClInclude Include="..\include\enemies.h" />
     <ClInclude Include="..\include\game.h" />
     <ClInclude Include="..\include\Geometry2D.h" />
@@ -274,9 +276,14 @@
     <None Include="..\actors\towerButton.actor" />
     <None Include="..\actors\water.actor" />
     <None Include="..\config\cash_UI.json" />
+    <None Include="..\config\editor_controls.json" />
+    <None Include="..\config\editor_coords.json" />
     <None Include="..\config\exit_window.json" />
     <None Include="..\config\gameover_window.json" />
     <None Include="..\config\go_button_window.json" />
+    <None Include="..\config\input_background_music_window.json" />
+    <None Include="..\config\input_background_window.json" />
+    <None Include="..\config\input_invalid_window.json" />
     <None Include="..\config\level_select.json" />
     <None Include="..\config\life_UI.json" />
     <None Include="..\config\main_menu.json" />

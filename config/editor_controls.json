@@ -1,0 +1,225 @@
+{
+"window":{
+    "color" : [255,255,255, 255],
+    "dimensions" : [0,0,1200,90],
+    "justify" : "left",
+    "align" : "bottom",
+    "elements":
+    [
+      {
+        "type": "list",
+        "name": "list",
+        "id" : 0,
+        "bounds": [10,10,1,1],
+        "color" : [255,255,255,255],
+        "style": "horizontal",
+        "item_size": [ 168, 64 ],
+        "elements": [
+          {
+            "type": "button",
+            "name": "drawPath",
+            "id": 50,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "drawPath",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "stingerLabel",
+              "id": 501,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Draw Path",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 502,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "setBG",
+            "id": 51,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "setBG",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "slingshotLabel",
+              "id": 511,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Set Image",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 512,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "setBGM",
+            "id": 52,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "setBGM",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "laserLabel",
+              "id": 521,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Set Music",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 522,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "widthPlus",
+            "id": 53,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "widthIncrease",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "waterLabel",
+              "id": 531,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Width +",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 532,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "widthMinus",
+            "id": 54,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "widthDecrease",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "technoLabel",
+              "id": 541,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Width -",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 542,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "saveButton",
+            "id": 55,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "saveEditor",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "snowglobeLabel",
+              "id": 551,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Save",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 552,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          },
+          {
+            "type": "button",
+            "name": "undoButton",
+            "id": 56,
+            "bounds": [ 0, 0, 168, 64 ],
+            "hotkey": "undo",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "musicLabel",
+              "id": 561,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Undo (z)",
+              "justify": "center",
+              "align": "middle",
+              "style": "H6"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 562,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/button.actor"
+            }
+          }
+        ]
+      }
+    ]
+    }
+}

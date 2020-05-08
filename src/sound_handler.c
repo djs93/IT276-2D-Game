@@ -31,15 +31,21 @@ void sound_manager_init(char* popFile, char* fireFile, char* zapFile, char* trum
 	sound_manager.sound_win = tempSound;
 }
 
-void sound_change_bgm(char* newBGM)
+int sound_change_bgm(char* newBGM)
 {
+	Sound* bgm;
 	int chan = -1;
-	if (sound_manager.sound_bgm) {
-		chan = sound_manager.sound_bgm->defaultChannel;
-		Mix_HaltChannel(chan);
+	bgm = gfc_sound_load(newBGM, 1.0f, 6);
+	if (bgm) {
+		if (sound_manager.sound_bgm) {
+			chan = sound_manager.sound_bgm->defaultChannel;
+			Mix_HaltChannel(chan);
+		}
+		sound_manager.sound_bgm = bgm;	
+		gfc_sound_play(sound_manager.sound_bgm, -1, sound_manager.sound_bgm->volume, sound_manager.sound_bgm->defaultChannel, 0);
+		return 1;
 	}
-	sound_manager.sound_bgm = gfc_sound_load(newBGM, 1.0f, 6);
-	gfc_sound_play(sound_manager.sound_bgm, -1, sound_manager.sound_bgm->volume, sound_manager.sound_bgm->defaultChannel, 0);
+	return 0;
 }
 
 Sound* sound_get(SoundTypes soundType)

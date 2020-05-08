@@ -417,39 +417,41 @@ Level* level_load(char* levelFile)
 	showGoButton();
 	if (!levelJson) {
 		slog("Level json %s not found!", levelFile);
-		return level_new("images/backgrounds/bg_flat.png");
-	}
-	background = sj_object_get_value(levelJson, "background");
-	if (!background) {
-		slog("No background key found in level file! Defaulting...");
-		backgroundName = "images/backgrounds/bg_flat.png";
+		backgroundName = "";
 	}
 	else {
-		backgroundName = sj_get_string_value(background);
-		if (!backgroundName) {
-			slog("No string found after background key in level file! Defaulting...");
+		background = sj_object_get_value(levelJson, "background");
+		if (!background) {
+			slog("No background key found in level file! Defaulting...");
 			backgroundName = "images/backgrounds/bg_flat.png";
+		}
+		else {
+			backgroundName = sj_get_string_value(background);
+			if (!backgroundName) {
+				slog("No string found after background key in level file! Defaulting...");
+				backgroundName = "images/backgrounds/bg_flat.png";
+			}
 		}
 	}
 	level = level_new(backgroundName);
 
 	paths = sj_object_get_value(levelJson, "paths");
 	if (!paths) {
-		slog("No paths key found in level file! Defaulting...");
-		lines = gfc_list_new();
-		currLine = line2d(point2d(0, 0), point2d(1200, 720));
-		currLineLine = gfc_allocate_array(sizeof(Line2D), 1);
-		currLineLine->end = currLine.end;
-		currLineLine->start = currLine.start;
-		lines = gfc_list_append(lines, currLineLine);
-		currPathPath = gfc_allocate_array(sizeof(Path2D), 1);
-		currPathPathPath = path2d(lines);
-		currPathPath->end = currPathPathPath.end;
-		currPathPath->start = currPathPathPath.start;
-		currPathPath->lines = currPathPathPath.lines;
-		currPathPath->totalLength = currPathPathPath.totalLength;
+		slog("No paths key found in level file!");
+		//lines = gfc_list_new();
+		//currLine = line2d(point2d(0, 0), point2d(1200, 720));
+		//currLineLine = gfc_allocate_array(sizeof(Line2D), 1);
+		//currLineLine->end = currLine.end;
+		//currLineLine->start = currLine.start;
+		//lines = gfc_list_append(lines, currLineLine);
+		//currPathPath = gfc_allocate_array(sizeof(Path2D), 1);
+		//currPathPathPath = path2d(lines);
+		//currPathPath->end = currPathPathPath.end;
+		//currPathPath->start = currPathPathPath.start;
+		//currPathPath->lines = currPathPathPath.lines;
+		//currPathPath->totalLength = currPathPathPath.totalLength;
 		pathsList = gfc_list_new();
-		pathsList = gfc_list_append(pathsList, currPathPath);
+		//pathsList = gfc_list_append(pathsList, currPathPath);
 		level->paths = pathsList;
 	}
 	else {

@@ -180,6 +180,9 @@
     <ClCompile Include="..\src\sound_handler.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\editor.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gfc\include\gfc_audio.h">
@@ -312,6 +315,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\sound_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -461,6 +467,21 @@
       <Filter>Resource Files\windows</Filter>
     </None>
     <None Include="..\config\to_main_menu_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\editor_controls.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\editor_coords.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\input_invalid_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\input_background_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\input_background_music_window.json">
       <Filter>Resource Files\windows</Filter>
     </None>
   </ItemGroup>
