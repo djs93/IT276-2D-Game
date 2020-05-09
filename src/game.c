@@ -274,6 +274,7 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("widthDecrease", decreasePathWidth, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("yes", yesPress, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("drawPath", startPlacement, NULL, NULL, NULL, editor);
+    gfc_input_set_callbacks("undo", editor_undo, NULL, NULL, NULL, editor);
 
     gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
 

@@ -68,4 +68,11 @@ void editor_draw(Editor* editor);
 * @param editor The Editor to draw components
 */
 void startPlacement(Editor* editor);
+
+/**
+* @brief Undo the last step in the editor
+* @param editor the Editor to undo the last step in
+* @note Cannot step back into an already confirmed path, will delete path instead. There's no redo, so be careful!
+*/
+void editor_undo(Editor* editor);
 #endif

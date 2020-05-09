@@ -86,6 +86,9 @@ void editor_confirm_line(Editor* editor) {
     Path2D* currPath;
     Path2D tempPath;
     slog("Confirm Line");
+    if (editor->currLinePoints->count <= 0) {
+        return;
+    }
     lines = gfc_list_new();
     for (j = 0; j < editor->currLinePoints->count - 1; j++) {
         currPoint = (Point2D*)gfc_list_get_nth(editor->currLinePoints, j);
@@ -161,4 +164,26 @@ void placePoint(Editor* editor, Vector2D position) {
 void startPlacement(Editor* editor) {
     editor->isPlacing = true;
     editor->currLinePoints = gfc_list_new();
+}
+
+void editor_undo(Editor* editor) {
+    if (editor->isPlacing) {
+        if (editor->currLinePoints->count > 0) {
+            gfc_list_delete_nth(editor->currLinePoints, editor->currLinePoints->count-1);
+        }
+        else {
+            if (get_loaded_level()->paths->count > 0) {
+                gfc_list_delete_nth(get_loaded_level()->paths, get_loaded_level()->paths->count - 1);
+                get_loaded_level()->collisionPaths = gfc_list_new();
+                gfc_list_foreach(get_loaded_level()->paths, calcPathBoundaries, get_loaded_level());
+            }
+        }
+    }
+    else {
+        if (get_loaded_level()->paths->count > 0) {
+            gfc_list_delete_nth(get_loaded_level()->paths, get_loaded_level()->paths->count - 1);
+            get_loaded_level()->collisionPaths = gfc_list_new();
+            gfc_list_foreach(get_loaded_level()->paths, calcPathBoundaries, get_loaded_level());
+        }
+    }
 }

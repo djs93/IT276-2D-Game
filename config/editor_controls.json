@@ -30,7 +30,7 @@
               "id": 501,
               "bounds": [ 0, 0, 168, 64 ],
               "color": [ 255, 255, 255, 255 ],
-              "text": "Draw Path",
+              "text": "Draw Path (D)",
               "justify": "center",
               "align": "middle",
               "style": "H6"
