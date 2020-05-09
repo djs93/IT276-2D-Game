@@ -36,8 +36,10 @@ void popBGInput();
 void popBGMInput();
 void popSaveInput();
 void popCustomInput();
+void loadCustom();
 void yesPress();
 void editorSaveAcceptPress();
+void loadButton(char* text);
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
@@ -64,6 +66,7 @@ Window* editorCoordWindow;
 Window* editorBGMInputWindow;
 Window* editorBackgroundInputWindow;
 Window* saveInputWindow;
+Window* customInputWindow;
 Window* inputInvalidMenu;
 int done;
 Player* player;
@@ -218,6 +221,10 @@ int main(int argc, char * argv[])
     levelSelectWindow->hide = 1;
     levelSelectWindow->no_draw_generic = 1;
 
+    customInputWindow = gf2d_window_load("config/input_custom_level_window.json");
+    customInputWindow->hide = 1;
+    gf2d_element_entry_set_text_pointer(gf2d_window_get_element_by_id(customInputWindow, 2), &editor->inputString, 500);
+
     perkWindow = gf2d_window_load("config/perk_menu.json");
     perkWindow->hide = 1;
     perkWindow->no_draw_generic = 1;
@@ -263,8 +270,8 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("modePrev", targetModePrev, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("modeNext", targetModeNext, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("mainMenu", loadMainMenu, NULL, NULL, NULL, NULL);
-    gfc_input_set_callbacks("level1", level_load_new, NULL, NULL, NULL, "levels/test.json");
-    gfc_input_set_callbacks("level2", level_load_new, NULL, NULL, NULL, "levels/level1.json");
+    gfc_input_set_callbacks("level1", loadButton, NULL, NULL, NULL, "levels/test.json");
+    gfc_input_set_callbacks("level2", loadButton, NULL, NULL, NULL, "levels/level1.json");
     gfc_input_set_callbacks("levelSelect", loadLevelSelect, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("loadSave", level_load_from_save, NULL, NULL, NULL, "saves/level.json");
     gfc_input_set_callbacks("loadEditor", loadEditor, NULL, NULL, NULL, "saves/level.json");
@@ -286,6 +293,7 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("saveEditor", editorSaveAcceptPress, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("popSave", popSaveInput, NULL, NULL, NULL, editor);
     gfc_input_set_callbacks("popCustomInput", popCustomInput, NULL, NULL, NULL, editor);
+    gfc_input_set_callbacks("customLevelLoad", loadCustom, NULL, NULL, NULL, editor);
 
     gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
 
@@ -446,7 +454,13 @@ void esc_press() {
             }
         }
         else if (levelSelectWindow->hide == 0) {
-            loadMainMenu();
+            if (customInputWindow->hide == 0) {
+                customInputWindow->hide = 1;
+                gf2d_mouse_consume_input(0);
+            }
+            else {
+                loadMainMenu();
+            }
         }
         else if (perkWindow->hide == 0) {
             loadMainMenu();
@@ -869,7 +883,28 @@ void editorSaveAcceptPress() {
 }
 
 void popCustomInput() {
-
+    customInputWindow->hide = 0;
+    gf2d_mouse_consume_input(0);
 }
 
+void loadCustom() {
+    SJson* test;
+    char* teststring = gfc_allocate_array(sizeof(char), 512);
+    gf2d_mouse_consume_input(0);
+    sprintf(teststring, "levels/%s.json", editor->inputString);
+    test = sj_load(teststring);
+    if (test) {
+        level_load_new(teststring);
+        customInputWindow->hide = 1;
+    }
+    else {
+        popInvalidInput();
+    }
+}
+
+void loadButton(char* text) {
+    if (customInputWindow->hide == 1) {
+        level_load_new(text);
+    }
+}
 /*eol@eof*/

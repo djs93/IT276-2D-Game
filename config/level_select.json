@@ -105,9 +105,38 @@
           },
           {
             "type": "button",
+            "name": "loadButton",
+            "id": 5,
+            "bounds": [ 516, 280, 168, 64 ],
+            "hotkey": "popCustomInput",
+            "color": [ 255, 255, 255, 255 ],
+            "highColor": [ 255, 255, 255, 255 ],
+            "pressColor": [ 255, 255, 255, 255 ],
+            "label": {
+              "type": "label",
+              "name": "save_label",
+              "id": 51,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "text": "Load Custom",
+              "justify": "center",
+              "align": "middle",
+              "style": "H5"
+            },
+            "actor": {
+              "type": "actor",
+              "name": "image",
+              "id": 52,
+              "bounds": [ 0, 0, 168, 64 ],
+              "color": [ 255, 255, 255, 255 ],
+              "actor": "actors/towerButton.actor"
+            }
+          },
+          {
+            "type": "button",
             "name": "exitButton",
             "id": 8,
-            "bounds": [ 516, 340, 168, 64 ],
+            "bounds": [ 516, 400, 168, 64 ],
             "hotkey": "mainMenu",
             "color": [ 255, 255, 255, 255 ],
             "highColor": [ 255, 255, 255, 255 ],
