@@ -53,7 +53,7 @@
             "name": "yes",
             "id": 51,
             "bounds": [ 0, 0, 168, 64 ],
-            "hotkey": "loadNext",
+            "hotkey": "mainMenu",
             "color": [ 255, 255, 255, 255 ],
             "highColor": [ 255, 255, 255, 255 ],
             "pressColor": [ 255, 255, 255, 255 ],
