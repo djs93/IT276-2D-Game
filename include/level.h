@@ -133,4 +133,11 @@ void level_addRegen(int amountPerRound);
 */
 void level_loadNext();
 
+/**
+* @brief calculate the boundaries for a path
+* @param data the path to generate lines for
+* @param context the Level* level to generate lines for
+*/
+void calcPathBoundaries(void* data, void* context);
+
 #endif

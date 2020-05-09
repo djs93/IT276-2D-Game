@@ -64,17 +64,47 @@ void background_music_input_process(Editor* editor){
 void increasePathWidth() {
     get_loaded_level()->pathDistance += 1.0f;
     updateWidthUI();
+    get_loaded_level()->collisionPaths = gfc_list_new();
+    gfc_list_foreach(get_loaded_level()->paths, calcPathBoundaries, get_loaded_level());
 }
 
 void decreasePathWidth() {
     if (get_loaded_level()->pathDistance > 1.0f) {
         get_loaded_level()->pathDistance -= 1.0f;
         updateWidthUI();
+        get_loaded_level()->collisionPaths = gfc_list_new();
+        gfc_list_foreach(get_loaded_level()->paths, calcPathBoundaries, get_loaded_level());
     }
 }
 
 void editor_confirm_line(Editor* editor) {
+    List* lines;
+    int j;
+    Point2D* currPoint;
+    Point2D* nextPoint;
+    Line2D* currLine;
+    Path2D* currPath;
+    Path2D tempPath;
     slog("Confirm Line");
+    lines = gfc_list_new();
+    for (j = 0; j < editor->currLinePoints->count - 1; j++) {
+        currPoint = (Point2D*)gfc_list_get_nth(editor->currLinePoints, j);
+        nextPoint = (Point2D*)gfc_list_get_nth(editor->currLinePoints, j+1);
+        currLine = gfc_allocate_array(sizeof(Line2D), 1);
+        currLine->start.x = currPoint->x;
+        currLine->start.y = currPoint->y;
+        currLine->end.x = nextPoint->x;
+        currLine->end.y = nextPoint->y;
+        lines = gfc_list_append(lines, currLine);
+    }
+    currPath = gfc_allocate_array(sizeof(Path2D), 1);
+    tempPath = path2d(lines);
+    currPath->end = tempPath.end;
+    currPath->start = tempPath.start;
+    currPath->lines = tempPath.lines;
+    currPath->totalLength = tempPath.totalLength;
+    get_loaded_level()->paths = gfc_list_append(get_loaded_level()->paths, currPath);
+    gfc_list_foreach(get_loaded_level()->paths, calcPathBoundaries, get_loaded_level());
 }
 
 void editor_start_line(Editor* editor) {
@@ -130,4 +160,5 @@ void placePoint(Editor* editor, Vector2D position) {
 
 void startPlacement(Editor* editor) {
     editor->isPlacing = true;
+    editor->currLinePoints = gfc_list_new();
 }

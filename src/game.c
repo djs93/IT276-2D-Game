@@ -185,7 +185,7 @@ int main(int argc, char * argv[])
     gameOverWindow->hide = 1;
 
     editorBackgroundInputWindow = gf2d_window_load("config/input_background_window.json");
-    editorBackgroundInputWindow->hide = 0;
+    editorBackgroundInputWindow->hide = 1;
     gf2d_element_entry_set_text_pointer(gf2d_window_get_element_by_id(editorBackgroundInputWindow, 2), &editor->inputString, 500);
 
     editorBGMInputWindow = gf2d_window_load("config/input_background_music_window.json");
