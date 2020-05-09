@@ -5,9 +5,9 @@
 #include <gfc_list.h>
 
 typedef struct {
+	TextBlock inputString;
 	Bool isPlacing;
 	List* currLinePoints;
-	TextBlock inputString;
 }Editor;
 
 /**
@@ -50,4 +50,22 @@ void increasePathWidth();
 * @brief decrease width of ALL paths in level
 */
 void decreasePathWidth();
+
+/**
+* @brief Adds the currently drawn line to the level's paths
+* @param editor The Editor to save the line for
+*/
+void editor_confirm_line(Editor* editor);
+
+/**
+* @brief Draw both the editor lines and the point attached to the mouse
+* @param editor The Editor to draw components
+*/
+void editor_draw(Editor* editor);
+
+/**
+* @brief Enable placement mode on an editor
+* @param editor The Editor to draw components
+*/
+void startPlacement(Editor* editor);
 #endif

@@ -34,6 +34,7 @@ void showEditorControls();
 void hideEditorControls();
 void popBGInput();
 void popBGMInput();
+void yesPress();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
@@ -139,6 +140,9 @@ int main(int argc, char * argv[])
     gfc_input_init("config/input.cfg");
     gf2d_windows_init(32);
     editor = editor_new();
+
+    editor->currLinePoints = gfc_list_new();
+    editor->isPlacing = false;
 
     ui = gf2d_window_load("config/yes_no_window2.json");
     setPrices(ui);
@@ -268,6 +272,8 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("setBGM", popBGMInput, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("widthIncrease", increasePathWidth, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("widthDecrease", decreasePathWidth, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("yes", yesPress, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("drawPath", startPlacement, NULL, NULL, NULL, editor);
 
     gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
 
@@ -317,7 +323,7 @@ int main(int argc, char * argv[])
         //draw_buckets_ally();
         if (state == GS_InContentEditor) { 
             drawPaths(); 
-            //drawEditorLines(editor);
+            editor_draw(editor);
         }
         gf2d_windows_draw_all();
         gf2d_mouse_draw();
@@ -823,6 +829,15 @@ void updateWidthUI() {
     currLabel = gf2d_window_get_element_by_id(editorCoordWindow, 2);
     sprintf(str, "Width:%i", (int)get_loaded_level()->pathDistance);
     gf2d_element_label_set_text(currLabel, str);
+}
+
+void yesPress() {
+    if (GS_InContentEditor) {
+        if (editor->isPlacing) {
+            editor->isPlacing = false;
+            editor_confirm_line(editor);
+        }
+    }
 }
 
 /*eol@eof*/
