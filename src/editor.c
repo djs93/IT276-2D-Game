@@ -187,3 +187,63 @@ void editor_undo(Editor* editor) {
         }
     }
 }
+
+void editor_save(Editor* editor) {
+    SJson* file;
+    SJson* tempJson;
+    SJson* tempJson2;
+    SJson* currPathArray;
+    SJson* currPointArray;
+    Path2D* currPath;
+    List* lines;
+    Line2D* line;
+    TextLine filePath;
+    int i, j, k;
+
+    file = sj_object_new();
+
+    //background
+    tempJson = sj_new_str(get_loaded_level()->background->filepath);
+    sj_object_insert(file, "background", tempJson);
+
+    //paths
+    tempJson = sj_array_new();
+    for (i = 0; i < get_loaded_level()->paths->count; i++) {
+        currPath = gfc_list_get_nth(get_loaded_level()->paths, i);
+        currPathArray = sj_array_new();
+        lines = currPath->lines;
+        for (j = 0; j < lines->count; j++) {
+            currPointArray = sj_array_new();
+            line = gfc_list_get_nth(lines, j);
+            tempJson2 = sj_new_float(line->start.x);
+            sj_array_append(currPointArray, tempJson2);
+            tempJson2 = sj_new_float(line->start.y);
+            sj_array_append(currPointArray, tempJson2);
+            sj_array_append(currPathArray, currPointArray);
+        }
+        line = gfc_list_get_nth(lines, j-1);
+        currPointArray = sj_array_new();
+        tempJson2 = sj_new_float(line->end.x);
+        sj_array_append(currPointArray, tempJson2);
+        tempJson2 = sj_new_float(line->end.y);
+        sj_array_append(currPointArray, tempJson2);
+        sj_array_append(currPathArray, currPointArray);
+        sj_array_append(tempJson, currPathArray);
+    }
+    sj_object_insert(file, "paths", tempJson);
+
+    //pathWidth
+    tempJson = sj_new_float(get_loaded_level()->pathDistance);
+    sj_object_insert(file, "pathWidth", tempJson);
+
+    //nextLevel
+    tempJson = sj_new_str("none");
+    sj_object_insert(file, "nextLevel", tempJson);
+
+    //music
+    tempJson = sj_new_str(sound_get(ST_BGM)->filepath);
+    sj_object_insert(file, "music", tempJson);
+
+    sprintf(filePath, "levels/%s.json", editor->inputString);
+    sj_save(file, filePath);
+}

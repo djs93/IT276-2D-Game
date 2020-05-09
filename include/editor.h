@@ -75,4 +75,11 @@ void startPlacement(Editor* editor);
 * @note Cannot step back into an already confirmed path, will delete path instead. There's no redo, so be careful!
 */
 void editor_undo(Editor* editor);
+
+/**
+* @brief Save the editor's contents to a file
+* @param editor The Editor to save
+* @note Outputs to the levels folder
+*/
+void editor_save(Editor* editor);
 #endif

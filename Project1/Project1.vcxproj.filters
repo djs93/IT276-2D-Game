@@ -484,5 +484,11 @@
     <None Include="..\config\input_background_music_window.json">
       <Filter>Resource Files\windows</Filter>
     </None>
+    <None Include="..\config\input_save_name_window .json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
+    <None Include="..\config\input_custom_level_window.json">
+      <Filter>Resource Files\windows</Filter>
+    </None>
   </ItemGroup>
 </Project>

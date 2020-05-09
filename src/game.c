@@ -34,7 +34,10 @@ void showEditorControls();
 void hideEditorControls();
 void popBGInput();
 void popBGMInput();
+void popSaveInput();
+void popCustomInput();
 void yesPress();
+void editorSaveAcceptPress();
 Vector2D vector2d_zero;
 int mx, my;
 Entity* selectedEntity;
@@ -60,6 +63,7 @@ Window* editorControlsWindow;
 Window* editorCoordWindow;
 Window* editorBGMInputWindow;
 Window* editorBackgroundInputWindow;
+Window* saveInputWindow;
 Window* inputInvalidMenu;
 int done;
 Player* player;
@@ -192,6 +196,10 @@ int main(int argc, char * argv[])
     editorBGMInputWindow->hide = 1;
     gf2d_element_entry_set_text_pointer(gf2d_window_get_element_by_id(editorBGMInputWindow, 2), &editor->inputString, 500);
 
+    saveInputWindow = gf2d_window_load("config/input_save_name_window.json");
+    saveInputWindow->hide = 1;
+    gf2d_element_entry_set_text_pointer(gf2d_window_get_element_by_id(saveInputWindow, 2), &editor->inputString, 500);
+
     inputInvalidMenu = gf2d_window_load("config/input_invalid_window.json");
     inputInvalidMenu->hide = 1;
 
@@ -275,6 +283,9 @@ int main(int argc, char * argv[])
     gfc_input_set_callbacks("yes", yesPress, NULL, NULL, NULL, NULL);
     gfc_input_set_callbacks("drawPath", startPlacement, NULL, NULL, NULL, editor);
     gfc_input_set_callbacks("undo", editor_undo, NULL, NULL, NULL, editor);
+    gfc_input_set_callbacks("saveEditor", editorSaveAcceptPress, NULL, NULL, NULL, NULL);
+    gfc_input_set_callbacks("popSave", popSaveInput, NULL, NULL, NULL, editor);
+    gfc_input_set_callbacks("popCustomInput", popCustomInput, NULL, NULL, NULL, editor);
 
     gfc_sound_play(sound_get(ST_BGM), -1, sound_get(ST_BGM)->volume, sound_get(ST_BGM)->defaultChannel, 0);
 
@@ -449,21 +460,26 @@ void esc_press() {
         }
         else {
             if (inputInvalidMenu->hide == 1) {
-                if (editorBackgroundInputWindow->hide == 1) {
-                    if (editorBGMInputWindow->hide == 1) {
-                        if (toMainMenuWindow->hide) {
-                            toMainMenuWindow->hide = 0;
+                if (saveInputWindow->hide == 1) {
+                    if (editorBackgroundInputWindow->hide == 1) {
+                        if (editorBGMInputWindow->hide == 1) {
+                            if (toMainMenuWindow->hide) {
+                                toMainMenuWindow->hide = 0;
+                            }
+                            else {
+                                toMainMenuWindow->hide = 1;
+                            }
                         }
                         else {
-                            toMainMenuWindow->hide = 1;
+                            editorBGMInputWindow->hide = 1;
                         }
                     }
                     else {
-                        editorBGMInputWindow->hide = 1;
+                        editorBackgroundInputWindow->hide = 1;
                     }
                 }
                 else {
-                    editorBackgroundInputWindow->hide = 1;
+                    saveInputWindow->hide = 1;
                 }
             }
             else {
@@ -809,6 +825,11 @@ void popInvalidInput() {
     gf2d_mouse_consume_input(0);
 }
 
+void popSaveInput() {
+    saveInputWindow->hide = 0;
+    gf2d_mouse_consume_input(0);
+}
+
 void hideBackgroundInputWindow() {
     editorBackgroundInputWindow->hide = 1;
     gf2d_mouse_consume_input(0);
@@ -839,6 +860,16 @@ void yesPress() {
             editor_confirm_line(editor);
         }
     }
+}
+
+void editorSaveAcceptPress() {
+    saveInputWindow->hide = 1;
+    editor_save(editor);
+    gf2d_mouse_consume_input(0);
+}
+
+void popCustomInput() {
+
 }
 
 /*eol@eof*/

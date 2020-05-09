@@ -283,7 +283,9 @@
     <None Include="..\config\go_button_window.json" />
     <None Include="..\config\input_background_music_window.json" />
     <None Include="..\config\input_background_window.json" />
+    <None Include="..\config\input_custom_level_window.json" />
     <None Include="..\config\input_invalid_window.json" />
+    <None Include="..\config\input_save_name_window .json" />
     <None Include="..\config\level_select.json" />
     <None Include="..\config\life_UI.json" />
     <None Include="..\config\main_menu.json" />
