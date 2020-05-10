@@ -632,6 +632,8 @@ void loadMainMenu() {
     levelSelectWindow->hide = 1;
     perkWindow->hide = 1;
     toMainMenuWindow->hide = 1;
+    rewardWindow->hide = 1;
+    gameOverWindow->hide = 1;
     hideEditorControls();
     if (state != GS_MainMenu && state != GS_InContentEditor) {
         sound_change_bgm("bgm/anttisinstrumentals_allaboardthefunkytrainvwkinstrumental.mp3");
